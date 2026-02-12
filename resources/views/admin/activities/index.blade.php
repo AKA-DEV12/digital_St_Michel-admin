@@ -115,6 +115,35 @@
                             <input type="text" name="location" id="location" class="form-control rounded-3 py-2" placeholder="Ex: Sanctuaire Marial d'Arigbo">
                         </div>
                         <div class="col-md-6">
+                            <label class="form-label small fw-bold text-slate-700">Montant de l'inscription (FCFA)</label>
+                            <input type="number" name="registration_amount" id="registration_amount" class="form-control rounded-3 py-2" placeholder="Ex: 5000">
+                        </div>
+                        
+                        <!-- Payment Numbers Group -->
+                        <div class="col-md-12">
+                            <div class="p-4 bg-slate-50 rounded-4 border border-slate-100">
+                                <h6 class="fw-bold text-slate-900 mb-3"><i class="fa-solid fa-money-bill-transfer me-2 text-crimson-600"></i> Numéros de paiement (Optionnels)</h6>
+                                <div class="row g-3">
+                                    <div class="col-md-3">
+                                        <label class="form-label small fw-bold text-slate-600">Numéro WAVE</label>
+                                        <input type="text" name="wave_number" id="wave_number" class="form-control rounded-3 border-0 shadow-sm" placeholder="00 00 00 00 00">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label small fw-bold text-slate-600">Numéro MTN</label>
+                                        <input type="text" name="mtn_number" id="mtn_number" class="form-control rounded-3 border-0 shadow-sm" placeholder="00 00 00 00 00">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label small fw-bold text-slate-600">Numéro ORANGE</label>
+                                        <input type="text" name="orange_number" id="orange_number" class="form-control rounded-3 border-0 shadow-sm" placeholder="00 00 00 00 00">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label small fw-bold text-slate-600">Numéro MOOV</label>
+                                        <input type="text" name="moov_number" id="moov_number" class="form-control rounded-3 border-0 shadow-sm" placeholder="00 00 00 00 00">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
                             <label class="form-label small fw-bold text-slate-700">Couleur du thème</label>
                             <select name="color" id="color" class="form-select rounded-3 py-2">
                                 <option value="blue">Bleu</option>
@@ -153,7 +182,12 @@ function editActivity(activity) {
     document.getElementById('date').value = activity.date;
     document.getElementById('start_time').value = activity.start_time;
     document.getElementById('end_time').value = activity.end_time;
-    document.getElementById('location').value = activity.location;
+    document.getElementById('location').value = activity.location || '';
+    document.getElementById('registration_amount').value = activity.registration_amount || '';
+    document.getElementById('wave_number').value = activity.wave_number || '';
+    document.getElementById('mtn_number').value = activity.mtn_number || '';
+    document.getElementById('orange_number').value = activity.orange_number || '';
+    document.getElementById('moov_number').value = activity.moov_number || '';
     document.getElementById('color').value = activity.color;
     document.getElementById('is_active').checked = !!activity.is_active;
 }

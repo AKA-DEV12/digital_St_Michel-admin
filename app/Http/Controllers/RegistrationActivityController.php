@@ -38,6 +38,11 @@ class RegistrationActivityController extends Controller
             'start_time' => 'nullable',
             'end_time' => 'nullable',
             'location' => 'nullable|string|max:255',
+            'registration_amount' => 'nullable|integer',
+            'wave_number' => 'nullable|string|max:255',
+            'mtn_number' => 'nullable|string|max:255',
+            'orange_number' => 'nullable|string|max:255',
+            'moov_number' => 'nullable|string|max:255',
             'color' => 'required|string|in:blue,indigo,slate,purple,emerald',
             'is_active' => 'boolean'
         ]);
@@ -61,6 +66,11 @@ class RegistrationActivityController extends Controller
             'start_time' => 'nullable',
             'end_time' => 'nullable',
             'location' => 'nullable|string|max:255',
+            'registration_amount' => 'nullable|integer',
+            'wave_number' => 'nullable|string|max:255',
+            'mtn_number' => 'nullable|string|max:255',
+            'orange_number' => 'nullable|string|max:255',
+            'moov_number' => 'nullable|string|max:255',
             'color' => 'required|string|in:blue,indigo,slate,purple,emerald',
             'is_active' => 'boolean'
         ]);
