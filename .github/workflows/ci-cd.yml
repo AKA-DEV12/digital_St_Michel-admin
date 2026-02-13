@@ -146,8 +146,10 @@ jobs:
 
             # Laravel commandes
             if [ -f artisan ]; then
-              php8.4 artisan migrate --force || true
+              php8.4 artisan migrate --force
               php8.4 artisan db:seed --class=RolePermissionSeeder --force || true
+              # RESET du cache Spatie (Crucial pour les permissions)
+              php8.4 artisan permission:cache-reset || true
               php8.4 artisan config:cache
               php8.4 artisan route:cache
               php8.4 artisan view:cache

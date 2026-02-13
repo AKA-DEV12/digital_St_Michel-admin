@@ -47,15 +47,6 @@ class RolePermissionSeeder extends Seeder
             'access_presences',
         ]);
 
-        // Assigner le rôle Super Admin au premier utilisateur s'il existe
-        $admin = User::where('email', 'admin@example.com')->first();
-        if (!$admin) {
-            $admin = User::create([
-                'name' => 'Super Administrateur',
-                'email' => 'admin@example.com',
-                'password' => Hash::make('password'),
-            ]);
-        }
-        $admin->assignRole($superAdminRole);
+        // Les utilisateurs administratifs sont désormais gérés dans AdminSeeder
     }
 }
