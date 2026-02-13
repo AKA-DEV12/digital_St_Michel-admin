@@ -27,7 +27,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-          extensions: mbstring, dom, curl, libxml, zlib, mysql, pdo_mysql, bcmath, tokenizer, xml, ctype, json, zip
+          extensions: mbstring, dom, curl, libxml, zlib, mysql, pdo_mysql, bcmath, tokenizer, xml, ctype, json, zip, gd
           coverage: none
 
       - name: Get Composer Cache Directory
@@ -93,7 +93,7 @@ jobs:
 
             # Installation des outils nécessaires
             apt-get update -y
-            apt-get install -y git unzip curl
+            apt-get install -y git unzip curl php8.4-gd php8.4-imagick
             
             # Installation de Node.js si absent
             if ! command -v npm &> /dev/null; then
@@ -147,6 +147,7 @@ jobs:
             # Laravel commandes
             if [ -f artisan ]; then
               php8.4 artisan migrate --force || true
+              php8.4 artisan db:seed --class=RolePermissionSeeder --force || true
               php8.4 artisan config:cache
               php8.4 artisan route:cache
               php8.4 artisan view:cache
