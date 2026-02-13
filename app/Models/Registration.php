@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Registration extends Model
 {
     protected $fillable = [
+        'id',
         'uuid',
         'registration_activity_id',
         'full_name',
@@ -30,6 +31,14 @@ class Registration extends Model
     public function agent()
     {
         return $this->belongsTo(Agent::class, 'scanned_by_agent_id');
+    }
+
+    /**
+     * Retourne l'URL de scan pour ce participant (basée sur l'ID).
+     */
+    public function getScanUrl()
+    {
+        return url("/api/scan/{$this->id}");
     }
 
     protected static function boot()

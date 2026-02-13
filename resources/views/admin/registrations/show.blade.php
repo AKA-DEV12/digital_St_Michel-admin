@@ -50,6 +50,7 @@
             </div>
         </div>
 
+        @if($registration->status === 'pending')
         <!-- Action Card -->
         <div class="glass-card">
             <h5 class="fw-bold mb-4">Changer le statut</h5>
@@ -57,14 +58,21 @@
                 @csrf
                 <div class="mb-3">
                     <select name="status" class="form-select rounded-3">
-                        <option value="pending" {{ $registration->status == 'pending' ? 'selected' : '' }}>En attente</option>
-                        <option value="confirmed" {{ $registration->status == 'confirmed' ? 'selected' : '' }}>Confirmer</option>
-                        <option value="cancelled" {{ $registration->status == 'cancelled' ? 'selected' : '' }}>Annuler</option>
+                        <option value="confirmed">Confirmer</option>
+                        <option value="cancelled">Annuler</option>
                     </select>
                 </div>
                 <button type="submit" class="btn btn-primary w-100 rounded-pill">Mettre à jour</button>
             </form>
         </div>
+        @else
+        <div class="glass-card bg-light border-0">
+            <div class="text-center py-2">
+                <i class="fa-solid fa-lock text-secondary mb-2"></i>
+                <p class="small text-secondary mb-0">Statut verrouillé</p>
+            </div>
+        </div>
+        @endif
     </div>
 
     <!-- Right Column: Tabs Card -->

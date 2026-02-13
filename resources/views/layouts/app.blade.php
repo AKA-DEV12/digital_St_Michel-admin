@@ -330,9 +330,9 @@
                 <div class="nav-label">Modules</div>
 
                 <!-- Logistique & Réservations -->
-                @if(auth()->user()->hasAnyPermission(['access_reservations', 'access_rooms', 'access_time_slots']))
+                @if(auth()->user()->hasAnyPermission(['access_reservations', 'access_rooms', 'access_time_slots', 'access_movements']))
                 <div class="nav-item">
-                    <button class="nav-link w-100 border-0 bg-transparent dropdown-toggle-custom {{ request()->routeIs(['reservations.*', 'rooms.*', 'time_slots.*']) ? 'active open' : '' }}" onclick="toggleDropdown(this)">
+                    <button class="nav-link w-100 border-0 bg-transparent dropdown-toggle-custom {{ request()->routeIs(['reservations.*', 'rooms.*', 'time_slots.*', 'movements.*']) ? 'active open' : '' }}" onclick="toggleDropdown(this)">
                         <i class="fa-solid fa-hotel"></i> 
                         <span>Logistique</span>
                         <i class="fa-solid fa-chevron-right ms-auto arrow-icon"></i>
@@ -353,14 +353,19 @@
                             <i class="fa-solid fa-clock me-2"></i> Créneaux
                         </a>
                         @endcan
+                        @can('access_movements')
+                        <a href="{{ route('movements.index') }}" class="submenu-link {{ request()->routeIs('movements.*') ? 'active' : '' }}">
+                            <i class="fa-solid fa-people-group me-2"></i> Mouvements
+                        </a>
+                        @endcan
                     </div>
                 </div>
                 @endif
 
                 <!-- Inscriptions & Activités -->
-                @if(auth()->user()->hasAnyPermission(['access_activities', 'access_registrations', 'access_presences', 'access_movements']))
+                @if(auth()->user()->hasAnyPermission(['access_activities', 'access_registrations', 'access_presences']))
                 <div class="nav-item">
-                    <button class="nav-link w-100 border-0 bg-transparent dropdown-toggle-custom {{ request()->routeIs(['activities.*', 'admin.registrations.*', 'movements.*']) ? 'active open' : '' }}" onclick="toggleDropdown(this)">
+                    <button class="nav-link w-100 border-0 bg-transparent dropdown-toggle-custom {{ request()->routeIs(['activities.*', 'admin.registrations.*']) ? 'active open' : '' }}" onclick="toggleDropdown(this)">
                         <i class="fa-solid fa-clipboard-list"></i> 
                         <span>Inscriptions</span>
                         <i class="fa-solid fa-chevron-right ms-auto arrow-icon"></i>
@@ -381,11 +386,6 @@
                             <i class="fa-solid fa-person-walking me-2"></i> Activités
                         </a>
                         @endcan
-                        @can('access_movements')
-                        <a href="{{ route('movements.index') }}" class="submenu-link {{ request()->routeIs('movements.*') ? 'active' : '' }}">
-                            <i class="fa-solid fa-people-group me-2"></i> Mouvements
-                        </a>
-                        @endcan
                     </div>
                 </div>
                 @endif
@@ -394,7 +394,7 @@
                 @can('access_agents')
                 <div class="nav-item">
                     <a href="{{ route('agents.index') }}" class="nav-link {{ request()->routeIs('agents.*') ? 'active' : '' }}">
-                        <i class="fa-solid fa-user-tie"></i> Agents (API)
+                        <i class="fa-solid fa-user-tie"></i> Agents 
                     </a>
                 </div>
                 @endcan

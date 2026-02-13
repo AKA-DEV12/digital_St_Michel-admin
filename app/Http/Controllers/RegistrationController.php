@@ -40,7 +40,7 @@ class RegistrationController extends Controller
 
     public function scanned()
     {
-        $registrations = Registration::where('qr_code_scanned', true)
+        $registrations = Registration::where('qr_code_scanned', 1)
             ->with('registrationActivity')
             ->latest('updated_at')
             ->paginate(15);
@@ -64,8 +64,18 @@ class RegistrationController extends Controller
 
     public function updateStatus(Request $request, $uuid)
     {
+        $registration = Registration::where('uuid', $uuid)->first();
+
+        if (!$registration) {
+            return back()->with('error', 'Inscription introuvable.');
+        }
+
+        if ($registration->status !== 'pending') {
+            return back()->with('error', 'Le statut de cette inscription a déjà été défini et ne peut plus être modifié.');
+        }
+
         $validated = $request->validate([
-            'status' => 'required|string|in:pending,confirmed,cancelled'
+            'status' => 'required|string|in:confirmed,cancelled'
         ]);
 
         Registration::where('uuid', $uuid)->update(['status' => $validated['status']]);

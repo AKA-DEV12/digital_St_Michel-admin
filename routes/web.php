@@ -42,15 +42,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Activity Management
     Route::middleware(['permission:access_activities'])->resource('activities', RegistrationActivityController::class)->except(['create', 'show', 'edit']);
 
+    // Presence / Scanned QR
+    Route::middleware(['permission:access_presences'])->get('/registrations/scanned', [RegistrationController::class, 'scanned'])->name('admin.registrations.scanned');
+
     // Registration Management
     Route::middleware(['permission:access_registrations'])->group(function () {
         Route::get('/registrations', [RegistrationController::class, 'index'])->name('admin.registrations.index');
         Route::get('/registrations/{uuid}', [RegistrationController::class, 'show'])->name('admin.registrations.show');
         Route::post('/registrations/{uuid}/status', [RegistrationController::class, 'updateStatus'])->name('admin.registrations.update_status');
     });
-
-    // Presence / Scanned QR
-    Route::middleware(['permission:access_presences'])->get('/registrations/scanned', [RegistrationController::class, 'scanned'])->name('admin.registrations.scanned');
 
     // Agent Management
     Route::middleware(['permission:access_agents'])->resource('agents', AgentController::class)->except(['create', 'show', 'edit']);
