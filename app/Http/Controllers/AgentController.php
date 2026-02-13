@@ -22,6 +22,9 @@ class AgentController extends Controller
             'email' => 'required|email|unique:agents,email',
             'phone' => 'required|string|max:20',
             'password' => 'required|string|min:6',
+        ], [
+            'password.required' => 'Le mot de passe est requis',
+            'password.min' => 'Le mot de passe doit contenir au moins 6 caractères',
         ]);
 
         Agent::create([

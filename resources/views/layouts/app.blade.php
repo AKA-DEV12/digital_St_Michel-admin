@@ -504,5 +504,6 @@
             }
         });
     </script>
+    @include('partials.flashmessage')
 </body>
 </html>

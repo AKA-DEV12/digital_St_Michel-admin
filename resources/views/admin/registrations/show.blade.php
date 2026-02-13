@@ -171,10 +171,13 @@
                                 <div class="bg-light rounded-4 p-3 border">
                                     @php
                                         $isImage = in_array(pathinfo($registration->payment_receipt, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'webp']);
+                                        $receiptUrl = (strpos($registration->payment_receipt, 'assets/') === 0) 
+                                            ? rtrim(env('PUBLIC_SITE_URL', 'https://digital.saint-michel-archange.com'), '/') . '/' . $registration->payment_receipt 
+                                            : asset('storage/' . $registration->payment_receipt);
                                     @endphp
                                     
                                     @if($isImage)
-                                        <img src="{{ asset('storage/' . $registration->payment_receipt) }}" alt="Reçu" class="img-fluid rounded-3 shadow-sm mx-auto d-block" style="max-height: 500px">
+                                        <img src="{{ $receiptUrl }}" alt="Reçu" class="img-fluid rounded-3 shadow-sm mx-auto d-block" style="max-height: 500px">
                                     @else
                                         <div class="py-5">
                                             <i class="fa-solid fa-file-pdf fs-1 text-danger mb-3"></i>
@@ -184,10 +187,10 @@
                                 </div>
                             </div>
                             <div class="d-flex justify-content-center gap-2">
-                                <a href="{{ asset('storage/' . $registration->payment_receipt) }}" target="_blank" class="btn btn-primary rounded-pill px-4">
+                                <a href="{{ $receiptUrl }}" target="_blank" class="btn btn-primary rounded-pill px-4">
                                     <i class="fa-solid fa-expand me-2"></i> Voir en plein écran
                                 </a>
-                                <a href="{{ asset('storage/' . $registration->payment_receipt) }}" download class="btn btn-outline-secondary rounded-pill px-4">
+                                <a href="{{ $receiptUrl }}" download class="btn btn-outline-secondary rounded-pill px-4">
                                     <i class="fa-solid fa-download me-2"></i> Télécharger
                                 </a>
                             </div>
