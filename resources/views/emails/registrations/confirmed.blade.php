@@ -42,7 +42,7 @@
         <p>Merci de votre confiance et à bientôt !</p>
 
         <div class="footer">
-            <p>&copy; {{ date('Y') }} {{ config('app.name') }}. Tous droits réservés.</p>
+            <p>&copy; {{ date('Y') }} Saint Michel Archange d‘Adjamé - Paroisse SMA. Tous droits réservés.</p>
         </div>
     </div>
 </body>

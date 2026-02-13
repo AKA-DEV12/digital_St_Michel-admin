@@ -18,11 +18,18 @@ class Registration extends Model
         'payment_email',
         'payment_operator',
         'payment_receipt',
+        'qr_code_scanned',
+        'scanned_by_agent_id',
     ];
 
     public function registrationActivity()
     {
         return $this->belongsTo(RegistrationActivity::class);
+    }
+
+    public function agent()
+    {
+        return $this->belongsTo(Agent::class, 'scanned_by_agent_id');
     }
 
     protected static function boot()

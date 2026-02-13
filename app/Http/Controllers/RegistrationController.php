@@ -17,7 +17,7 @@ class RegistrationController extends Controller
         $query = Registration::with('registrationActivity')
             ->selectRaw('uuid, registration_activity_id, `option`, group_name, status, SUM(amount) as total_amount, MAX(full_name) as primary_name, MAX(phone_number) as primary_phone, MAX(created_at) as created_at')
             ->where('status', $status)
-            ->groupBy('uuid', 'registration_activity_id', 'option', 'group_name', 'status');
+            ->groupBy('uuid', 'registration_activity_id', \DB::raw('`option`'), 'group_name', 'status');
 
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -36,6 +36,16 @@ class RegistrationController extends Controller
         $activities = RegistrationActivity::all();
 
         return view('admin.registrations.index', compact('registrations', 'activities'));
+    }
+
+    public function scanned()
+    {
+        $registrations = Registration::where('qr_code_scanned', true)
+            ->with('registrationActivity')
+            ->latest('updated_at')
+            ->paginate(15);
+
+        return view('admin.registrations.scanned', compact('registrations'));
     }
 
     public function show($uuid)

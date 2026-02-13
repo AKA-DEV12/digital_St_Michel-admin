@@ -65,7 +65,9 @@ class RegistrationConfirmed extends Mailable
         $attachments = [];
 
         foreach ($this->participants as $participant) {
-            $qrData = "Nom: {$participant->full_name}\nTel: {$participant->phone_number}\nUUID: {$participant->uuid}";
+            // L'URL de scan qui sera encodée dans le QR Code
+            $scanUrl = url("/api/scan/{$participant->uuid}");
+            $qrData = "Participant: {$participant->full_name}\nActivite: " . ($this->registration->registrationActivity->title ?? 'N/A') . "\nURL: {$scanUrl}";
 
             // Generate QR code as PNG (base64 string then decoded)
             // Note: simple-qrcode supports generating PNG if imagick or gd is installed

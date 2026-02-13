@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Reservation;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\ReservationStatusUpdated;
 
 class ReservationController extends Controller
 {
@@ -115,8 +116,13 @@ class ReservationController extends Controller
     {
         $reservation->update(['status' => 'validated']);
 
-        // Logic to send email would go here
-        // Mail::to($reservation->email)->send(new ReservationStatusMail($reservation));
+        try {
+            if ($reservation->email) {
+                Mail::to($reservation->email)->send(new ReservationStatusUpdated($reservation));
+            }
+        } catch (\Exception $e) {
+            \Log::error("Erreur d'envoi d'e-mail de validation pour la réservation #{$reservation->id}: " . $e->getMessage());
+        }
 
         return back()->with('success', 'Réservation validée avec succès.');
     }
@@ -128,8 +134,13 @@ class ReservationController extends Controller
     {
         $reservation->update(['status' => 'cancelled']);
 
-        // Logic to send email would go here
-        // Mail::to($reservation->email)->send(new ReservationStatusMail($reservation));
+        try {
+            if ($reservation->email) {
+                Mail::to($reservation->email)->send(new ReservationStatusUpdated($reservation));
+            }
+        } catch (\Exception $e) {
+            \Log::error("Erreur d'envoi d'e-mail d'annulation pour la réservation #{$reservation->id}: " . $e->getMessage());
+        }
 
         return back()->with('success', 'Réservation annulée.');
     }

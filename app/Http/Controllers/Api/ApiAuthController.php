@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
-use App\Models\User;
+use App\Models\Agent;
 use Illuminate\Support\Facades\Hash;
 
 class ApiAuthController extends Controller
@@ -14,14 +14,14 @@ class ApiAuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required',
+            'email' => 'required|email',
             'password' => 'required',
         ]);
 
 
-        $user = User::where('email', $request->email)->first();
+        $agent = Agent::where('email', $request->email)->first();
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        if (!$agent || !Hash::check($request->password, $agent->password)) {
 
             return response()->json(
                 [
@@ -33,14 +33,14 @@ class ApiAuthController extends Controller
             );
 
         }
-        $token = $user->createToken('auth-token')->plainTextToken;
+        $token = $agent->createToken('auth-token')->plainTextToken;
 
         return response()->json([
             'status' => 'success',
             'code' => 'LOGIN_SUCCESS',
             'message' => 'Connexion réussie',
             'token' => $token,
-            'user' => $user
+            'user' => $agent
         ], 200);
 
 
