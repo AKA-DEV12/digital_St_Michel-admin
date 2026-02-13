@@ -146,7 +146,8 @@ jobs:
 
             # Laravel commandes
             if [ -f artisan ]; then
-              php8.4 artisan migrate --force || true
+              php8.4 artisan migrate --force
+              php8.4 artisan permission:cache-reset
               php8.4 artisan config:cache
               php8.4 artisan route:cache
               php8.4 artisan view:cache
