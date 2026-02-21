@@ -365,7 +365,7 @@
                 <!-- Inscriptions & Activités -->
                 @if(auth()->user()->hasAnyPermission(['access_activities', 'access_registrations', 'access_presences']))
                 <div class="nav-item">
-                    <button class="nav-link w-100 border-0 bg-transparent dropdown-toggle-custom {{ request()->routeIs(['activities.*', 'admin.registrations.*']) ? 'active open' : '' }}" onclick="toggleDropdown(this)">
+                    <button class="nav-link w-100 border-0 bg-transparent dropdown-toggle-custom {{ request()->routeIs(['activities.*', 'admin.registrations.*', 'admin.participant_groups.*']) ? 'active open' : '' }}" onclick="toggleDropdown(this)">
                         <i class="fa-solid fa-clipboard-list"></i> 
                         <span>Inscriptions</span>
                         <i class="fa-solid fa-chevron-right ms-auto arrow-icon"></i>
@@ -384,6 +384,11 @@
                         @can('access_activities')
                         <a href="{{ route('activities.index') }}" class="submenu-link {{ request()->routeIs('activities.*') ? 'active' : '' }}">
                             <i class="fa-solid fa-person-walking me-2"></i> Activités
+                        </a>
+                        @endcan
+                        @can('access_registrations')
+                        <a href="{{ route('admin.participant_groups.index') }}" class="submenu-link {{ request()->routeIs('admin.participant_groups.*') ? 'active' : '' }}">
+                            <i class="fa-solid fa-layer-group me-2"></i> Groupes
                         </a>
                         @endcan
                     </div>

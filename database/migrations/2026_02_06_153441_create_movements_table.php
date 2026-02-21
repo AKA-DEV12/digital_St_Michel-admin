@@ -10,11 +10,13 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('movements', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('movements')) {
+            Schema::create('movements', function (Blueprint $table) {
+                $table->id();
+                $table->string('name');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

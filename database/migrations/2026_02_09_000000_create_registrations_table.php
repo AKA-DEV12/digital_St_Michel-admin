@@ -10,21 +10,23 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('registrations', function (Blueprint $table) {
-            $table->id();
-            $table->uuid('uuid')->index();
-            $table->foreignId('registration_activity_id')->constrained()->onDelete('cascade');
-            $table->string('full_name');
-            $table->string('phone_number');
-            $table->decimal('amount', 10, 2);
-            $table->string('option');
-            $table->string('group_name')->nullable();
-            $table->string('status')->default('pending');
-            $table->string('payment_email')->nullable();
-            $table->string('payment_operator')->nullable();
-            $table->string('payment_receipt')->nullable();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('registrations')) {
+            Schema::create('registrations', function (Blueprint $table) {
+                $table->id();
+                $table->uuid('uuid')->index();
+                $table->foreignId('registration_activity_id')->constrained()->onDelete('cascade');
+                $table->string('full_name');
+                $table->string('phone_number');
+                $table->decimal('amount', 10, 2);
+                $table->string('option');
+                $table->string('group_name')->nullable();
+                $table->string('status')->default('pending');
+                $table->string('payment_email')->nullable();
+                $table->string('payment_operator')->nullable();
+                $table->string('payment_receipt')->nullable();
+                $table->timestamps();
+            });
+        }
     }
 
     /**

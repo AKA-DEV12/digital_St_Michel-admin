@@ -21,6 +21,7 @@ class Registration extends Model
         'payment_receipt',
         'qr_code_scanned',
         'scanned_by_agent_id',
+        'participant_group_id',
     ];
 
     public function registrationActivity()
@@ -31,6 +32,11 @@ class Registration extends Model
     public function agent()
     {
         return $this->belongsTo(Agent::class, 'scanned_by_agent_id');
+    }
+
+    public function participantGroup()
+    {
+        return $this->belongsTo(ParticipantGroup::class);
     }
 
     /**

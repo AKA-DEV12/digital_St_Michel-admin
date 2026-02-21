@@ -8,7 +8,9 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('registrations', function (Blueprint $table) {
-            $table->foreignId('scanned_by_agent_id')->nullable()->constrained('agents')->onDelete('set null');
+            if (!Schema::hasColumn('registrations', 'scanned_by_agent_id')) {
+                $table->foreignId('scanned_by_agent_id')->nullable()->constrained('agents')->onDelete('set null');
+            }
         });
     }
 

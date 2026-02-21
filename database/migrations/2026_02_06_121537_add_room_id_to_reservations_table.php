@@ -11,7 +11,9 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('reservations', function (Blueprint $table) {
-            $table->foreignId('room_id')->constrained()->onDelete('cascade');
+            if (!Schema::hasColumn('reservations', 'room_id')) {
+                $table->foreignId('room_id')->constrained()->onDelete('cascade');
+            }
         });
     }
 

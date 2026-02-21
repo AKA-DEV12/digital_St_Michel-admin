@@ -52,6 +52,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/registrations/{uuid}/status', [RegistrationController::class, 'updateStatus'])->name('admin.registrations.update_status');
     });
 
+    // Participant Groups Management
+    Route::middleware(['permission:access_registrations'])->group(function () {
+        Route::get('/participant-groups', [\App\Http\Controllers\ParticipantGroupController::class, 'index'])->name('admin.participant_groups.index');
+        Route::get('/participant-groups/create', [\App\Http\Controllers\ParticipantGroupController::class, 'create'])->name('admin.participant_groups.create');
+        Route::post('/participant-groups', [\App\Http\Controllers\ParticipantGroupController::class, 'store'])->name('admin.participant_groups.store');
+        Route::get('/participant-groups/{id}', [\App\Http\Controllers\ParticipantGroupController::class, 'show'])->name('admin.participant_groups.show');
+    });
+
     // Agent Management
     Route::middleware(['permission:access_agents'])->resource('agents', AgentController::class)->except(['create', 'show', 'edit']);
 

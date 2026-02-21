@@ -14,8 +14,8 @@ class RegistrationController extends Controller
         $search = $request->get('search');
         $activity_id = $request->get('activity_id');
 
-        $query = Registration::with('registrationActivity')
-            ->selectRaw('uuid, registration_activity_id, `option`, group_name, status, SUM(amount) as total_amount, MAX(full_name) as primary_name, MAX(phone_number) as primary_phone, MAX(created_at) as created_at')
+        $query = Registration::with(['registrationActivity', 'participantGroup'])
+            ->selectRaw('uuid, registration_activity_id, `option`, group_name, status, SUM(amount) as total_amount, MAX(full_name) as primary_name, MAX(phone_number) as primary_phone, MAX(created_at) as created_at, MAX(participant_group_id) as participant_group_id')
             ->where('status', $status)
             ->groupBy('uuid', 'registration_activity_id', \DB::raw('`option`'), 'group_name', 'status');
 
@@ -35,7 +35,37 @@ class RegistrationController extends Controller
         $registrations = $query->latest('created_at')->paginate(33)->withQueryString();
         $activities = RegistrationActivity::all();
 
-        return view('admin.registrations.index', compact('registrations', 'activities'));
+        // Calculate Wallet Total for confirmed registrations based on current filters
+        $walletQuery = Registration::where('status', 'confirmed');
+        if ($search) {
+            $walletQuery->where(function ($q) use ($search) {
+                $q->where('full_name', 'like', "%{$search}%")
+                    ->orWhere('phone_number', 'like', "%{$search}%")
+                    ->orWhere('uuid', 'like', "%{$search}%")
+                    ->orWhere('group_name', 'like', "%{$search}%");
+            });
+        }
+        if ($activity_id) {
+            $walletQuery->where('registration_activity_id', $activity_id);
+        }
+        $walletTotal = $walletQuery->sum('amount');
+
+        // Calculate Pending Wallet Total for pending registrations
+        $pendingWalletQuery = Registration::where('status', 'pending');
+        if ($search) {
+            $pendingWalletQuery->where(function ($q) use ($search) {
+                $q->where('full_name', 'like', "%{$search}%")
+                    ->orWhere('phone_number', 'like', "%{$search}%")
+                    ->orWhere('uuid', 'like', "%{$search}%")
+                    ->orWhere('group_name', 'like', "%{$search}%");
+            });
+        }
+        if ($activity_id) {
+            $pendingWalletQuery->where('registration_activity_id', $activity_id);
+        }
+        $pendingWalletTotal = $pendingWalletQuery->sum('amount');
+
+        return view('admin.registrations.index', compact('registrations', 'activities', 'walletTotal', 'pendingWalletTotal'));
     }
 
     public function scanned()

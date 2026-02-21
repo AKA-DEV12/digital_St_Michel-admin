@@ -10,19 +10,21 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('registration_activities', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
-            $table->string('subtitle')->nullable();
-            $table->text('description')->nullable();
-            $table->date('date');
-            $table->time('start_time')->nullable();
-            $table->time('end_time')->nullable();
-            $table->string('location')->nullable();
-            $table->string('color')->default('blue'); // blue, indigo, slate, etc.
-            $table->boolean('is_active')->default(true);
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('registration_activities')) {
+            Schema::create('registration_activities', function (Blueprint $table) {
+                $table->id();
+                $table->string('title');
+                $table->string('subtitle')->nullable();
+                $table->text('description')->nullable();
+                $table->date('date');
+                $table->time('start_time')->nullable();
+                $table->time('end_time')->nullable();
+                $table->string('location')->nullable();
+                $table->string('color')->default('blue'); // blue, indigo, slate, etc.
+                $table->boolean('is_active')->default(true);
+                $table->timestamps();
+            });
+        }
     }
 
     /**

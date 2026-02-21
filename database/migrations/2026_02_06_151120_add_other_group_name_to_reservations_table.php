@@ -11,7 +11,9 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('reservations', function (Blueprint $table) {
-            $table->string('other_group_name')->nullable()->after('group_name');
+            if (!Schema::hasColumn('reservations', 'other_group_name')) {
+                $table->string('other_group_name')->nullable()->after('group_name');
+            }
         });
     }
 

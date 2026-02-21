@@ -10,15 +10,17 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('agents', function (Blueprint $table) {
-            $table->id();
-            $table->string('nom');
-            $table->string('prenom');
-            $table->string('email')->unique();
-            $table->string('phone');
-            $table->string('password');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('agents')) {
+            Schema::create('agents', function (Blueprint $table) {
+                $table->id();
+                $table->string('nom');
+                $table->string('prenom');
+                $table->string('email')->unique();
+                $table->string('phone');
+                $table->string('password');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

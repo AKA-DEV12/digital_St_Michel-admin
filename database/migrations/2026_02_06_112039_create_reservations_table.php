@@ -10,19 +10,21 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('reservations', function (Blueprint $table) {
-            $table->id();
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('email');
-            $table->string('phone')->nullable();
-            $table->string('group_name');
-            $table->text('reservation_object');
-            $table->date('reservation_date');
-            $table->string('time_slot');
-            $table->enum('status', ['pending', 'validated', 'cancelled'])->default('pending');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('reservations')) {
+            Schema::create('reservations', function (Blueprint $table) {
+                $table->id();
+                $table->string('first_name');
+                $table->string('last_name');
+                $table->string('email');
+                $table->string('phone')->nullable();
+                $table->string('group_name');
+                $table->text('reservation_object');
+                $table->date('reservation_date');
+                $table->string('time_slot');
+                $table->enum('status', ['pending', 'validated', 'cancelled'])->default('pending');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

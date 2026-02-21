@@ -10,14 +10,16 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('rooms', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->text('description')->nullable();
-            $table->integer('capacity')->nullable();
-            $table->string('icon')->nullable();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('rooms')) {
+            Schema::create('rooms', function (Blueprint $table) {
+                $table->id();
+                $table->string('name');
+                $table->text('description')->nullable();
+                $table->integer('capacity')->nullable();
+                $table->string('icon')->nullable();
+                $table->timestamps();
+            });
+        }
     }
 
     /**

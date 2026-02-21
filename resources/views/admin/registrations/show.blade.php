@@ -15,11 +15,24 @@
     <div class="col-lg-4 animate-fade-in" style="animation-delay: 0.1s">
         <div class="glass-card text-center py-5">
             <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 80px; height: 80px; font-size: 2rem; font-weight: 700;">
-                {{ strtoupper(substr($registration->option === 'Individuel' ? $registration->full_name : ($registration->group_name ?? 'G'), 0, 1)) }}
+                @if($registration->participant_group_id && $registration->participantGroup)
+                    {{ strtoupper(substr($registration->participantGroup->name, 0, 1)) }}
+                @else
+                    {{ strtoupper(substr($registration->option === 'Individuel' ? $registration->full_name : ($registration->group_name ?? 'G'), 0, 1)) }}
+                @endif
             </div>
             <h4 class="fw-bold mb-1">
-                {{ $registration->option === 'Individuel' ? $registration->full_name : ($registration->group_name ?? 'Groupe non nommé') }}
+                @if($registration->participant_group_id && $registration->participantGroup)
+                    {{ $registration->participantGroup->name }}
+                @else
+                    {{ $registration->option === 'Individuel' ? $registration->full_name : ($registration->group_name ?? 'Groupe non nommé') }}
+                @endif
             </h4>
+            @if($registration->participant_group_id && $registration->participantGroup)
+                <div class="text-secondary small mb-2 fst-italic">
+                    Inscription init: {{ $registration->option === 'Individuel' ? $registration->full_name : ($registration->group_name ?? 'Multiple') }}
+                </div>
+            @endif
             <p class="text-secondary mb-4">{{ $registration->phone_number }}</p>
             
             <div class="d-flex justify-content-center gap-3 mb-4">
@@ -29,6 +42,12 @@
                     <span class="badge-pill bg-success bg-opacity-10 text-success px-4 py-2">Confirmée</span>
                 @else
                     <span class="badge-pill bg-danger bg-opacity-10 text-danger px-4 py-2">Annulée</span>
+                @endif
+                
+                @if($registration->participant_group_id)
+                    <a href="{{ route('admin.participant_groups.show', $registration->participant_group_id) }}" class="badge-pill bg-primary bg-opacity-10 text-primary px-4 py-2 text-decoration-none">
+                        <i class="fa-solid fa-layer-group me-1"></i> {{ $registration->participantGroup->name ?? 'Groupe' }}
+                    </a>
                 @endif
             </div>
 
@@ -79,7 +98,7 @@
     <div class="col-lg-8 animate-fade-in" style="animation-delay: 0.2s">
         <div class="glass-card h-100">
             <!-- Nav Tabs -->
-            <ul class="nav nav-pills mb-4 gap-2" id="registrationTab" role="tablist">
+            <ul class="nav nav-pills custom-red-tabs mb-4 gap-2" id="registrationTab" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active rounded-pill px-4" id="participants-tab" data-bs-toggle="pill" data-bs-target="#participantsList" type="button" role="tab" aria-controls="participantsList" aria-selected="true">
                         <i class="fa-solid fa-users me-2"></i> Participants ({{ $participants->count() }})
@@ -206,4 +225,21 @@
         </div>
     </div>
 </div>
+</div>
+<style>
+    .nav-pills.custom-red-tabs .nav-link.active {
+        background-color: #dc2626 !important;
+        color: #ffffff !important;
+    }
+    .nav-pills.custom-red-tabs .nav-link.active i {
+        color: #ffffff !important;
+    }
+    .nav-pills.custom-red-tabs .nav-link {
+        color: #64748b; /* text-slate-500 */
+    }
+    .nav-pills.custom-red-tabs .nav-link:hover:not(.active) {
+        background-color: #f8fafc;
+        color: #dc2626;
+    }
+</style>
 @endsection

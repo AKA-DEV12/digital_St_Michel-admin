@@ -11,8 +11,8 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('registrations', function (Blueprint $table) {
-            if (!Schema::hasColumn('registrations', 'qr_code_scanned')) {
-                $table->boolean('qr_code_scanned')->default(false)->after('status');
+            if (!Schema::hasColumn('registrations', 'participant_group_id')) {
+                $table->foreignId('participant_group_id')->nullable()->after('id')->constrained('participant_groups')->nullOnDelete();
             }
         });
     }
@@ -23,7 +23,8 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::table('registrations', function (Blueprint $table) {
-            $table->dropColumn('qr_code_scanned');
+            $table->dropForeign(['participant_group_id']);
+            $table->dropColumn('participant_group_id');
         });
     }
 };

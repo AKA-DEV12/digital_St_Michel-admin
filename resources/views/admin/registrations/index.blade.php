@@ -7,6 +7,74 @@
                 <h1 class="h3 fw-bold mb-1">Inscriptions</h1>
                 <p class="text-secondary">Gérez les inscriptions aux activités et pèlerinages.</p>
             </div>
+            <a href="{{ route('admin.participant_groups.create') }}" class="btn btn-primary rounded-3 px-4 py-2 fw-bold shadow-sm">
+                <i class="fa-solid fa-layer-group me-2"></i> Constituer un groupe
+            </a>
+        </div>
+    </div>
+
+    <!-- Premium Wallet Cards -->
+    <div class="row mb-5 animate-fade-in justify-content-center g-4" style="animation-delay: 0.1s">
+        <!-- Confirmed Wallet -->
+        <div class="col-12 col-md-6 col-lg-5">
+            <div class="card border-0 rounded-4 overflow-hidden shadow-lg position-relative premium-wallet-card">
+                <!-- Background Decoration -->
+                <div class="position-absolute top-0 end-0 p-3 opacity-25" style="transform: translate(20%, -20%) scale(2);">
+                    <i class="fa-solid fa-wallet text-white" style="font-size: 8rem;"></i>
+                </div>
+                
+                <div class="card-body p-4 position-relative z-1">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="rounded-circle bg-white bg-opacity-25 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                <i class="fa-solid fa-vault text-white"></i>
+                            </div>
+                            <h6 class="text-white text-uppercase fw-bold mb-0" style="letter-spacing: 1px; font-size: 0.85rem;">Portefeuille Global</h6>
+                        </div>
+                        <span class="badge bg-white text-danger rounded-pill px-3 py-2 fw-bold shadow-sm">
+                            <i class="fa-solid fa-circle-check text-success me-1"></i> Validé
+                        </span>
+                    </div>
+
+                    <div class="mb-1">
+                        <span class="text-white-50 small fw-bold text-uppercase">Solde Disponible</span>
+                        <h2 class="display-6 fw-bolder text-white mb-0" style="text-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                            {{ number_format($walletTotal, 0, ',', ' ') }} <span class="fs-5 opacity-75">FCFA</span>
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Wallet -->
+        <div class="col-12 col-md-6 col-lg-5">
+            <div class="card border-0 rounded-4 overflow-hidden shadow-lg position-relative premium-wallet-secondary">
+                <!-- Background Decoration -->
+                <div class="position-absolute top-0 end-0 p-3 opacity-25" style="transform: translate(20%, -20%) scale(2);">
+                    <i class="fa-solid fa-hourglass-half text-white" style="font-size: 8rem;"></i>
+                </div>
+                
+                <div class="card-body p-4 position-relative z-1">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="rounded-circle bg-white bg-opacity-25 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                <i class="fa-solid fa-vault text-white"></i>
+                            </div>
+                            <h6 class="text-white text-uppercase fw-bold mb-0" style="letter-spacing: 1px; font-size: 0.85rem;">En Attente</h6>
+                        </div>
+                        <span class="badge bg-white align-items-center d-flex gap-1 text-secondary rounded-pill px-3 py-2 fw-bold shadow-sm">
+                            <i class="fa-solid fa-clock text-warning"></i> Non validé
+                        </span>
+                    </div>
+
+                    <div class="mb-1">
+                        <span class="text-white-50 small fw-bold text-uppercase">Solde Potentiel</span>
+                        <h2 class="display-6 fw-bolder text-white mb-0" style="text-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                            {{ number_format($pendingWalletTotal, 0, ',', ' ') }} <span class="fs-5 opacity-75">FCFA</span>
+                        </h2>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -59,12 +127,25 @@
                 <td class="px-6 py-4">
                     <div class="d-flex align-items-center">
                         <div class="rounded-circle bg-primary-light text-primary d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; font-weight: 600;">
-                            {{ strtoupper(substr($reg->option === 'Individuel' ? $reg->primary_name : ($reg->group_name ?? 'G'), 0, 1)) }}
+                            @if($reg->participant_group_id && $reg->participantGroup)
+                                {{ strtoupper(substr($reg->participantGroup->name, 0, 1)) }}
+                            @else
+                                {{ strtoupper(substr($reg->option === 'Individuel' ? $reg->primary_name : ($reg->group_name ?? 'G'), 0, 1)) }}
+                            @endif
                         </div>
                         <div>
                             <div class="fw-bold text-dark">
-                                {{ $reg->option === 'Individuel' ? $reg->primary_name : ($reg->group_name ?? 'Groupe non nommé') }}
+                                @if($reg->participant_group_id && $reg->participantGroup)
+                                    {{ $reg->participantGroup->name }}
+                                @else
+                                    {{ $reg->option === 'Individuel' ? $reg->primary_name : ($reg->group_name ?? 'Groupe non nommé') }}
+                                @endif
                             </div>
+                            @if($reg->participant_group_id && $reg->participantGroup)
+                                <div class="text-xs text-secondary mt-1">
+                                    Init: {{ $reg->option === 'Individuel' ? $reg->primary_name : ($reg->group_name ?? 'Inscription multiple') }}
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </td>
@@ -75,7 +156,14 @@
                     </div>
                 </td>
                 <td class="px-6 py-4">
-                    <span class="badge bg-light text-dark border">{{ $reg->option }}</span>
+                    <span class="badge bg-light text-dark border mb-1">{{ $reg->option }}</span>
+                    @if($reg->participant_group_id)
+                        <div class="mt-1">
+                            <a href="{{ route('admin.participant_groups.show', $reg->participant_group_id) }}" class="badge bg-primary bg-opacity-10 text-primary border-0 text-decoration-none" title="Fait partie du groupe">
+                                <i class="fa-solid fa-layer-group me-1"></i> {{ $reg->participantGroup->name ?? 'Groupe #' . $reg->participant_group_id }}
+                            </a>
+                        </div>
+                    @endif
                 </td>
                 <td class="px-6 py-4">
                     <div class="fw-bold text-primary">{{ number_format($reg->total_amount, 0, ',', ' ') }} FCFA</div>
@@ -98,27 +186,6 @@
                             <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-3 p-2">
                                 <li><a class="dropdown-item small py-2 rounded-2 fw-bold" href="{{ route('admin.registrations.show', $reg->uuid) }}"><i class="fa-solid fa-eye me-2"></i>Détails</a></li>
 
-                            @if($reg->status == 'pending')
-                                <li><hr class="dropdown-divider opacity-50"></li>
-                                <li>
-                                    <form action="{{ route('admin.registrations.update_status', $reg->uuid) }}" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="status" value="confirmed">
-                                        <button type="submit" class="dropdown-item small py-2 rounded-2 text-success fw-bold bg-success-subtle mb-1">
-                                            <i class="fa-solid fa-circle-check me-2"></i> CONFIRMER
-                                        </button>
-                                    </form>
-                                </li>
-                                <li>
-                                    <form action="{{ route('admin.registrations.update_status', $reg->uuid) }}" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="status" value="cancelled">
-                                        <button type="submit" class="dropdown-item small py-2 rounded-2 text-danger fw-bold bg-danger-subtle">
-                                            <i class="fa-solid fa-circle-xmark me-2"></i> ANNULER
-                                        </button>
-                                    </form>
-                                </li>
-                            @endif
                         </ul>
                     </div>
                 </td>
@@ -128,6 +195,24 @@
 @endsection
 
 <style>
+    .premium-wallet-card {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        box-shadow: 0 10px 25px -5px rgba(220, 38, 38, 0.5) !important;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .premium-wallet-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 25px -5px rgba(220, 38, 38, 0.6) !important;
+    }
+    .premium-wallet-secondary {
+        background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+        box-shadow: 0 10px 25px -5px rgba(71, 85, 105, 0.5) !important;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .premium-wallet-secondary:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 25px -5px rgba(71, 85, 105, 0.6) !important;
+    }
     .bg-success-subtle { background-color: #f0fdf4 !important; }
     .bg-danger-subtle { background-color: #fef2f2 !important; }
     .text-success { color: #16a34a !important; }

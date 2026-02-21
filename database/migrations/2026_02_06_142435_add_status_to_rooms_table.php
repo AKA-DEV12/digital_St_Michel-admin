@@ -11,7 +11,9 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('rooms', function (Blueprint $table) {
-            $table->enum('status', ['disponible', 'indisponible'])->default('disponible')->after('icon');
+            if (!Schema::hasColumn('rooms', 'status')) {
+                $table->enum('status', ['disponible', 'indisponible'])->default('disponible')->after('icon');
+            }
         });
     }
 
