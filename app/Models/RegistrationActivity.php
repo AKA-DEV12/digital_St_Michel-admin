@@ -15,6 +15,7 @@ class RegistrationActivity extends Model
         'end_time',
         'location',
         'registration_amount',
+        'notification_email',
         'wave_number',
         'mtn_number',
         'orange_number',
