@@ -9,8 +9,7 @@ use Illuminate\Http\Request;
 class QrCodeController extends Controller
 {
     /**
-     * Cette fonction permet de valider le ticket d'un participant après avoir scanné son QR Code.
-     * On l'appelle via l'adresse : /api/scan/{id}
+     * Cette fonction permet de valider le ticket d'un participant après avoir scanné son QR Code. /api/scan/{id}
      */
     public function scan(Request $request, $id)
     {
@@ -39,7 +38,7 @@ class QrCodeController extends Controller
 
         // Si tout est bon, on marque le ticket comme "scanné"
         // On enregistre aussi l'ID de l'agent qui a fait le scan pour le suivi
-        $agent = $request->user(); // C'est l'agent qui s'est connecté à l'application
+        $agent = $request->user();
         $registration->update([
             'qr_code_scanned' => 1,
             'scanned_by_agent_id' => $agent ? $agent->id : null
@@ -70,7 +69,7 @@ class QrCodeController extends Controller
             ->latest() // On affiche les plus récents en premier
             ->get();
 
-        // On renvoie la liste complète au format JSON (facile à lire pour une application mobile)
+        // On renvoie la liste complète au format JSON
         return response()->json([
             'status' => 'success',
             'agent_id' => $agentId,

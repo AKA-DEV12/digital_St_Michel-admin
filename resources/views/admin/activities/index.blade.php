@@ -125,8 +125,8 @@
                                 <h6 class="fw-bold text-slate-900 mb-3"><i class="fa-solid fa-money-bill-transfer me-2 text-crimson-600"></i> Numéros de paiement (Optionnels)</h6>
                                 <div class="row g-3">
                                     <div class="col-md-3">
-                                        <label class="form-label small fw-bold text-slate-600">Numéro WAVE</label>
-                                        <input type="text" name="wave_number" id="wave_number" class="form-control rounded-3 border-0 shadow-sm" placeholder="00 00 00 00 00">
+                                        <label class="form-label small fw-bold text-slate-600">Lien de paiement Wave</label>
+                                        <input type="text" name="wave_number" id="wave_number" class="form-control rounded-3 border-0 shadow-sm" placeholder="https://wave.com/...">
                                     </div>
                                     <div class="col-md-3">
                                         <label class="form-label small fw-bold text-slate-600">Numéro MTN</label>

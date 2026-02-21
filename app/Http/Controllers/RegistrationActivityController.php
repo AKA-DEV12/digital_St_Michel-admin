@@ -44,8 +44,9 @@ class RegistrationActivityController extends Controller
             'orange_number' => 'nullable|string|max:255',
             'moov_number' => 'nullable|string|max:255',
             'color' => 'required|string|in:blue,indigo,slate,purple,emerald',
-            'is_active' => 'boolean'
         ]);
+
+        $validated['is_active'] = $request->boolean('is_active');
 
         RegistrationActivity::create($validated);
 
@@ -72,8 +73,9 @@ class RegistrationActivityController extends Controller
             'orange_number' => 'nullable|string|max:255',
             'moov_number' => 'nullable|string|max:255',
             'color' => 'required|string|in:blue,indigo,slate,purple,emerald',
-            'is_active' => 'boolean'
         ]);
+
+        $validated['is_active'] = $request->boolean('is_active');
 
         $activity->update($validated);
 
