@@ -185,7 +185,16 @@
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-3 p-2">
                                 <li><a class="dropdown-item small py-2 rounded-2 fw-bold" href="{{ route('admin.registrations.show', $reg->uuid) }}"><i class="fa-solid fa-eye me-2"></i>Détails</a></li>
-
+                                <li><hr class="dropdown-divider opacity-50"></li>
+                                <li>
+                                    <form action="{{ route('admin.registrations.destroy', $reg->uuid) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette inscription ? Cette action est irréversible.');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="dropdown-item small py-2 rounded-2 text-danger fw-bold bg-danger-subtle">
+                                            <i class="fa-solid fa-trash me-2"></i> SUPPRIMER
+                                        </button>
+                                    </form>
+                                </li>
                         </ul>
                     </div>
                 </td>

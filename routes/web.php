@@ -50,6 +50,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/registrations', [RegistrationController::class, 'index'])->name('admin.registrations.index');
         Route::get('/registrations/{uuid}', [RegistrationController::class, 'show'])->name('admin.registrations.show');
         Route::post('/registrations/{uuid}/status', [RegistrationController::class, 'updateStatus'])->name('admin.registrations.update_status');
+        Route::delete('/registrations/{uuid}', [RegistrationController::class, 'destroy'])->name('admin.registrations.destroy');
     });
 
     // Participant Groups Management

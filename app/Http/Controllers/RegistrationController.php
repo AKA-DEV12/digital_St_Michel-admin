@@ -125,4 +125,20 @@ class RegistrationController extends Controller
 
         return back()->with('success', 'Statut de l\'inscription mis à jour pour tout le groupe' . ($validated['status'] === 'confirmed' ? ' et mail de confirmation envoyé.' : '.'));
     }
+
+    public function destroy($uuid)
+    {
+        $registration = Registration::where('uuid', $uuid)->first();
+
+        if (!$registration) {
+            return back()->with('error', 'Inscription introuvable.');
+        }
+
+        // Only delete this specific record, if there are multiple with the same UUID (group logic),
+        // we might want to delete all of them. Since the logic ties multiple rows to one UUID 
+        // in groups, we should delete all records with this UUID.
+        Registration::where('uuid', $uuid)->delete();
+
+        return back()->with('success', 'L\'inscription a été supprimée avec succès.');
+    }
 }
