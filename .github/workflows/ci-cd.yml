@@ -92,13 +92,13 @@ jobs:
             set -e
 
             # Installation des outils nécessaires
-            apt-get update -y
-            apt-get install -y git unzip curl php8.4-gd php8.4-imagick
+            apt-get -y -o Dpkg::Lock::Timeout=120 update
+            apt-get -y -o Dpkg::Lock::Timeout=120 install git unzip curl php8.4-gd php8.4-imagick
             
             # Installation de Node.js si absent
             if ! command -v npm &> /dev/null; then
                 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-                sudo apt-get install -y nodejs
+                sudo apt-get -y -o Dpkg::Lock::Timeout=120 install nodejs
             fi
 
             # Configuration Git Safe Directory
