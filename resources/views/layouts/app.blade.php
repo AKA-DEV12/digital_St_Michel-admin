@@ -406,6 +406,19 @@
                 display: none;
             }
         }
+
+        /* Tag Selection Styles */
+        .tag-check input:checked + label {
+            background-color: var(--primary) !important;
+            color: white !important;
+            border-color: var(--primary) !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .tag-check label:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        .cursor-pointer { cursor: pointer; }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>

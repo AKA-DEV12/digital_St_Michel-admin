@@ -159,9 +159,25 @@ class BlogController extends Controller
 
     public function storeCategory(Request $request)
     {
-        $request->validate(['name' => 'required|unique:blog_categories|max:255']);
-        BlogCategory::create(['name' => $request->name, 'slug' => Str::slug($request->name)]);
-        return back()->with('success', 'Catégorie ajoutée.');
+        $validated = $request->validate([
+            'name' => 'required|unique:blog_categories|max:255',
+            'description' => 'nullable|string'
+        ]);
+
+        BlogCategory::create([
+            'name' => $validated['name'],
+            'slug' => Str::slug($validated['name']),
+            'description' => $validated['description'] ?? null
+        ]);
+
+        return back()->with('success', 'Catégorie ajoutée avec succès.');
+    }
+
+    public function destroyCategory(BlogCategory $category)
+    {
+        // Optionnel: Vérifier si la catégorie a des articles avant de supprimer ou laisser faire la cascade
+        $category->delete();
+        return back()->with('success', 'Catégorie supprimée avec succès.');
     }
 
     public function exportTags(Request $request, \App\Services\ExportService $exportService)
@@ -196,6 +212,12 @@ class BlogController extends Controller
     {
         $request->validate(['name' => 'required|unique:blog_tags|max:255']);
         BlogTag::create(['name' => $request->name, 'slug' => Str::slug($request->name)]);
-        return back()->with('success', 'Tag ajouté.');
+        return back()->with('success', 'Tag ajouté avec succès.');
+    }
+
+    public function destroyTag(BlogTag $tag)
+    {
+        $tag->delete();
+        return back()->with('success', 'Tag supprimé avec succès.');
     }
 }

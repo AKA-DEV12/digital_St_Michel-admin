@@ -69,6 +69,24 @@
                 </div>
 
                 <div class="card border-0 rounded-4 shadow-sm p-4 bg-white mb-4">
+                    <h6 class="fw-bold mb-4">Tags</h6>
+                    <div class="d-flex flex-wrap gap-2">
+                        @foreach($tags as $tag)
+                            <div class="form-check tag-check">
+                                <input class="form-check-input d-none" type="checkbox" name="tags[]" value="{{ $tag->id }}" id="tag_{{ $tag->id }}"
+                                    {{ (is_array(old('tags')) && in_array($tag->id, old('tags'))) ? 'checked' : '' }}>
+                                <label class="form-check-label badge rounded-pill border py-2 px-3 cursor-pointer transition-all" for="tag_{{ $tag->id }}">
+                                    {{ $tag->name }}
+                                </label>
+                            </div>
+                        @endforeach
+                    </div>
+                    @if($tags->isEmpty())
+                        <p class="text-secondary small mb-0 italic">Aucun tag disponible. <a href="{{ route('admin.blog.tags') }}" class="text-primary">En créer un ?</a></p>
+                    @endif
+                </div>
+
+                <div class="card border-0 rounded-4 shadow-sm p-4 bg-white mb-4">
                     <h6 class="fw-bold mb-4">Image à la une</h6>
                     
                     @if(isset($post) && $post->featured_image)

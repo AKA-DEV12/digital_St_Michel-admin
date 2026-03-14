@@ -57,10 +57,33 @@
                         </select>
                     </div>
 
-                    <div class="form-check form-switch mb-0">
+                    <div class="form-check form-switch mb-3">
                         <input class="form-check-input" type="checkbox" name="is_featured" id="is_featured" value="1" {{ old('is_featured', $post->is_featured ?? false) ? 'checked' : '' }}>
                         <label class="form-check-label small fw-bold text-secondary ms-2" for="is_featured">Mettre cet article à la une</label>
                     </div>
+
+                    <div class="form-check form-switch mb-0">
+                        <input class="form-check-input" type="checkbox" name="is_popular" id="is_popular" value="1" {{ old('is_popular', $post->is_popular ?? false) ? 'checked' : '' }}>
+                        <label class="form-check-label small fw-bold text-secondary ms-2" for="is_popular">Marquer comme populaire</label>
+                    </div>
+                </div>
+
+                <div class="card border-0 rounded-4 shadow-sm p-4 bg-white mb-4">
+                    <h6 class="fw-bold mb-4">Tags</h6>
+                    <div class="d-flex flex-wrap gap-2">
+                        @foreach($tags as $tag)
+                            <div class="form-check tag-check">
+                                <input class="form-check-input d-none" type="checkbox" name="tags[]" value="{{ $tag->id }}" id="tag_{{ $tag->id }}"
+                                    {{ (is_array(old('tags', isset($post) ? $post->tags->pluck('id')->toArray() : [])) && in_array($tag->id, old('tags', isset($post) ? $post->tags->pluck('id')->toArray() : []))) ? 'checked' : '' }}>
+                                <label class="form-check-label badge rounded-pill border py-2 px-3 cursor-pointer transition-all" for="tag_{{ $tag->id }}">
+                                    {{ $tag->name }}
+                                </label>
+                            </div>
+                        @endforeach
+                    </div>
+                    @if($tags->isEmpty())
+                        <p class="text-secondary small mb-0 italic">Aucun tag disponible. <a href="{{ route('admin.blog.tags') }}" class="text-primary">En créer un ?</a></p>
+                    @endif
                 </div>
 
                 <div class="card border-0 rounded-4 shadow-sm p-4 bg-white mb-4">

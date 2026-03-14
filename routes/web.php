@@ -114,10 +114,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/categories/export', [BlogController::class, 'exportCategories'])->name('categories.export');
         Route::get('/categories', [BlogController::class, 'categories'])->name('categories');
         Route::post('/categories', [BlogController::class, 'storeCategory'])->name('categories.store');
+        Route::delete('/categories/{category}', [BlogController::class, 'destroyCategory'])->name('categories.destroy');
 
         Route::get('/tags/export', [BlogController::class, 'exportTags'])->name('tags.export');
         Route::get('/tags', [BlogController::class, 'tags'])->name('tags');
         Route::post('/tags', [BlogController::class, 'storeTag'])->name('tags.store');
+        Route::delete('/tags/{tag}', [BlogController::class, 'destroyTag'])->name('tags.destroy');
     });
     Route::get('/blog/export', [BlogController::class, 'export'])->name('admin.blog.export');
     Route::resource('blog', BlogController::class)->parameters([
@@ -129,7 +131,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         'edit' => 'admin.blog.edit',
         'update' => 'admin.blog.update',
         'destroy' => 'admin.blog.destroy',
-    ]);
+    ])->except(['show']);
 
     Route::get('/flash-messages/export', [\App\Http\Controllers\Admin\FlashMessageController::class, 'export'])->name('admin.flash-messages.export');
     Route::resource('flash-messages', \App\Http\Controllers\Admin\FlashMessageController::class)->names([
