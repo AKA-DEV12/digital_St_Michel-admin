@@ -118,7 +118,7 @@ jobs:
             # .env
             cat > "$APP_DIR/.env" <<'EOF'
             APP_ENV=production
-            APP_DEBUG=false
+            APP_DEBUG=true
             APP_KEY=${{ secrets.APP_KEY }}
             APP_URL=https://admin.saint-michel-archange.com
 

@@ -17,7 +17,7 @@
                     </x-nav-link>
                     
                     <x-nav-link :href="route('admin.blog.index')" :active="request()->routeIs('admin.blog.*')">
-                        {{ __('Blog Premium') }}
+                        {{ __('Blog') }}
                     </x-nav-link>
                 </div>
             </div>
