@@ -94,7 +94,7 @@ class PriestController extends Controller
             'last_name' => 'required|string|max:255',
             'role' => 'required|string|max:255',
             'audience' => 'nullable|string|max:255',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:10124',
             'time_slot_start' => 'nullable|array',
             'time_slot_start.*' => 'nullable|date_format:H:i',
             'time_slot_end' => 'nullable|array',
