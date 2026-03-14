@@ -90,10 +90,12 @@ jobs:
             BRANCH="main"
 
             set -e
+            set -x
 
             # Installation des outils nécessaires
-            apt-get -y -o Dpkg::Lock::Timeout=120 update
-            apt-get -y -o Dpkg::Lock::Timeout=120 install git unzip curl php8.4-gd php8.4-imagick
+            echo "--- Installation des dépendances système ---"
+            sudo apt-get -y -o Dpkg::Lock::Timeout=120 update
+            sudo apt-get -y -o Dpkg::Lock::Timeout=120 install git unzip curl php8.4-gd php8.4-imagick php8.4-mysql php8.4-xml php8.4-curl php8.4-mbstring php8.4-zip
             
             # Installation de Node.js si absent
             if ! command -v npm &> /dev/null; then
@@ -133,18 +135,19 @@ jobs:
             MAIL_HOST=${{ secrets.MAIL_HOST }}
             MAIL_PORT=587
             MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}
-            MAIL_PASSWORD=${{secrets.MAIL_PASSWORD}}
+            MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}
             MAIL_ENCRYPTION=tls
-            MAIL_FROM_ADDRESS="${{secrets.MAIL_FROM_ADDRESS}}"
-            MAIL_FROM_NAME="${{secrets.APP_NAME}}"
+            MAIL_FROM_ADDRESS="${{ secrets.MAIL_FROM_ADDRESS }}"
+            MAIL_FROM_NAME="${{ secrets.APP_NAME }}"
             EOF
             
             cd "$APP_DIR"
             export COMPOSER_ALLOW_SUPERUSER=1
 
-            # Installation Composer (via PHP 8.4)
+            # Installation Composer
             if [ -f composer.json ]; then
-              php8.4 /usr/local/bin/composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+              echo "--- Composer install ---"
+              composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
             fi
 
             # Build NPM (Vite)
@@ -155,6 +158,7 @@ jobs:
 
             # Laravel commandes
             if [ -f artisan ]; then
+              echo "--- Exécution des migrations ---"
               php8.4 artisan migrate --force
               php8.4 artisan db:seed --class=RolePermissionSeeder --force || true
               # RESET du cache Spatie (Crucial pour les permissions)
