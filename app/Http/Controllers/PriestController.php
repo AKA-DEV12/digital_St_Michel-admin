@@ -105,7 +105,7 @@ class PriestController extends Controller
 
         $data = $validated;
 
-        // Track the user who created this priest
+        // Track the user who created this priest utilisateur
         $data['user_id'] = auth()->id();
 
         // Build time slots array
