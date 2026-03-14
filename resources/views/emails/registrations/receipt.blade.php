@@ -32,16 +32,7 @@
             color: #e11d48;
             font-weight: bold;
         }
-        .logo-box {
-            background-color: #991b1b;
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            display: inline-block;
-            text-align: center;
-            vertical-align: middle;
-            margin-right: 15px;
-        }
+        
         .logo-icon {
             color: white;
             font-size: 24px;
@@ -152,9 +143,7 @@
 <body>
     <div class="header">
         <div class="header-left">
-            <div class="logo-box">
-                <img src="{{ asset('assets/images/logo/logo.png') }}" alt="Saint Michel Archange">
-            </div>
+           
             <div class="title-text">
                 <span>REÇU</span>
                 <h1>d'Inscription</h1>

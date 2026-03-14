@@ -1,91 +1,106 @@
 @if (session()->has('success') || session()->has('error') || session()->has('warning') || session()->has('info') || $errors->any())
-    <div id="flash-message-container" class="position-fixed bottom-0 end-0 p-4" style="z-index: 9999;">
+    <div id="flash-message-container" class="position-fixed top-0 start-50 translate-middle-x p-4" style="z-index: 9999; margin-top: 1rem;">
         @php
             $type = 'info';
-            $icon = 'info-circle';
+            $icon = 'circle-info';
             $message = '';
+            $theme_color = 'var(--primary)';
             
             if (session()->has('success')) {
                 $type = 'success';
-                $icon = 'check-circle';
+                $icon = 'circle-check';
                 $message = session('success');
+                $theme_color = 'var(--success)';
             } elseif (session()->has('error') || $errors->any()) {
-                $type = 'danger';
-                $icon = 'exclamation-circle';
+                $type = 'error';
+                $icon = 'circle-exclamation';
                 $message = session('error') ?? $errors->first();
+                $theme_color = 'var(--danger)';
             } elseif (session()->has('warning')) {
                 $type = 'warning';
-                $icon = 'exclamation-triangle';
+                $icon = 'triangle-exclamation';
                 $message = session('warning');
+                $theme_color = 'var(--warning)';
             } elseif (session()->has('info')) {
-                $type = 'primary';
-                $icon = 'info-circle';
+                $type = 'info';
+                $icon = 'circle-info';
                 $message = session('info');
+                $theme_color = 'var(--primary)';
             }
         @endphp
 
-        <div class="toast show align-items-center text-white bg-{{ $type }} border-0 shadow-lg animate-slide-in" role="alert" aria-live="assertive" aria-atomic="true" id="liveToast">
-            <div class="d-flex p-3">
-                <div class="me-3 fs-4">
+        <div class="toast-premium animate-bounce-in shadow-lg" role="alert">
+            <div class="d-flex align-items-center p-3">
+                <div class="toast-icon-box" style="background-color: {{ $theme_color }}20; color: {{ $theme_color }};">
                     <i class="fa-solid fa-{{ $icon }}"></i>
                 </div>
-                <div class="toast-body grow">
-                    <h6 class="mb-1 fw-bold">{{ ucfirst($type == 'danger' ? 'Erreur' : ($type == 'primary' ? 'Information' : $type)) }}</h6>
-                    <div class="small opacity-90">{{ $message }}</div>
+                <div class="ms-3 me-4">
+                    <div class="fw-bold text-dark" style="font-size: 0.95rem;">{{ ucfirst($type == 'error' ? 'Erreur' : $type) }}</div>
+                    <div class="text-secondary small">{{ $message }}</div>
                 </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                <button type="button" class="btn-close ms-auto" style="font-size: 0.7rem;" onclick="this.parentElement.parentElement.remove()"></button>
             </div>
-            <div class="toast-progress-bar"></div>
+            <div class="toast-progress" style="background-color: {{ $theme_color }};"></div>
         </div>
     </div>
 
     <style>
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+        .toast-premium {
+            background: white;
+            min-width: 350px;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid var(--border-color);
         }
-        @keyframes fadeOut {
-            from { opacity: 1; transform: translateY(0); }
-            to { opacity: 0; transform: translateY(10px); }
+        .toast-icon-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
         }
-        @keyframes progress {
-            from { width: 100%; }
-            to { width: 0%; }
-        }
-        .animate-slide-in {
-            animation: slideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-        .animate-fade-out {
-            animation: fadeOut 0.5s ease-in forwards;
-        }
-        .toast-progress-bar {
+        .toast-progress {
             height: 3px;
-            background: rgba(255, 255, 255, 0.3);
             width: 100%;
             position: absolute;
             bottom: 0;
             left: 0;
-            animation: progress 7s linear forwards;
+            animation: toast-progress 5s linear forwards;
         }
-        .toast {
-            min-width: 320px;
-            border-radius: 12px;
-            overflow: hidden;
+        @keyframes toast-progress {
+            from { width: 100%; }
+            to { width: 0%; }
+        }
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: translateY(-20px) scale(0.9); }
+            70% { opacity: 1; transform: translateY(5px) scale(1.02); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .animate-bounce-in {
+            animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        .animate-fade-out {
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.4s ease;
         }
     </style>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const toast = document.getElementById('liveToast');
-            if (toast) {
-                setTimeout(() => {
+            setTimeout(() => {
+                const toast = document.querySelector('.toast-premium');
+                if (toast) {
                     toast.classList.add('animate-fade-out');
                     setTimeout(() => {
                         const container = document.getElementById('flash-message-container');
                         if (container) container.remove();
-                    }, 500);
-                }, 7000);
-            }
+                    }, 400);
+                }
+            }, 5000);
         });
     </script>
 @endif

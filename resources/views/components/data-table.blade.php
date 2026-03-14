@@ -96,42 +96,42 @@
 
     <!-- Table Body -->
     <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse table-hover">
+        <table class="premium-table">
             <thead>
-                <tr class="bg-gray-50/50">
+                <tr>
                     @foreach($headers as $header)
-                        <th class="px-6 py-4 border-b border-gray-100">
+                        <th>
                             <div class="d-flex align-items-center gap-2">
-                                <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">{{ $header }}</span>
-                                <div class="d-flex flex-column" style="font-size: 0.5rem; line-height: 1;">
-                                    <i class="fa-solid fa-caret-up text-gray-300"></i>
-                                    <i class="fa-solid fa-caret-down text-gray-300"></i>
+                                <span>{{ $header }}</span>
+                                <div class="d-flex flex-column opacity-30" style="font-size: 0.5rem; line-height: 1;">
+                                    <i class="fa-solid fa-caret-up"></i>
+                                    <i class="fa-solid fa-caret-down"></i>
                                 </div>
                             </div>
                         </th>
                     @endforeach
                 </tr>
             </thead>
-            <tbody class="divide-y divide-gray-50">
+            <tbody>
                 {{ $slot }}
             </tbody>
         </table>
     </div>
 
     @if($collection->count() === 0)
-        <div class="p-10 text-center">
-            <div class="bg-gray-50 rounded-2xl p-8 d-inline-block">
-                <i class="fa-solid fa-inbox text-gray-200 fs-1 mb-3"></i>
-                <p class="text-gray-400 mb-0">Aucun enregistrement trouvé</p>
+        <div class="py-5 text-center">
+            <div class="py-5 d-inline-block">
+                <i class="fa-solid fa-inbox text-secondary opacity-20 fs-1 mb-3"></i>
+                <p class="text-secondary mb-0">Aucun enregistrement trouvé</p>
             </div>
         </div>
     @endif
 
     <!-- Footer -->
-    <div class="px-6 py-4 bg-white border-t border-gray-50">
-        <div class="d-flex align-items-center justify-content-between">
-            <div class="text-secondary small">
-                Affichage de {{ $collection->firstItem() ?? 0 }} à {{ $collection->lastItem() ?? 0 }} sur {{ $collection->total() }} entrées
+    <div class="px-6 py-4 bg-white border-t" style="border-color: var(--border-color) !important;">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+            <div class="text-secondary small fw-500">
+                Affichage de <span class="text-dark fw-bold">{{ $collection->firstItem() ?? 0 }}</span> à <span class="text-dark fw-bold">{{ $collection->lastItem() ?? 0 }}</span> sur <span class="text-dark fw-bold">{{ $collection->total() }}</span> entrées
             </div>
             
             <div class="premium-pagination">
@@ -144,22 +144,14 @@
 <style>
     .btn-white {
         background: white;
+        border: 1px solid var(--border-color);
+        color: var(--secondary);
         transition: all 0.2s ease;
     }
     .btn-white:hover {
-        background: #f9fafb;
-        border-color: #d1d5db;
-    }
-    .text-gray-400 { color: #9ca3af; }
-    .text-gray-500 { color: #6b7280; }
-    .bg-gray-50 { background-color: #f9fafb; }
-    
-    /* Hover highlight matching screenshot row lines */
-    tbody tr {
-        transition: background-color 0.2s ease;
-    }
-    tbody tr:hover {
-        background-color: #fcfdfe;
+        background: #f8fafc;
+        border-color: #cbd5e1;
+        color: var(--dark);
     }
 </style>
 
