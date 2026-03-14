@@ -13,6 +13,7 @@
     <!-- Google Fonts -->
     <!-- Scripts & Styles (Tailwind via Vite) -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @stack('styles')
 
     <style>
         :root {
@@ -54,6 +55,7 @@
             display: flex;
             align-items: center;
             gap: 0.75rem;
+            width: 100%;
         }
 
         .logo-box {
@@ -311,10 +313,10 @@
 
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <div class="logo-box">
+                <a href="{{ route('dashboard') }}" class="logo-box">
                 <img src="{{ asset('assets/images/logo/logo.png') }}" style="height: 112px" alt="">
-                </div>
-                <a href="{{ route('dashboard') }}" class="sidebar-brand">Saint Michel Archange</a>
+                </a>
+
             </div>
 
             <nav class="sidebar-nav">
@@ -362,6 +364,25 @@
                 </div>
                 @endif
 
+                <!-- Clergé & RDV -->
+                @if(auth()->user()->hasAnyPermission(['access_reservations']))
+                <div class="nav-item">
+                    <button class="nav-link w-100 border-0 bg-transparent dropdown-toggle-custom {{ request()->routeIs(['admin.priests.*', 'admin.priest_appointments.*']) ? 'active open' : '' }}" onclick="toggleDropdown(this)">
+                        <i class="fa-solid fa-place-of-worship"></i> 
+                        <span>Clergé & RDV</span>
+                        <i class="fa-solid fa-chevron-right ms-auto arrow-icon"></i>
+                    </button>
+                    <div class="submenu">
+                        <a href="{{ route('admin.priests.index') }}" class="submenu-link {{ request()->routeIs('admin.priests.*') ? 'active' : '' }}">
+                            <i class="fa-solid fa-user-tie me-2"></i> Pères
+                        </a>
+                        <a href="{{ route('admin.priest_appointments.index') }}" class="submenu-link {{ request()->routeIs('admin.priest_appointments.*') ? 'active' : '' }}">
+                            <i class="fa-solid fa-calendar-check me-2"></i> Rendez-vous
+                        </a>
+                    </div>
+                </div>
+                @endif
+
                 <!-- Inscriptions & Activités -->
                 @if(auth()->user()->hasAnyPermission(['access_activities', 'access_registrations', 'access_presences']))
                 <div class="nav-item">
@@ -372,12 +393,12 @@
                     </button>
                     <div class="submenu">
                         @can('access_registrations')
-                        <a href="{{ route('admin.registrations.index') }}" class="submenu-link {{ request()->routeIs('admin.registrations.index') ? 'active' : '' }}">
+                        <a href="{{ route('admin.registrations.selector', ['target' => 'registrations']) }}" class="submenu-link {{ (request()->routeIs('admin.registrations.index') || (request()->routeIs('admin.registrations.selector') && request('target') == 'registrations')) ? 'active' : '' }}">
                             <i class="fa-solid fa-id-card me-2"></i> Liste Inscriptions
                         </a>
                         @endcan
                         @can('access_presences')
-                        <a href="{{ route('admin.registrations.scanned') }}" class="submenu-link {{ request()->routeIs('admin.registrations.scanned') ? 'active' : '' }}">
+                        <a href="{{ route('admin.registrations.selector', ['target' => 'scanned']) }}" class="submenu-link {{ (request()->routeIs('admin.registrations.scanned') || (request()->routeIs('admin.registrations.selector') && request('target') == 'scanned')) ? 'active' : '' }}">
                             <i class="fa-solid fa-barcode me-2"></i> Présences (Scans)
                         </a>
                         @endcan
@@ -387,13 +408,39 @@
                         </a>
                         @endcan
                         @can('access_registrations')
-                        <a href="{{ route('admin.participant_groups.index') }}" class="submenu-link {{ request()->routeIs('admin.participant_groups.*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.registrations.selector', ['target' => 'groups']) }}" class="submenu-link {{ (request()->routeIs('admin.participant_groups.*') || (request()->routeIs('admin.registrations.selector') && request('target') == 'groups')) ? 'active' : '' }}">
                             <i class="fa-solid fa-layer-group me-2"></i> Groupes
                         </a>
                         @endcan
                     </div>
                 </div>
                 @endif
+
+                <!-- Blog Management -->
+                <div class="nav-item">
+                    <button class="nav-link w-100 border-0 bg-transparent dropdown-toggle-custom {{ request()->routeIs('admin.blog.*') ? 'active open' : '' }}" onclick="toggleDropdown(this)">
+                        <i class="fa-solid fa-newspaper"></i> 
+                        <span>Blog Premium</span>
+                        <i class="fa-solid fa-chevron-right ms-auto arrow-icon"></i>
+                    </button>
+                    <div class="submenu">
+                        <a href="{{ route('admin.blog.index') }}" class="submenu-link {{ request()->routeIs('admin.blog.index') ? 'active' : '' }}">
+                            <i class="fa-solid fa-list me-2"></i> Articles
+                        </a>
+                        <a href="{{ route('admin.blog.categories') }}" class="submenu-link {{ request()->routeIs('admin.blog.categories') ? 'active' : '' }}">
+                            <i class="fa-solid fa-tags me-2"></i> Catégories
+                        </a>
+                        <a href="{{ route('admin.blog.tags') }}" class="submenu-link {{ request()->routeIs('admin.blog.tags') ? 'active' : '' }}">
+                            <i class="fa-solid fa-hashtag me-2"></i> Tags
+                        </a>
+                        <a href="{{ route('admin.flash-messages.index') }}" class="submenu-link {{ request()->routeIs('admin.flash-messages.*') ? 'active' : '' }}">
+                            <i class="fa-solid fa-bolt me-2"></i> Messages Flash
+                        </a>
+                        <a href="{{ route('admin.settings.index') }}" class="submenu-link {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
+                            <i class="fa-solid fa-gear me-2"></i> Configuration Site
+                        </a>
+                    </div>
+                </div>
 
                 <!-- Agents & Terrain -->
                 @can('access_agents')
@@ -510,5 +557,6 @@
         });
     </script>
     @include('partials.flashmessage')
+    @stack('scripts')
 </body>
 </html>

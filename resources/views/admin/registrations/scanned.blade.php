@@ -2,8 +2,13 @@
 
 @section('content')
 <div class="mb-5 animate-fade-in text-slate-900">
-    <h1 class="h3 fw-bold mb-1">Présences (QR Code Scannés)</h1>
-    <p class="text-secondary">Liste des participants ayant validé leur présence via le scan QR Code.</p>
+    <div class="d-flex align-items-center gap-3 mb-3">
+        <a href="{{ route('admin.registrations.index') }}" class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 40px; height: 40px;">
+            <i class="fa-solid fa-arrow-left"></i>
+        </a>
+        <h1 class="h3 fw-bold mb-0">Présences (QR Code Scannés)</h1>
+    </div>
+    <p class="text-secondary" style="margin-left: 53px;">Liste des participants ayant validé leur présence via le scan QR Code.</p>
 </div>
 
 <x-data-table :headers="['Participant', 'Activité', 'Date de Scan', 'Statut Scan']" :collection="$registrations">

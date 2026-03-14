@@ -26,32 +26,64 @@
                     </div>
                 </form>
 
-                @if(isset($advancedSearch))
-                    {{ $advancedSearch }}
+                @if(isset($advancedSearchBtn))
+                    {{ $advancedSearchBtn }}
                 @else
-                    <button class="btn btn-sm btn-white border-gray-200 rounded-3 px-3 py-2 text-primary fw-600" data-bs-toggle="collapse" data-bs-target="#advancedSearchCollapse">
+                    <button type="button" class="btn btn-sm btn-white border-gray-200 rounded-3 px-3 py-2 text-primary fw-600" data-bs-toggle="modal" data-bs-target="#advancedSearchModal">
                         <i class="fa-solid fa-filter me-2"></i> Recherche avancée
                     </button>
                 @endif
 
+                @php
+                    $currentRouteName = request()->route()->getName();
+                    $exportRouteName = null;
+                    $hasExport = false;
+                    $exportUrlPath = null;
+                    
+                    if (str_ends_with($currentRouteName, '.index')) {
+                        $exportRouteName = str_replace('.index', '.export', $currentRouteName);
+                        if (\Illuminate\Support\Facades\Route::has($exportRouteName)) {
+                            $hasExport = true;
+                            $exportUrlPath = route($exportRouteName);
+                        }
+                    }
+                @endphp
+
+                @if($hasExport)
                 <div class="dropdown">
                     <button class="btn btn-sm btn-white border-gray-200 rounded-3 px-3 py-2 text-secondary fw-600 dropdown-toggle" data-bs-toggle="dropdown">
                         <i class="fa-solid fa-file-export me-2"></i> Exporter
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-3">
                         <li>
-                            <form action="{{ url()->current() . '/export' }}" method="GET">
+                            <form action="{{ $exportUrlPath }}" method="GET">
                                 <input type="hidden" name="format" value="csv">
                                 @foreach(request()->all() as $key => $value)
-                                    <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                                    @if($key !== 'format')
+                                        <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                                    @endif
                                 @endforeach
                                 <button type="submit" class="dropdown-item small py-2">
-                                    <i class="fa-solid fa-file-csv me-2 text-info"></i> CSV
+                                    <i class="fa-solid fa-file-csv me-2 text-info"></i> Excel (CSV)
+                                </button>
+                            </form>
+                        </li>
+                        <li>
+                            <form action="{{ $exportUrlPath }}" method="GET">
+                                <input type="hidden" name="format" value="pdf">
+                                @foreach(request()->all() as $key => $value)
+                                    @if($key !== 'format')
+                                        <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                                    @endif
+                                @endforeach
+                                <button type="submit" class="dropdown-item small py-2">
+                                    <i class="fa-solid fa-file-pdf me-2 text-danger"></i> Format PDF
                                 </button>
                             </form>
                         </li>
                     </ul>
                 </div>
+                @endif
 
                 @if(isset($actions))
                     {{ $actions }}
@@ -60,35 +92,7 @@
         </div>
     </div>
 
-    <!-- Advanced Search Collapse -->
-    <div class="collapse border-b border-gray-50 bg-gray-50/30" id="advancedSearchCollapse">
-        <div class="px-6 py-4">
-            @if(isset($advancedSearch))
-                {{ $advancedSearch }}
-            @else
-                <form action="{{ url()->current() }}" method="GET">
-                    @foreach(request()->except(['date_from', 'date_to', 'status', 'page']) as $key => $value)
-                        <input type="hidden" name="{{ $key }}" value="{{ $value }}">
-                    @endforeach
-                    <div class="row g-3 align-items-end">
-                        <div class="col-md-4">
-                            <label class="form-label small fw-bold text-secondary">Date début</label>
-                            <input type="date" name="date_from" value="{{ request('date_from') }}" class="form-control form-control-sm rounded-3">
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label small fw-bold text-secondary">Date fin</label>
-                            <input type="date" name="date_to" value="{{ request('date_to') }}" class="form-control form-control-sm rounded-3">
-                        </div>
-                        <div class="col-md-4">
-                            <button type="submit" class="btn btn-sm btn-primary w-100 rounded-3 py-2 fw-bold">
-                                <i class="fa-solid fa-magnifying-glass me-2"></i> Filtrer
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            @endif
-        </div>
-    </div>
+
 
     <!-- Table Body -->
     <div class="overflow-x-auto">
@@ -158,3 +162,40 @@
         background-color: #fcfdfe;
     }
 </style>
+
+<!-- Advanced Search Modal (Moved outside main container to fix backdrop z-index issues) -->
+<div class="modal fade" id="advancedSearchModal" tabindex="-1" aria-labelledby="advancedSearchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content overflow-hidden border-0 shadow-lg rounded-4">
+            <div class="modal-header bg-light border-bottom-0 pb-0">
+                <h5 class="modal-title fw-bold" id="advancedSearchModalLabel"><i class="fa-solid fa-filter me-2 text-primary"></i> Recherche avancée</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                @if(isset($advancedSearch))
+                    {{ $advancedSearch }}
+                @else
+                    <form action="{{ url()->current() }}" method="GET">
+                        @foreach(request()->except(['date_from', 'date_to', 'status', 'page']) as $key => $value)
+                            <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                        @endforeach
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-secondary">Date début</label>
+                            <input type="date" name="date_from" value="{{ request('date_from') }}" class="form-control rounded-3">
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-secondary">Date fin</label>
+                            <input type="date" name="date_to" value="{{ request('date_to') }}" class="form-control rounded-3">
+                        </div>
+                        <div class="d-flex justify-content-end gap-2">
+                            <button type="button" class="btn btn-light rounded-3 px-4" data-bs-dismiss="modal">Annuler</button>
+                            <button type="submit" class="btn btn-primary rounded-3 px-4 fw-bold">
+                                <i class="fa-solid fa-magnifying-glass me-2"></i> Appliquer filtres
+                            </button>
+                        </div>
+                    </form>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>

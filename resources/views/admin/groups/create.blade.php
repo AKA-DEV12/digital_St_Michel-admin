@@ -17,6 +17,7 @@
                 <h5 class="fw-bold mb-4 text-slate-800">Paramètres du groupe</h5>
                 <form id="createGroupForm" action="{{ route('admin.participant_groups.store') }}" method="POST">
                     @csrf
+                    <input type="hidden" name="activity_id" value="{{ $activity_id }}">
                     
                     <div class="mb-3">
                         <label for="name" class="form-label small fw-bold text-slate-700">Nom du groupe <span class="text-danger">*</span></label>

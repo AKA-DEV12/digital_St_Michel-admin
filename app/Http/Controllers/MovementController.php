@@ -8,6 +8,36 @@ use Illuminate\Http\Request;
 class MovementController extends Controller
 {
     /**
+     * Export resources.
+     */
+    public function export(Request $request, \App\Services\ExportService $exportService)
+    {
+        $search = $request->get('search');
+        $query = Movement::query();
+
+        if ($search) {
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+        $movements = $query->orderBy('name')->get();
+
+        return $exportService->export(
+            $request,
+            'Mouvements et Sous-mouvements',
+            'mouvements_' . date('Y-m-d'),
+            ['ID', 'Nom', 'Créé le'],
+            $movements,
+            function ($mov) {
+                return [
+                    $mov->id,
+                    $mov->name,
+                    $mov->created_at ? $mov->created_at->format('Y-m-d H:i') : ''
+                ];
+            }
+        );
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index(Request $request)

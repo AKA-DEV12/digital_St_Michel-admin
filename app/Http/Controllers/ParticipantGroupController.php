@@ -10,16 +10,61 @@ use Illuminate\Support\Facades\DB;
 
 class ParticipantGroupController extends Controller
 {
+    public function export(Request $request, \App\Services\ExportService $exportService)
+    {
+        $activity_id = $request->get('activity_id');
+
+        if (!$activity_id) {
+            return redirect()->route('admin.registrations.selector', ['target' => 'groups']);
+        }
+
+        $groups = ParticipantGroup::whereHas('registrations', function ($q) use ($activity_id) {
+            $q->where('registration_activity_id', $activity_id);
+        })->withCount('registrations')->latest()->get();
+
+        return $exportService->export(
+            $request,
+            'Groupes de Participants',
+            'groupes_' . date('Y-m-d'),
+            ['ID', 'Nom du Groupe', 'Taille Requise', 'Membres', 'Créé le'],
+            $groups,
+            function ($group) {
+                return [
+                    $group->id,
+                    $group->name,
+                    $group->target_size,
+                    $group->registrations_count,
+                    $group->created_at ? $group->created_at->format('Y-m-d H:i') : ''
+                ];
+            }
+        );
+    }
+
     public function index(Request $request)
     {
-        $groups = ParticipantGroup::withCount('registrations')->latest()->paginate(20);
-        return view('admin.groups.index', compact('groups'));
+        $activity_id = $request->get('activity_id');
+
+        if (!$activity_id) {
+            return redirect()->route('admin.registrations.selector', ['target' => 'groups']);
+        }
+
+        $groups = ParticipantGroup::whereHas('registrations', function ($q) use ($activity_id) {
+            $q->where('registration_activity_id', $activity_id);
+        })->withCount('registrations')->latest()->paginate(20);
+
+        return view('admin.groups.index', compact('groups', 'activity_id'));
     }
 
     public function create(Request $request)
     {
+        $activity_id = $request->get('activity_id');
+
+        if (!$activity_id) {
+            return redirect()->route('admin.registrations.selector', ['target' => 'groups']);
+        }
+
         // On cherche toutes les inscriptions confirmées qui ne sont pas encore dans un groupe participant,
-        // groupées par UUID pour calculer le nombre de personnes (COUNT) qu'elles contiennent.
+        // filtrées par activité, groupées par UUID pour calculer le nombre de personnes (COUNT) qu'elles contiennent.
         $eligibles = Registration::select(
             'uuid',
             'registration_activity_id',
@@ -30,11 +75,12 @@ class ParticipantGroupController extends Controller
         )
             ->with('registrationActivity')
             ->where('status', 'confirmed')
+            ->where('registration_activity_id', $activity_id)
             ->whereNull('participant_group_id')
             ->groupBy('uuid', 'registration_activity_id', 'option', 'group_name')
             ->get();
 
-        return view('admin.groups.create', compact('eligibles'));
+        return view('admin.groups.create', compact('eligibles', 'activity_id'));
     }
 
     public function store(Request $request)
@@ -43,7 +89,8 @@ class ParticipantGroupController extends Controller
             'name' => 'required|string|max:255',
             'target_size' => 'required|integer|min:1',
             'selected_uuids' => 'required|array',
-            'selected_uuids.*' => 'string'
+            'selected_uuids.*' => 'string',
+            'activity_id' => 'required|exists:registration_activities,id'
         ]);
 
         // Vérifier mathématiquement si la sélection est valide côté backend
@@ -74,7 +121,7 @@ class ParticipantGroupController extends Controller
         Registration::whereIn('uuid', $validated['selected_uuids'])
             ->update(['participant_group_id' => $group->id]);
 
-        return redirect()->route('admin.participant_groups.index')->with('success', 'Groupe créé avec succès. ' . $totalPeople . ' participants y ont été ajoutés.');
+        return redirect()->route('admin.participant_groups.index', ['activity_id' => $validated['activity_id']])->with('success', 'Groupe créé avec succès. ' . $totalPeople . ' participants y ont été ajoutés.');
     }
 
     public function show($id)

@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             AdminSeeder::class,
             MovementSeeder::class,
             RegistrationActivitySeeder::class,
+            BlogSeeder::class,
         ]);
     }
 }

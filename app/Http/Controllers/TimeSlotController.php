@@ -9,6 +9,30 @@ use App\Models\TimeSlot;
 class TimeSlotController extends Controller
 {
     /**
+     * Export resources.
+     */
+    public function export(Request $request, \App\Services\ExportService $exportService)
+    {
+        $timeSlots = TimeSlot::orderBy('start_time')->get();
+
+        return $exportService->export(
+            $request,
+            'Créneaux Horaires',
+            'creneaux_horaires_' . date('Y-m-d'),
+            ['ID', 'Heure de début', 'Heure de fin', 'Créé le'],
+            $timeSlots,
+            function ($slot) {
+                return [
+                    $slot->id,
+                    $slot->start_time,
+                    $slot->end_time,
+                    $slot->created_at ? $slot->created_at->format('Y-m-d H:i') : ''
+                ];
+            }
+        );
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index()

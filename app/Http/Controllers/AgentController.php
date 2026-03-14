@@ -8,6 +8,29 @@ use Illuminate\Support\Facades\Hash;
 
 class AgentController extends Controller
 {
+    public function export(Request $request, \App\Services\ExportService $exportService)
+    {
+        $agents = Agent::latest()->get();
+
+        return $exportService->export(
+            $request,
+            'Agents / Utilisateurs App Mobile',
+            'agents_' . date('Y-m-d'),
+            ['ID', 'Nom', 'Prénom', 'Email', 'Téléphone', 'Créé le'],
+            $agents,
+            function ($agent) {
+                return [
+                    $agent->id,
+                    $agent->nom,
+                    $agent->prenom,
+                    $agent->email,
+                    $agent->phone,
+                    $agent->created_at ? $agent->created_at->format('Y-m-d H:i') : ''
+                ];
+            }
+        );
+    }
+
     public function index()
     {
         $agents = Agent::latest()->paginate(15);

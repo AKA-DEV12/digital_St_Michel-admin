@@ -8,6 +8,40 @@ use Illuminate\Http\Request;
 class RoomController extends Controller
 {
     /**
+     * Export resources.
+     */
+    public function export(Request $request, \App\Services\ExportService $exportService)
+    {
+        $search = $request->get('search');
+        $query = Room::query();
+
+        if ($search) {
+            $query->where('name', 'like', "%{$search}%")
+                ->orWhere('description', 'like', "%{$search}%");
+        }
+
+        $rooms = $query->get();
+
+        return $exportService->export(
+            $request,
+            'Liste des Salles',
+            'salles_' . date('Y-m-d'),
+            ['ID', 'Nom', 'Description', 'Capacité', 'Statut', 'Créé le'],
+            $rooms,
+            function ($room) {
+                return [
+                    $room->id,
+                    $room->name,
+                    strip_tags($room->description),
+                    $room->capacity,
+                    ucfirst(strtolower($room->status)),
+                    $room->created_at ? $room->created_at->format('Y-m-d H:i') : ''
+                ];
+            }
+        );
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index(Request $request)

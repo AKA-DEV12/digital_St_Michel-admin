@@ -7,7 +7,7 @@
             <h1 class="h3 fw-bold mb-1">Groupes Constitués</h1>
             <p class="text-secondary">Gérez les super-groupes formés à partir des inscriptions confirmées.</p>
         </div>
-        <a href="{{ route('admin.participant_groups.create') }}" class="btn btn-primary rounded-3 px-4 py-2 fw-bold shadow-sm">
+        <a href="{{ route('admin.participant_groups.create', ['activity_id' => $activity_id]) }}" class="btn btn-primary rounded-3 px-4 py-2 fw-bold shadow-sm">
             <i class="fa-solid fa-layer-group me-2"></i> Constituer un groupe
         </a>
     </div>

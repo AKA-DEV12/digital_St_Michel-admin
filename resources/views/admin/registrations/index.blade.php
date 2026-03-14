@@ -83,7 +83,9 @@
 
         <x-slot name="actions">
             <div class="btn-group glass-card mb-0 p-1 d-flex gap-1 border-0 bg-gray-50" style="border-radius: 12px;">
-                @php $currentStatus = request('status', 'pending'); @endphp
+                @php 
+                    $currentStatus = request('status', 'pending');
+                @endphp
                 <a href="{{ route('admin.registrations.index', ['status' => 'pending']) }}" class="btn btn-xs {{ $currentStatus == 'pending' ? 'btn-primary' : 'btn-light bg-transparent border-0' }} rounded-3 px-2 py-1 small" style="font-size: 0.75rem;">
                     En attente
                 </a>
@@ -96,31 +98,7 @@
             </div>
         </x-slot>
 
-        <x-slot name="advancedSearch">
-            <form action="{{ route('admin.registrations.index') }}" method="GET">
-                @foreach(request()->except(['activity_id', 'status', 'page']) as $key => $value)
-                    <input type="hidden" name="{{ $key }}" value="{{ $value }}">
-                @endforeach
-                <div class="row g-3 align-items-end">
-                    <div class="col-md-8">
-                        <label class="form-label small fw-bold text-secondary">Filtrer par activité</label>
-                        <select name="activity_id" class="form-select form-select-sm rounded-3">
-                            <option value="">Toutes les activités</option>
-                            @foreach($activities as $activity)
-                                <option value="{{ $activity->id }}" {{ request('activity_id') == $activity->id ? 'selected' : '' }}>
-                                    {{ $activity->title }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-4">
-                        <button type="submit" class="btn btn-sm btn-primary w-100 rounded-3 py-2 fw-bold">
-                            <i class="fa-solid fa-magnifying-glass me-2"></i> Filtrer
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </x-slot>
+
 
         @foreach($registrations as $reg)
             <tr class="group">

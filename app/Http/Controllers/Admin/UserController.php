@@ -10,6 +10,28 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    public function export(Request $request, \App\Services\ExportService $exportService)
+    {
+        $users = User::with('roles')->latest()->get();
+
+        return $exportService->export(
+            $request,
+            'Administrateurs de la Plateforme',
+            'admins_' . date('Y-m-d'),
+            ['ID', 'Nom', 'Email', 'Rôle(s)', 'Créé le'],
+            $users,
+            function ($user) {
+                return [
+                    $user->id,
+                    $user->name,
+                    $user->email,
+                    $user->roles->pluck('name')->join(', '),
+                    $user->created_at ? $user->created_at->format('Y-m-d H:i') : ''
+                ];
+            }
+        );
+    }
+
     public function index()
     {
         $users = User::with('roles')->latest()->paginate(15);

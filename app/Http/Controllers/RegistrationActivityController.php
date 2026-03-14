@@ -8,6 +8,42 @@ use App\Models\RegistrationActivity;
 class RegistrationActivityController extends Controller
 {
     /**
+     * Export resources.
+     */
+    public function export(Request $request, \App\Services\ExportService $exportService)
+    {
+        $search = $request->get('search');
+        $query = RegistrationActivity::query();
+
+        if ($search) {
+            $query->where('title', 'like', "%{$search}%")
+                ->orWhere('subtitle', 'like', "%{$search}%")
+                ->orWhere('location', 'like', "%{$search}%");
+        }
+
+        $activities = $query->orderBy('date', 'desc')->get();
+
+        return $exportService->export(
+            $request,
+            'Activités et Pèlerinages',
+            'activites_' . date('Y-m-d'),
+            ['ID', 'Titre', 'Date', 'Lieu', 'Montant', 'Statut', 'Créé le'],
+            $activities,
+            function ($act) {
+                return [
+                    $act->id,
+                    $act->title,
+                    $act->date,
+                    $act->location,
+                    $act->registration_amount,
+                    $act->is_active ? 'Actif' : 'Inactif',
+                    $act->created_at ? $act->created_at->format('Y-m-d H:i') : ''
+                ];
+            }
+        );
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index(Request $request)

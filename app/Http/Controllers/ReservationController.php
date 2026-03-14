@@ -47,7 +47,7 @@ class ReservationController extends Controller
         return view('admin.reservations.index', compact('reservations', 'status'));
     }
 
-    public function export(Request $request)
+    public function export(Request $request, \App\Services\ExportService $exportService)
     {
         $status = $request->get('status', 'pending');
         $search = $request->get('search');
@@ -74,24 +74,17 @@ class ReservationController extends Controller
         }
 
         $reservations = $query->get();
-
-        $filename = "reservations_{$status}_" . date('Y-m-d') . ".csv";
-        $headers = [
-            "Content-type" => "text/csv",
-            "Content-Disposition" => "attachment; filename=$filename",
-            "Pragma" => "no-cache",
-            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
-            "Expires" => "0"
-        ];
-
         $columns = ['ID', 'Client', 'Email', 'Objet', 'Salle', 'Date', 'Horaire', 'Statut'];
+        $filenameBase = "reservations_{$status}_" . date('Y-m-d');
 
-        $callback = function () use ($reservations, $columns) {
-            $file = fopen('php://output', 'w');
-            fputcsv($file, $columns);
-
-            foreach ($reservations as $res) {
-                fputcsv($file, [
+        return $exportService->export(
+            $request,
+            'Réservations de Salles - ' . ucfirst($status),
+            $filenameBase,
+            $columns,
+            $reservations,
+            function ($res) {
+                return [
                     $res->id,
                     $res->first_name . ' ' . $res->last_name,
                     $res->email,
@@ -100,13 +93,9 @@ class ReservationController extends Controller
                     $res->reservation_date,
                     $res->time_slot,
                     $res->status
-                ]);
+                ];
             }
-
-            fclose($file);
-        };
-
-        return response()->stream($callback, 200, $headers);
+        );
     }
 
     /**

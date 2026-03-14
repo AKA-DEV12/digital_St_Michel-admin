@@ -3,7 +3,7 @@
 @section('content')
 <div class="mb-4 animate-fade-in">
     <div class="d-flex align-items-center gap-3 mb-3">
-        <a href="{{ route('admin.registrations.index') }}" class="btn btn-outline-secondary rounded-circle p-2" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+        <a href="{{ route('admin.registrations.index', ['activity_id' => $registration->registration_activity_id]) }}" class="btn btn-outline-secondary rounded-circle p-2" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
             <i class="fa-solid fa-arrow-left"></i>
         </a>
         <h1 class="h3 fw-bold mb-0">Détails de l'inscription</h1>

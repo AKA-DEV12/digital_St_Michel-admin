@@ -68,15 +68,29 @@ class RegistrationConfirmed extends Mailable
             // L'ID qui sera encodé dans le QR Code pour le scan
             $qrData = $participant->id;
 
-            // Generate QR code as PNG (base64 string then decoded)
-            // Note: simple-qrcode supports generating PNG if imagick or gd is installed
-            $qrCodeImage = (string) QrCode::format('png')
+            // Generate QR code as base64
+            $qrCodeBase64 = base64_encode(QrCode::format('png')
                 ->size(300)
                 ->margin(1)
-                ->generate($qrData);
+                ->generate($qrData));
 
-            $attachments[] = Attachment::fromData(fn() => $qrCodeImage, "Ticket_{$participant->full_name}.png")
-                ->withMime('image/png');
+            // Data for the receipt
+            $data = [
+                'activityTitle' => $this->registration->registrationActivity->title ?? 'Activité',
+                'registrationOption' => $participant->option,
+                'participantName' => $participant->full_name,
+                'groupName' => $participant->group_name,
+                'registrationDate' => $participant->created_at ? \Carbon\Carbon::parse($participant->created_at)->locale('fr')->translatedFormat('d F Y') : \Carbon\Carbon::now()->locale('fr')->translatedFormat('d F Y'),
+                'uuid' => $this->uuid,
+                'qrCode' => $qrCodeBase64,
+            ];
+
+            // Generate PDF
+            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('emails.registrations.receipt', $data);
+            $pdfContent = $pdf->output();
+
+            $attachments[] = Attachment::fromData(fn() => $pdfContent, "Recu_Inscription_{$participant->full_name}.pdf")
+                ->withMime('application/pdf');
         }
 
         return $attachments;

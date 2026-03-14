@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\BlogController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\ApiAuthController;
 use App\Http\Controllers\Api\QrCodeController;
@@ -23,4 +24,14 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Permet de voir la liste de toutes les personnes qu'un agent a déjà validées
     Route::get('/agents/{id}/scanned', [QrCodeController::class, 'scannedByAgent']);
+});
+
+// Blog API
+Route::prefix('blog')->group(function () {
+    Route::get('/posts/latest', [BlogController::class, 'latest']);
+    Route::get('/posts/featured', [BlogController::class, 'featured']);
+    Route::get('/post/{slug}', [BlogController::class, 'show']);
+    Route::get('/categories', [BlogController::class, 'categories']);
+    // added
+    Route::get('/category/{slug}', [BlogController::class, 'byCategory']);
 });
