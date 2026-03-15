@@ -26,6 +26,10 @@ class RolePermissionSeeder extends Seeder
             'access_registrations',
             'access_presences',
             'access_agents',
+            'access_blog',
+            'access_flash_messages',
+            'access_settings',
+            'access_priests',
             'manage_users',
             'manage_roles',
         ];

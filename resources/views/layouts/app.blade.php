@@ -480,7 +480,7 @@
                 @endif
 
                 <!-- Clergé & RDV -->
-                @if(auth()->user()->hasAnyPermission(['access_reservations']))
+                @can('access_priests')
                 <div class="nav-item">
                     <button class="nav-link w-100 border-0 bg-transparent dropdown-toggle-custom {{ request()->routeIs(['admin.priests.*', 'admin.priest_appointments.*']) ? 'active open' : '' }}" onclick="toggleDropdown(this)">
                         <i class="fa-solid fa-user-tie"></i> 
@@ -496,7 +496,7 @@
                         </a>
                     </div>
                 </div>
-                @endif
+                @endcan
                 
                 <div class="nav-label">Public</div>
 
@@ -534,13 +534,15 @@
                 @endif
 
                 <!-- Blog Management -->
+                @if(auth()->user()->hasAnyPermission(['access_blog', 'access_flash_messages', 'access_settings']))
                 <div class="nav-item">
-                    <button class="nav-link w-100 border-0 bg-transparent dropdown-toggle-custom {{ request()->routeIs('admin.blog.*') ? 'active open' : '' }}" onclick="toggleDropdown(this)">
+                    <button class="nav-link w-100 border-0 bg-transparent dropdown-toggle-custom {{ (request()->routeIs('admin.blog.*') || request()->routeIs('admin.flash-messages.*') || request()->routeIs('admin.settings.*')) ? 'active open' : '' }}" onclick="toggleDropdown(this)">
                         <i class="fa-solid fa-blog"></i> 
-                        <span>Blog Premium</span>
+                        <span>Contenu & Web</span>
                         <i class="fa-solid fa-chevron-right ms-auto arrow-icon" style="font-size: 0.6rem;"></i>
                     </button>
                     <div class="submenu">
+                        @can('access_blog')
                         <a href="{{ route('admin.blog.index') }}" class="submenu-link {{ request()->routeIs('admin.blog.index') ? 'active' : '' }}">
                             Articles
                         </a>
@@ -550,14 +552,20 @@
                         <a href="{{ route('admin.blog.tags') }}" class="submenu-link {{ request()->routeIs('admin.blog.tags') ? 'active' : '' }}">
                             Tags
                         </a>
+                        @endcan
+                        @can('access_flash_messages')
                         <a href="{{ route('admin.flash-messages.index') }}" class="submenu-link {{ request()->routeIs('admin.flash-messages.*') ? 'active' : '' }}">
                             Messages Flash
                         </a>
+                        @endcan
+                        @can('access_settings')
                         <a href="{{ route('admin.settings.index') }}" class="submenu-link {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
                             Configuration
                         </a>
+                        @endcan
                     </div>
                 </div>
+                @endif
 
                 @if(auth()->user()->hasAnyPermission(['manage_users', 'manage_roles']))
                 <div class="nav-label">Système</div>
@@ -568,6 +576,11 @@
                         <i class="fa-solid fa-chevron-right ms-auto arrow-icon" style="font-size: 0.6rem;"></i>
                     </button>
                     <div class="submenu">
+                        @can('access_agents')
+                        <a href="{{ route('agents.index') }}" class="submenu-link {{ request()->routeIs('agents.*') ? 'active' : '' }}">
+                            Agents Mobile
+                        </a>
+                        @endcan
                         @can('manage_users')
                         <a href="{{ route('users.index') }}" class="submenu-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
                             Utilisateurs

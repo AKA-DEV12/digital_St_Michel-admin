@@ -34,7 +34,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     // Clergé & Rendez-vous Management
-    Route::middleware(['permission:access_reservations'])->group(function () {
+    Route::middleware(['permission:access_priests'])->group(function () {
         // Priests
         Route::patch('/priests/{priest}/toggle', [PriestController::class, 'toggleActive'])->name('admin.priests.toggle');
         Route::get('/priests/export', [PriestController::class, 'export'])->name('admin.priests.export');
@@ -110,54 +110,61 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware(['permission:manage_roles'])->resource('roles', RoleController::class)->except(['create', 'show', 'edit']);
 
     // Blog Management
-    Route::prefix('blog')->name('admin.blog.')->group(function () {
-        Route::get('/categories/export', [BlogController::class, 'exportCategories'])->name('categories.export');
-        Route::get('/categories', [BlogController::class, 'categories'])->name('categories');
-        Route::post('/categories', [BlogController::class, 'storeCategory'])->name('categories.store');
-        Route::delete('/categories/{category}', [BlogController::class, 'destroyCategory'])->name('categories.destroy');
+    Route::middleware(['permission:access_blog'])->group(function () {
+        Route::prefix('blog')->name('admin.blog.')->group(function () {
+            Route::get('/categories/export', [BlogController::class, 'exportCategories'])->name('categories.export');
+            Route::get('/categories', [BlogController::class, 'categories'])->name('categories');
+            Route::post('/categories', [BlogController::class, 'storeCategory'])->name('categories.store');
+            Route::delete('/categories/{category}', [BlogController::class, 'destroyCategory'])->name('categories.destroy');
 
-        Route::get('/tags/export', [BlogController::class, 'exportTags'])->name('tags.export');
-        Route::get('/tags', [BlogController::class, 'tags'])->name('tags');
-        Route::post('/tags', [BlogController::class, 'storeTag'])->name('tags.store');
-        Route::delete('/tags/{tag}', [BlogController::class, 'destroyTag'])->name('tags.destroy');
+            Route::get('/tags/export', [BlogController::class, 'exportTags'])->name('tags.export');
+            Route::get('/tags', [BlogController::class, 'tags'])->name('tags');
+            Route::post('/tags', [BlogController::class, 'storeTag'])->name('tags.store');
+            Route::delete('/tags/{tag}', [BlogController::class, 'destroyTag'])->name('tags.destroy');
+        });
+        Route::get('/blog/export', [BlogController::class, 'export'])->name('admin.blog.export');
+        Route::resource('blog', BlogController::class)->parameters([
+            'blog' => 'post'
+        ])->names([
+            'index' => 'admin.blog.index',
+            'create' => 'admin.blog.create',
+            'store' => 'admin.blog.store',
+            'edit' => 'admin.blog.edit',
+            'update' => 'admin.blog.update',
+            'destroy' => 'admin.blog.destroy',
+        ])->except(['show']);
+
+        Route::resource('reviews', \App\Http\Controllers\Admin\BlogReviewController::class)->names([
+            'index' => 'admin.reviews.index',
+            'create' => 'admin.reviews.create',
+            'store' => 'admin.reviews.store',
+            'edit' => 'admin.reviews.edit',
+            'update' => 'admin.reviews.update',
+            'destroy' => 'admin.reviews.destroy',
+        ]);
     });
-    Route::get('/blog/export', [BlogController::class, 'export'])->name('admin.blog.export');
-    Route::resource('blog', BlogController::class)->parameters([
-        'blog' => 'post'
-    ])->names([
-        'index' => 'admin.blog.index',
-        'create' => 'admin.blog.create',
-        'store' => 'admin.blog.store',
-        'edit' => 'admin.blog.edit',
-        'update' => 'admin.blog.update',
-        'destroy' => 'admin.blog.destroy',
-    ])->except(['show']);
 
-    Route::get('/flash-messages/export', [\App\Http\Controllers\Admin\FlashMessageController::class, 'export'])->name('admin.flash-messages.export');
-    Route::resource('flash-messages', \App\Http\Controllers\Admin\FlashMessageController::class)->names([
-        'index' => 'admin.flash-messages.index',
-        'create' => 'admin.flash-messages.create',
-        'store' => 'admin.flash-messages.store',
-        'edit' => 'admin.flash-messages.edit',
-        'update' => 'admin.flash-messages.update',
-        'destroy' => 'admin.flash-messages.destroy',
-    ]);
-
-    Route::resource('reviews', \App\Http\Controllers\Admin\BlogReviewController::class)->names([
-        'index' => 'admin.reviews.index',
-        'create' => 'admin.reviews.create',
-        'store' => 'admin.reviews.store',
-        'edit' => 'admin.reviews.edit',
-        'update' => 'admin.reviews.update',
-        'destroy' => 'admin.reviews.destroy',
-    ]);
+    // Flash Messages
+    Route::middleware(['permission:access_flash_messages'])->group(function () {
+        Route::get('/flash-messages/export', [\App\Http\Controllers\Admin\FlashMessageController::class, 'export'])->name('admin.flash-messages.export');
+        Route::resource('flash-messages', \App\Http\Controllers\Admin\FlashMessageController::class)->names([
+            'index' => 'admin.flash-messages.index',
+            'create' => 'admin.flash-messages.create',
+            'store' => 'admin.flash-messages.store',
+            'edit' => 'admin.flash-messages.edit',
+            'update' => 'admin.flash-messages.update',
+            'destroy' => 'admin.flash-messages.destroy',
+        ]);
+    });
 
     // Profile (from Breeze)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     // Site Settings
-    Route::get('/settings', [\App\Http\Controllers\Admin\SiteSettingController::class, 'index'])->name('admin.settings.index');
+    Route::middleware(['permission:access_settings'])->group(function () {
+        Route::get('/settings', [\App\Http\Controllers\Admin\SiteSettingController::class, 'index'])->name('admin.settings.index');
+    });
     Route::post('/settings', [\App\Http\Controllers\Admin\SiteSettingController::class, 'update'])->name('admin.settings.update');
 });
 
