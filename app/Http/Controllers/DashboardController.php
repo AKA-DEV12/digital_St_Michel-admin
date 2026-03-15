@@ -26,4 +26,9 @@ class DashboardController extends Controller
 
         return view('admin.dashboard', compact('stats', 'recent_reservations'));
     }
+
+    public function documentation()
+    {
+        return view('admin.documentation');
+    }
 }

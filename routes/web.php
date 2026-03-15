@@ -23,7 +23,10 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     // Dashboard
-    Route::middleware(['permission:access_dashboard'])->get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::middleware(['permission:access_dashboard'])->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/documentation', [DashboardController::class, 'documentation'])->name('admin.documentation');
+    });
 
     // Reservation Management
     Route::middleware(['permission:access_reservations'])->group(function () {
