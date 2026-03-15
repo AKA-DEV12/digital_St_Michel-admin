@@ -214,14 +214,9 @@ class RegistrationController extends Controller
     {
         $registration = Registration::where('uuid', $uuid)->first();
 
-        if (!$registration) {
-            return back()->with('error', 'Inscription introuvable.');
-        }
-
-        // Only delete this specific record, if there are multiple with the same UUID (group logic),
-        // we might want to delete all of them. Since the logic ties multiple rows to one UUID 
-        // in groups, we should delete all records with this UUID.
-        Registration::where('uuid', $uuid)->delete();
+        // Use get()->each->delete() instead of direct query delete to trigger Eloquent events
+        // (like cleaning up physical payment receipt files).
+        Registration::where('uuid', $uuid)->get()->each->delete();
 
         return back()->with('success', 'L\'inscription a été supprimée avec succès.');
     }

@@ -249,15 +249,6 @@ class PriestController extends Controller
             abort(403, 'Accès non autorisé.');
         }
 
-        // Don't delete if they have appointments to avoid constraint errors or lost history
-        if ($priest->appointments()->count() > 0) {
-            return redirect()->route('admin.priests.index')->with('error', 'Impossible de supprimer ce prêtre car il a des rendez-vous associés. Vous pouvez le désactiver à la place.');
-        }
-
-        if ($priest->photo_path && file_exists(public_path($priest->photo_path))) {
-            @unlink(public_path($priest->photo_path));
-        }
-
         $priest->delete();
         return redirect()->route('admin.priests.index')->with('success', 'Prêtre supprimé avec succès.');
     }

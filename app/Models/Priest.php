@@ -33,4 +33,17 @@ class Priest extends Model
     {
         return $this->hasMany(PriestAppointment::class);
     }
+
+    protected static function booted()
+    {
+        static::deleting(function ($priest) {
+            // Delete associated appointments
+            $priest->appointments()->delete();
+
+            // Delete photo file
+            if ($priest->photo_path && file_exists(public_path($priest->photo_path))) {
+                @unlink(public_path($priest->photo_path));
+            }
+        });
+    }
 }

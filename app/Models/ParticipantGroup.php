@@ -12,4 +12,13 @@ class ParticipantGroup extends Model
     {
         return $this->hasMany(Registration::class);
     }
+
+    protected static function booted()
+    {
+        static::deleting(function ($group) {
+            $group->registrations->each(function ($registration) {
+                $registration->delete();
+            });
+        });
+    }
 }

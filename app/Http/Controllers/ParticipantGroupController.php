@@ -130,4 +130,11 @@ class ParticipantGroupController extends Controller
 
         return view('admin.groups.show', compact('group'));
     }
+
+    public function destroy(ParticipantGroup $group)
+    {
+        $group->delete();
+
+        return back()->with('success', 'Groupe supprimé avec succès.');
+    }
 }

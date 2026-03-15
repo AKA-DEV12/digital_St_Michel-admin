@@ -45,6 +45,13 @@
             <a href="{{ route('admin.participant_groups.show', $group->id) }}" class="btn btn-sm btn-light border-0 text-primary fw-bold rounded-pill px-3">
                 <i class="fa-solid fa-eye me-1"></i> Voir détails
             </a>
+            <form action="{{ route('admin.participant_groups.destroy', $group->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Supprimer ce groupe ? Les inscriptions associées seront également supprimées.')">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-sm btn-light border-0 text-danger fw-bold rounded-pill px-3 ms-1">
+                    <i class="fa-solid fa-trash me-1"></i> Supprimer
+                </button>
+            </form>
         </td>
     </tr>
     @endforeach

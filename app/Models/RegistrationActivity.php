@@ -23,4 +23,19 @@ class RegistrationActivity extends Model
         'color',
         'is_active',
     ];
+    public function registrations()
+    {
+        return $this->hasMany(Registration::class);
+    }
+
+    protected static function booted()
+    {
+        static::deleting(function ($activity) {
+            // Delete all registrations associated with this activity
+            // Using each() to trigger the deleting event on each Registration model
+            $activity->registrations->each(function ($registration) {
+                $registration->delete();
+            });
+        });
+    }
 }

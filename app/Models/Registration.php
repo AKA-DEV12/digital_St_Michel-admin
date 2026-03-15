@@ -55,5 +55,20 @@ class Registration extends Model
                 $model->uuid = (string) \Illuminate\Support\Str::uuid();
             }
         });
+
+        static::deleting(function ($registration) {
+            // Delete payment receipt file if it exists
+            if ($registration->payment_receipt && file_exists(public_path($registration->payment_receipt))) {
+                // Check if other registrations use the same file (same UUID group)
+                // before deleting the physical file
+                $otherCount = Registration::where('payment_receipt', $registration->payment_receipt)
+                    ->where('id', '!=', $registration->id)
+                    ->count();
+                
+                if ($otherCount === 0) {
+                    @unlink(public_path($registration->payment_receipt));
+                }
+            }
+        });
     }
 }

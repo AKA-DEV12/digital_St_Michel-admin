@@ -94,6 +94,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/participant-groups/create', [\App\Http\Controllers\ParticipantGroupController::class, 'create'])->name('admin.participant_groups.create');
         Route::post('/participant-groups', [\App\Http\Controllers\ParticipantGroupController::class, 'store'])->name('admin.participant_groups.store');
         Route::get('/participant-groups/{id}', [\App\Http\Controllers\ParticipantGroupController::class, 'show'])->name('admin.participant_groups.show');
+        Route::delete('/participant-groups/{group}', [\App\Http\Controllers\ParticipantGroupController::class, 'destroy'])->name('admin.participant_groups.destroy');
     });
 
     // Agent Management
