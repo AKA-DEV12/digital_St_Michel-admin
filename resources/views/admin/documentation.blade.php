@@ -3,191 +3,254 @@
 @section('content')
 <div class="mb-5 animate-fade-in">
     <div class="d-flex align-items-center gap-3 mb-2">
-        <h1 class="h3 fw-bold mb-0" style="letter-spacing: -0.02em;">Guide d'Utilisation</h1>
-        <span class="badge bg-primary-light text-primary px-3 py-2 rounded-pill small fw-bold" style="font-size: 0.7rem;">VERSION 1.0.1</span>
+        <h1 class="h3 fw-bold mb-0" style="letter-spacing: -0.02em;">Guide Opérationnel</h1>
+        <span class="badge bg-primary-light text-primary px-3 py-2 rounded-pill small fw-bold" style="font-size: 0.7rem;">V.1.0.1 - MANUEL COMPLET</span>
     </div>
-    <p class="text-secondary mb-0">Découvrez comment exploiter tout le potentiel de la plateforme Digital Saint-Michel.</p>
+    <p class="text-secondary mb-0">Apprenez à manipuler chaque module de la plateforme avec précision et efficacité.</p>
 </div>
 
 <div class="row g-4 animate-fade-in">
-    <!-- Sommaire -->
+    <!-- Sommaire Interactif -->
     <div class="col-lg-3">
         <div class="bg-white rounded-4 shadow-sm border p-4 sticky-top" style="top: 100px; z-index: 10;">
-            <h6 class="fw-bold mb-4 text-dark text-uppercase tracking-wider" style="font-size: 0.75rem;">SÉCTIONS DU GUIDE</h6>
+            <h6 class="fw-bold mb-4 text-dark text-uppercase tracking-wider" style="font-size: 0.75rem;">MODULES À MAÎTRISER</h6>
             <nav id="doc-nav" class="nav flex-column gap-2">
-                <a class="nav-link px-0 text-secondary small fw-bold d-flex align-items-center gap-2 active" href="#intro">
+                <a class="nav-link px-0 text-secondary small fw-bold d-flex align-items-center gap-2 active" href="#clerge">
                     <div class="rounded-2 bg-primary bg-opacity-10 p-1">
-                        <i class="fa-solid fa-book text-primary" style="width: 14px;"></i>
+                        <i class="fa-solid fa-user-tie text-primary" style="width: 14px;"></i>
                     </div>
-                    Introduction
+                    1. Clergé & RDV
                 </a>
-                <a class="nav-link px-0 text-secondary small fw-bold d-flex align-items-center gap-2" href="#modules">
+                <a class="nav-link px-0 text-secondary small fw-bold d-flex align-items-center gap-2" href="#activites">
                     <div class="rounded-2 bg-success bg-opacity-10 p-1">
-                        <i class="fa-solid fa-cubes text-success" style="width: 14px;"></i>
+                        <i class="fa-solid fa-person-walking text-success" style="width: 14px;"></i>
                     </div>
-                    Modules & Utilité
+                    2. Activités & Inscriptions
                 </a>
-                <a class="nav-link px-0 text-secondary small fw-bold d-flex align-items-center gap-2" href="#guide">
+                <a class="nav-link px-0 text-secondary small fw-bold d-flex align-items-center gap-2" href="#salles">
                     <div class="rounded-2 bg-warning bg-opacity-10 p-1">
-                        <i class="fa-solid fa-gears text-warning" style="width: 14px;"></i>
+                        <i class="fa-solid fa-hotel text-warning" style="width: 14px;"></i>
                     </div>
-                    Guide Pratique
+                    3. Salles & Réservations
                 </a>
-                <a class="nav-link px-0 text-secondary small fw-bold d-flex align-items-center gap-2" href="#evolutif">
+                <a class="nav-link px-0 text-secondary small fw-bold d-flex align-items-center gap-2" href="#blog">
                     <div class="rounded-2 bg-info bg-opacity-10 p-1">
-                        <i class="fa-solid fa-rocket text-info" style="width: 14px;"></i>
+                        <i class="fa-solid fa-pen-nib text-info" style="width: 14px;"></i>
                     </div>
-                    Évolutions Futures
+                    4. Blog & Médias
+                </a>
+                <a class="nav-link px-0 text-secondary small fw-bold d-flex align-items-center gap-2" href="#agents">
+                    <div class="rounded-2 bg-danger bg-opacity-10 p-1">
+                        <i class="fa-solid fa-qrcode text-danger" style="width: 14px;"></i>
+                    </div>
+                    5. Agents & Terrain
+                </a>
+                <a class="nav-link px-0 text-secondary small fw-bold d-flex align-items-center gap-2" href="#securite">
+                    <div class="rounded-2 bg-slate-900 bg-opacity-10 p-1">
+                        <i class="fa-solid fa-shield-halved text-slate-900" style="width: 14px;"></i>
+                    </div>
+                    6. Sécurité & Rôles
                 </a>
             </nav>
-            <hr class="my-4 opacity-50">
-            <div class="rounded-3 p-3 bg-slate-50 border border-slate-100">
-                <p class="small text-secondary mb-0"><i class="fa-solid fa-circle-info me-2 text-primary"></i>Besoin de plus d'aide ? Contactez l'administrateur système.</p>
-            </div>
         </div>
     </div>
 
-    <!-- Contenu -->
+    <!-- Contenu Détaillé -->
     <div class="col-lg-9">
-        <div class="bg-white rounded-4 shadow-sm border p-5">
-            <!-- Intro -->
-            <section id="intro" class="mb-5">
+        <div class="bg-white rounded-4 shadow-sm border p-0 overflow-hidden">
+            
+            <!-- 1. Clergé -->
+            <section id="clerge" class="p-5 border-bottom">
                 <div class="d-flex align-items-center gap-3 mb-4">
                     <div class="rounded-4 bg-primary text-white p-3 shadow-lg shadow-blue-100">
-                        <i class="fa-solid fa-church fs-4"></i>
+                        <i class="fa-solid fa-user-tie fs-4"></i>
                     </div>
                     <div>
-                        <h2 class="h4 fw-bold mb-1">Introduction & Contexte</h2>
-                        <div class="text-primary small fw-bold">MODERNISATION PAROISSIALE</div>
+                        <h2 class="h4 fw-bold mb-1">Gestion du Clergé & Rendez-vous</h2>
+                        <div class="text-primary small fw-bold">POUR LE MINISTÈRE SPIRITUEL</div>
                     </div>
                 </div>
-                <p class="text-secondary leading-relaxed">
-                    La plateforme <strong>Digital Saint-Michel</strong> est née de la volonté de moderniser et de centraliser la gestion des activités paroissiales et pèlerines. Dans un monde de plus en plus connecté, cette solution offre un pont numérique entre l'administration et les fidèles, garantissant une organisation fluide, transparente et sécurisée.
-                </p>
-                <div class="p-4 rounded-4 border-start border-4 border-primary bg-primary bg-opacity-5 mt-4">
-                    <p class="mb-0 fw-bold text-dark italic">"Propulser la gestion de la communauté vers l'excellence numérique tout en simplifiant les processus d'inscription, de réservation et d'interaction spirituelle."</p>
+
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-dark"><i class="fa-solid fa-circle-plus me-2 text-primary"></i> Ajouter un Prêtre</h6>
+                        <p class="small text-secondary leading-relaxed">
+                            Allez dans <strong>Clergé > Ajouter</strong>. Renseignez le nom, le rôle et surtout les <strong>créneaux de disponibilité</strong>. Ces créneaux apparaîtront sur le site public pour les prises de RDV.
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-dark"><i class="fa-solid fa-calendar-check me-2 text-primary"></i> Valider un RDV</h6>
+                        <p class="small text-secondary leading-relaxed">
+                            Dans <strong>Rendez-vous</strong>, vous voyez les demandes entrantes. Vous pouvez <strong>Valider</strong> ou <strong>Annuler</strong> une demande. Le fidèle recevra un feedback visuel sur son statut.
+                        </p>
+                    </div>
+                </div>
+                <div class="alert bg-primary-light border-0 rounded-4 p-4 mb-0">
+                    <div class="d-flex gap-3">
+                        <i class="fa-solid fa-lightbulb text-primary fs-4"></i>
+                        <div class="small text-dark leading-relaxed">
+                            <strong>Astuce :</strong> Si un prêtre est en voyage, utilisez le champ "Dates d'indisponibilité" pour bloquer automatiquement sa prise de RDV sur ces jours précis.
+                        </div>
+                    </div>
                 </div>
             </section>
 
-            <hr class="my-5 opacity-50">
-
-            <!-- Modules -->
-            <section id="modules" class="mb-5">
+            <!-- 2. Activités -->
+            <section id="activites" class="p-5 border-bottom">
                 <div class="d-flex align-items-center gap-3 mb-4">
                     <div class="rounded-4 bg-success text-white p-3 shadow-lg shadow-emerald-100">
-                        <i class="fa-solid fa-puzzle-piece fs-4"></i>
+                        <i class="fa-solid fa-person-walking fs-4"></i>
                     </div>
                     <div>
-                        <h2 class="h4 fw-bold mb-1">Architecture & Modules</h2>
-                        <div class="text-success small fw-bold">CŒUR DU SYSTÈME</div>
+                        <h2 class="h4 fw-bold mb-1">Activités & Inscriptions</h2>
+                        <div class="text-success small fw-bold">PILOTAGE DES ÉVÉNEMENTS</div>
                     </div>
                 </div>
-                
-                <div class="row g-4 mt-2">
-                    <div class="col-md-6">
-                        <div class="p-4 rounded-4 border bg-white h-100 transition hover-shadow">
-                            <h6 class="fw-bold text-dark mb-3"><i class="fa-solid fa-user-tie me-2 text-primary"></i> Clergé (Priests)</h6>
-                            <p class="small text-secondary mb-0">Humanise la plateforme en présentant les prêtres et gère l'agenda spirituel pour les rendez-vous individuels.</p>
+
+                <div class="mb-4">
+                    <h6 class="fw-bold text-dark mb-3">Cycle de manipulation :</h6>
+                    <div class="d-flex flex-column gap-3">
+                        <div class="d-flex align-items-start gap-3">
+                            <span class="badge rounded-circle bg-success p-2">1</span>
+                            <div class="small text-secondary mt-1"><strong>Création :</strong> Définissez le titre, le lieu, et les 4 numéros de paiement (Wave, MTN, Moov, Orange).</div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="p-4 rounded-4 border bg-white h-100 transition hover-shadow">
-                            <h6 class="fw-bold text-dark mb-3"><i class="fa-solid fa-person-walking me-2 text-success"></i> Activités & Pèlerinages</h6>
-                            <p class="small text-secondary mb-0">Moteur événementiel gérant les inscriptions, les paiements et les groupes de participants.</p>
+                        <div class="d-flex align-items-start gap-3">
+                            <span class="badge rounded-circle bg-success p-2">2</span>
+                            <div class="small text-secondary mt-1"><strong>Confirmation :</strong> Allez dans <strong>Inscriptions</strong>. vérifiez le reçu de paiement joint. Si OK, cliquez sur "Confirmer". Un mail de confirmation avec QR Code est envoyé au fidèle.</div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="p-4 rounded-4 border bg-white h-100 transition hover-shadow">
-                            <h6 class="fw-bold text-dark mb-3"><i class="fa-solid fa-hotel me-2 text-warning"></i> Réservations de Salles</h6>
-                            <p class="small text-secondary mb-0">Optimise l'utilisation des espaces physiques grâce à un système anti-collision par créneaux horaires.</p>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="p-4 rounded-4 border bg-white h-100 transition hover-shadow">
-                            <h6 class="fw-bold text-dark mb-3"><i class="fa-solid fa-newspaper me-2 text-info"></i> Blog & Communication</h6>
-                            <p class="small text-secondary mb-0">Rayonnement numérique avec un CMS premium supportant vidéos, tags et avis des lecteurs.</p>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="p-4 rounded-4 border bg-slate-50 text-dark">
-                            <h6 class="fw-bold mb-2"><i class="fa-solid fa-mobile-screen me-2 text-crimson-600"></i> Agents Mobile & Présences</h6>
-                            <p class="small text-secondary mb-0">Pont numérique/physique via QR Code pour la validation de présence sur le terrain en temps réel.</p>
+                        <div class="d-flex align-items-start gap-3">
+                            <span class="badge rounded-circle bg-success p-2">3</span>
+                            <div class="small text-secondary mt-1"><strong>Groupage :</strong> Utilisez le module <strong>Groupes</strong> pour réunir plusieurs inscriptions confirmées sous une même entité (ex: "Chorale St-Michel").</div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <hr class="my-5 opacity-50">
-
-            <!-- Guide Pratique -->
-            <section id="guide" class="mb-5">
+            <!-- 3. Réservations -->
+            <section id="salles" class="p-5 border-bottom">
                 <div class="d-flex align-items-center gap-3 mb-4">
                     <div class="rounded-4 bg-warning text-white p-3 shadow-lg shadow-yellow-100">
-                        <i class="fa-solid fa-wand-magic-sparkles fs-4"></i>
+                        <i class="fa-solid fa-hotel fs-4"></i>
                     </div>
                     <div>
-                        <h2 class="h4 fw-bold mb-1">Guide d'Utilisation Pratique</h2>
-                        <div class="text-warning small fw-bold">MAÎTRISE DE L'OUTIL</div>
+                        <h2 class="h4 fw-bold mb-1">Salles & Réservations</h2>
+                        <div class="text-warning small fw-bold">OPTIMISATION DES ESPACES</div>
                     </div>
                 </div>
 
-                <div class="bg-light bg-opacity-50 p-4 rounded-4 border border-dashed mb-4">
-                    <h6 class="fw-bold text-dark mb-3">1. Tour de contrôle (Dashboard)</h6>
-                    <ul class="text-secondary small ps-3 mb-0">
-                        <li class="mb-2">Visualisez les statistiques en direct de la plateforme.</li>
-                        <li class="mb-2">Utilisez les <strong>Actions Rapides</strong> pour gagner du temps.</li>
-                        <li>Accédez au support technique via le bloc crimson en bas de page.</li>
-                    </ul>
+                <div class="p-4 bg-slate-50 rounded-4 border border-slate-100 mb-4">
+                    <h6 class="fw-bold text-dark small mb-2">Comment manipuler les conflits ?</h6>
+                    <p class="small text-secondary mb-0">
+                        La plateforme bloque automatiquement toute réservation si la salle est déjà occupée sur le même créneau horaire. En tant qu'admin, vous pouvez libérer une salle en <strong>Annulant</strong> une réservation existante dans le module <strong>Réservations</strong>.
+                    </p>
                 </div>
-
-                <div class="bg-light bg-opacity-50 p-4 rounded-4 border border-dashed mb-4">
-                    <h6 class="fw-bold text-dark mb-3">2. Organisation d'un Pèlerinage</h6>
-                    <ul class="text-secondary small ps-3 mb-0">
-                        <li class="mb-2">Créez l'activité avec les détails de paiement nécessaires.</li>
-                        <li class="mb-2">Utilisez le module <strong>Groupes</strong> pour organiser les fidèles (ex: Familles, Paroisses).</li>
-                        <li>Validez les paiements via le reçu téléchargé par le fidèle.</li>
-                    </ul>
-                </div>
-
-                <div class="bg-light bg-opacity-50 p-4 rounded-4 border border-dashed">
-                    <h6 class="fw-bold text-dark mb-3">3. Communication Urgente</h6>
-                    <p class="text-secondary small">Utilisez les <strong>Messages Flash</strong> pour une diffusion instantanée sur le portail public (alertes météo, changement d'horaire de messe).</p>
+                <div class="small text-secondary">
+                    <strong>Étape 1 :</strong> Définissez vos salles (Nom, Capacité). <br>
+                    <strong>Étape 2 :</strong> Définissez les créneaux horaires autorisés (ex: 08:00 - 10:00). <br>
+                    <strong>Étape 3 :</strong> Suivez les demandes dans "Liste des Réservations".
                 </div>
             </section>
 
-            <hr class="my-5 opacity-50">
+            <!-- 4. Blog -->
+            <section id="blog" class="p-5 border-bottom">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <div class="rounded-4 bg-info text-white p-3 shadow-lg shadow-blue-100">
+                        <i class="fa-solid fa-pen-nib fs-4"></i>
+                    </div>
+                    <div>
+                        <h2 class="h4 fw-bold mb-1">Blog & Médias Premium</h2>
+                        <div class="text-info small fw-bold">RAYONNEMENT NUMÉRIQUE</div>
+                    </div>
+                </div>
 
-            <!-- Futur -->
-            <section id="evolutif" class="mb-4">
-                <div class="rounded-5 p-5 text-white shadow-xl position-relative overflow-hidden" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;">
-                    <div class="position-relative z-index-1">
-                        <h2 class="h4 fw-bold mb-3">Une Plateforme Évolutivive</h2>
-                        <p class="opacity-80 leading-relaxed mb-4">
-                            La version <strong>V.1.0.1</strong> n'est que le commencement. Nous avons conçu cette plateforme pour qu'elle puisse grandir avec vous. De nouvelles fonctionnalités seront ajoutées progressivement au fil de vos suggestions et des besoins de la communauté paroissiale.
-                        </p>
-                        <hr class="opacity-20 my-4">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="rounded-circle bg-white bg-opacity-10 p-2">
-                                <i class="fa-solid fa-check text-white"></i>
-                            </div>
-                            <span class="small fw-bold">Digital Saint-Michel - L'excellence spirituelle au service du numérique.</span>
+                <p class="small text-secondary mb-4">Pour publier un contenu captivant :</p>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="p-3 rounded-4 border bg-light text-center">
+                            <i class="fa-solid fa-image text-primary mb-2"></i>
+                            <div class="small fw-bold">Images</div>
+                            <div class="text-xs text-secondary">Utilisez des JPEG/PNG < 2Mo</div>
                         </div>
                     </div>
-                    <i class="fa-solid fa-rocket position-absolute opacity-10" style="right: -40px; bottom: -40px; font-size: 15rem; transform: rotate(-15deg);"></i>
+                    <div class="col-md-4">
+                        <div class="p-3 rounded-4 border bg-light text-center">
+                            <i class="fa-solid fa-video text-danger mb-2"></i>
+                            <div class="small fw-bold">Vidéos</div>
+                            <div class="text-xs text-secondary">Collez l'ID YouTube (ex: dQw4w9WgXcQ)</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-3 rounded-4 border bg-light text-center">
+                            <i class="fa-solid fa-tags text-success mb-2"></i>
+                            <div class="small fw-bold">SEO</div>
+                            <div class="text-xs text-secondary">Ajoutez des Tags pour le référencement</div>
+                        </div>
+                    </div>
                 </div>
             </section>
+
+            <!-- 5. Agents -->
+            <section id="agents" class="p-5 border-bottom">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <div class="rounded-4 bg-danger text-white p-3 shadow-lg shadow-red-100">
+                        <i class="fa-solid fa-qrcode fs-4"></i>
+                    </div>
+                    <div>
+                        <h2 class="h4 fw-bold mb-1">Agents & Présences Terrain</h2>
+                        <div class="text-danger small fw-bold">VALIDATION EN TEMPS RÉEL</div>
+                    </div>
+                </div>
+
+                <div class="p-4 rounded-4 border bg-white">
+                    <h6 class="fw-bold text-dark small mb-3">Protocole pour l'Agent :</h6>
+                    <ol class="small text-secondary mb-0">
+                        <li class="mb-2">L'agent se connecte avec son compte sur son smartphone.</li>
+                        <li class="mb-2">Il scanne le QR Code présent sur le reçu du pèlerin.</li>
+                        <li>La présence est immédiatement marquée comme "Scannée" dans l'administration centrale.</li>
+                    </ol>
+                </div>
+            </section>
+
+            <!-- 6. Sécurité -->
+            <section id="securite" class="p-5">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <div class="rounded-4 bg-slate-900 text-white p-3 shadow-lg">
+                        <i class="fa-solid fa-shield-halved fs-4"></i>
+                    </div>
+                    <div>
+                        <h2 class="h4 fw-bold mb-1">Sécurité & Rôles</h2>
+                        <div class="text-slate-600 small fw-bold">CONTRÔLE D'ACCÈS</div>
+                    </div>
+                </div>
+
+                <ul class="list-group list-group-flush small">
+                    <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                        <div><strong>Super Admin</strong> - Accès total (Inclus: Paramètres, Rôles, Utilisateurs)</div>
+                        <i class="fa-solid fa-lock-open text-success"></i>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                        <div><strong>Manager</strong> - Gestion des activités, blog et réservations.</div>
+                        <i class="fa-solid fa-lock text-warning"></i>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                        <div><strong>Agent</strong> - Uniquement le scanning de QR Codes.</div>
+                        <i class="fa-solid fa-mobile text-primary"></i>
+                    </li>
+                </ul>
+            </section>
+
         </div>
     </div>
 </div>
 
 <style>
     .leading-relaxed { line-height: 1.8; }
-    .nav-link { transition: all 0.2s ease; border-radius: 12px; }
+    .nav-link { transition: all 0.2s ease; border-radius: 12px; margin-bottom: 5px; }
     .nav-link:hover { background-color: #f8fafc; color: var(--primary) !important; transform: translateX(5px); }
     .nav-link.active { background-color: #fff1f2; color: var(--primary) !important; }
-    .transition { transition: all 0.3s ease; }
-    .hover-shadow:hover { shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1); transform: translateY(-3px); border-color: var(--primary) !important; }
+    .bg-primary-light { background-color: #fff1f2; }
     .sticky-top { transition: top 0.3s ease; }
+    section { scroll-margin-top: 100px; }
 </style>
 
 <script>
