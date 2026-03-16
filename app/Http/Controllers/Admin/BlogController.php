@@ -59,6 +59,7 @@ class BlogController extends Controller
             'is_popular' => 'boolean',
             'featured_image' => 'nullable|image|max:2048',
             'url_video' => 'nullable|url|max:255',
+            'secondary_images.*' => 'nullable|image|max:2048',
         ]);
 
         if ($request->hasFile('featured_image')) {
@@ -75,11 +76,19 @@ class BlogController extends Controller
             $post->tags()->sync($request->tags);
         }
 
+        if ($request->hasFile('secondary_images')) {
+            foreach ($request->file('secondary_images') as $image) {
+                $path = $image->store('blog/galleries', 'public');
+                $post->images()->create(['image_path' => $path]);
+            }
+        }
+
         return redirect()->route('admin.blog.index')->with('success', 'Article créé avec succès.');
     }
 
     public function edit(BlogPost $post)
     {
+        $post->load('images');
         $categories = BlogCategory::all();
         $tags = BlogTag::all();
         return view('admin.blog.edit', compact('post', 'categories', 'tags'));
@@ -96,6 +105,9 @@ class BlogController extends Controller
             'is_popular' => 'boolean',
             'featured_image' => 'nullable|image|max:2048',
             'url_video' => 'nullable|url|max:255',
+            'secondary_images.*' => 'nullable|image|max:2048',
+            'delete_images' => 'nullable|array',
+            'delete_images.*' => 'exists:blog_post_images,id',
         ]);
 
         if ($request->hasFile('featured_image')) {
@@ -115,6 +127,23 @@ class BlogController extends Controller
 
         if ($request->has('tags')) {
             $post->tags()->sync($request->tags);
+        }
+
+        // Delete requested secondary images
+        if ($request->has('delete_images')) {
+            $imagesToDelete = \App\Models\BlogPostImage::find($request->delete_images);
+            foreach ($imagesToDelete as $image) {
+                Storage::disk('public')->delete($image->image_path);
+                $image->delete();
+            }
+        }
+
+        // Upload new secondary images
+        if ($request->hasFile('secondary_images')) {
+            foreach ($request->file('secondary_images') as $image) {
+                $path = $image->store('blog/galleries', 'public');
+                $post->images()->create(['image_path' => $path]);
+            }
         }
 
         return redirect()->route('admin.blog.index')->with('success', 'Article mis à jour avec succès.');

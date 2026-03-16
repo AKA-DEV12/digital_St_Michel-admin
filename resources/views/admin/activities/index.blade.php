@@ -118,11 +118,11 @@
                             <label class="form-label small fw-bold text-slate-700">Montant de l'inscription (FCFA)</label>
                             <input type="number" name="registration_amount" id="registration_amount" class="form-control rounded-3 py-2" placeholder="Ex: 5000">
                         </div>
-                        {{-- <div class="col-md-6">
+                        <div class="col-md-6">
                             <label class="form-label small fw-bold text-slate-700">Email de notification</label>
                             <input type="email" name="notification_email" id="notification_email" class="form-control rounded-3 py-2" placeholder="Ex: admin@example.com (Défaut: config)">
                             <div class="form-text small opacity-75">Un e-mail sera envoyé à cette adresse lors d'une nouvelle inscription.</div>
-                        </div> --}}
+                        </div>
                         
                         <!-- Payment Numbers Group -->
                         <div class="col-md-12">

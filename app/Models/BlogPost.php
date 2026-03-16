@@ -21,7 +21,8 @@ class BlogPost extends Model
         'status',
         'is_featured',
         'is_popular',
-        'published_at'
+        'published_at',
+        'views_count'
     ];
 
     protected $casts = [
@@ -52,6 +53,11 @@ class BlogPost extends Model
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(BlogTag::class, 'blog_post_tag', 'blog_post_id', 'blog_tag_id');
+    }
+
+    public function images(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(BlogPostImage::class, 'blog_post_id');
     }
 
     public function scopePopular($query)

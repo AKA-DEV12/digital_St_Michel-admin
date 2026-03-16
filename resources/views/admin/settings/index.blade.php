@@ -65,7 +65,7 @@
                             </div>
                             <div class="flex-grow-1">
                                 <input type="file" name="site_logo" class="form-control mb-2 rounded-3">
-                                <small class="text-secondary">Recommandé : PNG transparent, Max 2MB.</small>
+                                <small class="text-secondary">Recommandé : PNG transparent, Max 12MB.</small>
                             </div>
                         </div>
                     </div>
@@ -105,26 +105,8 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group">
-                                    <span class="input-group-text bg-light border-end-0"><i class="fa-brands fa-twitter text-info"></i></span>
-                                    <input type="url" name="twitter_url" class="form-control border-start-0 ps-0" value="{{ $settings['twitter_url'] ?? '' }}" placeholder="https://twitter.com/...">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light border-end-0"><i class="fa-brands fa-youtube text-danger"></i></span>
-                                    <input type="url" name="youtube_url" class="form-control border-start-0 ps-0" value="{{ $settings['youtube_url'] ?? '' }}" placeholder="https://youtube.com/...">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light border-end-0"><i class="fa-brands fa-instagram text-danger"></i></span>
-                                    <input type="url" name="instagram_url" class="form-control border-start-0 ps-0" value="{{ $settings['instagram_url'] ?? '' }}" placeholder="https://instagram.com/...">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light border-end-0"><i class="fa-brands fa-linkedin text-primary"></i></span>
-                                    <input type="url" name="linkedin_url" class="form-control border-start-0 ps-0" value="{{ $settings['linkedin_url'] ?? '' }}" placeholder="https://linkedin.com/...">
+                                    <span class="input-group-text bg-light border-end-0"><i class="fa-brands fa-tiktok text-dark"></i></span>
+                                    <input type="url" name="tiktok_url" class="form-control border-start-0 ps-0" value="{{ $settings['tiktok_url'] ?? '' }}" placeholder="https://tiktok.com/@...">
                                 </div>
                             </div>
                         </div>
@@ -144,7 +126,7 @@
                                 @endif
                             </div>
                             <input type="file" name="header_ad_flyer" class="form-control mb-2 rounded-3">
-                            <small class="text-secondary">Format panoramique conseillé (ex: 728x90px), Max 2MB.</small>
+                            <small class="text-secondary">Format panoramique conseillé (ex: 728x90px), Max 12MB.</small>
                         </div>
                     </div>
 
@@ -177,7 +159,7 @@
                                         @endif
                                     </div>
                                     <input type="file" name="ad_digital_service_image" class="form-control mb-2 rounded-3">
-                                    <small class="text-secondary">Taille recommandée : 300x250px (Carré ou portrait), Max 2MB.</small>
+                                    <small class="text-secondary">Taille recommandée : 300x250px (Carré ou portrait), Max 12MB.</small>
                                 </div>
                             </div>
                         </div>

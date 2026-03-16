@@ -96,7 +96,13 @@
                     @endif
 
                     <input type="file" name="featured_image" id="featured_image" class="form-control rounded-3 border-gray-200">
-                    <p class="text-secondary x-small mt-2 mb-0">Format recommandé : 1200x800px. Max 2Mo.</p>
+                    <p class="text-secondary x-small mt-2 mb-0">Format recommandé : 1200x800px. Max 12Mo.</p>
+                </div>
+
+                <div class="card border-0 rounded-4 shadow-sm p-4 bg-white mb-4">
+                    <h6 class="fw-bold mb-4">Galerie d'images (secondaires)</h6>
+                    <input type="file" name="secondary_images[]" id="secondary_images" class="form-control rounded-3 border-gray-200" multiple>
+                    <p class="text-secondary x-small mt-2 mb-0">Vous pouvez sélectionner plusieurs images. Max 12Mo par image.</p>
                 </div>
 
                 <div class="card border-0 rounded-4 shadow-sm p-4 bg-white mb-4">

@@ -19,37 +19,33 @@ class SiteSettingController extends Controller
     public function update(Request $request)
     {
         $rules = [
-            'site_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10124',
-            'header_ad_flyer' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'site_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:12288',
+            'header_ad_flyer' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:12288',
             'site_name' => 'nullable|string|max:255',
             'site_description' => 'nullable|string',
             'site_address' => 'nullable|string|max:255',
             'site_phone' => 'nullable|string|max:20',
             'site_email' => 'nullable|email|max:255',
             'facebook_url' => 'nullable|url|max:255',
-            'twitter_url' => 'nullable|url|max:255',
             'youtube_url' => 'nullable|url|max:255',
-            'instagram_url' => 'nullable|url|max:255',
-            'linkedin_url' => 'nullable|url|max:255',
+            'tiktok_url' => 'nullable|url|max:255',
             'ad_digital_service_title' => 'nullable|string|max:255',
             'ad_digital_service_text' => 'nullable|string|max:255',
             'ad_digital_service_link' => 'nullable|url|max:255',
-            'ad_digital_service_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'ad_digital_service_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:12288',
         ];
 
         $messages = [
-            'site_logo.max' => 'Le logo doit faire moins de 10 Mo',
-            'header_ad_flyer.max' => 'La bannière doit faire moins de 2 Mo',
-            'ad_digital_service_image.max' => 'L\'image doit faire moins de 2 Mo',
+            'site_logo.max' => 'Le logo doit faire moins de 12 Mo',
+            'header_ad_flyer.max' => 'La bannière doit faire moins de 12 Mo',
+            'ad_digital_service_image.max' => 'L\'image doit faire moins de 12 Mo',
             'site_logo.image' => 'Le fichier doit être une image',
             'header_ad_flyer.image' => 'Le fichier doit être une image',
             'ad_digital_service_image.image' => 'Le fichier doit être une image',
             'site_email.email' => 'L\'adresse e-mail doit être valide',
             'facebook_url.url' => 'Le lien Facebook doit être une URL valide',
-            'twitter_url.url' => 'Le lien Twitter doit être une URL valide',
             'youtube_url.url' => 'Le lien YouTube doit être une URL valide',
-            'instagram_url.url' => 'Le lien Instagram doit être une URL valide',
-            'linkedin_url.url' => 'Le lien LinkedIn doit être une URL valide',
+            'tiktok_url.url' => 'Le lien TikTok doit être une URL valide',
             'ad_digital_service_link.url' => 'Le lien de la publicité doit être une URL valide',
         ];
 
@@ -79,7 +75,7 @@ class SiteSettingController extends Controller
             // Handle Text fields
             $textFields = [
                 'site_name', 'site_description', 'site_address', 'site_phone', 'site_email',
-                'facebook_url', 'twitter_url', 'youtube_url', 'instagram_url', 'linkedin_url',
+                'facebook_url', 'youtube_url', 'tiktok_url',
                 'ad_digital_service_title', 'ad_digital_service_text', 'ad_digital_service_link'
             ];
 

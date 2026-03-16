@@ -96,7 +96,30 @@
                     @endif
 
                     <input type="file" name="featured_image" id="featured_image" class="form-control rounded-3 border-gray-200">
-                    <p class="text-secondary x-small mt-2 mb-0">Format recommandé : 1200x800px. Max 2Mo.</p>
+                    <p class="text-secondary x-small mt-2 mb-0">Format recommandé : 1200x800px. Max 12Mo.</p>
+                </div>
+
+                <div class="card border-0 rounded-4 shadow-sm p-4 bg-white mb-4">
+                    <h6 class="fw-bold mb-4">Galerie d'images (secondaires)</h6>
+                    
+                    @if($post->images->count() > 0)
+                        <div class="row g-2 mb-3">
+                            @foreach($post->images as $image)
+                                <div class="col-4">
+                                    <div class="position-relative rounded-3 overflow-hidden border">
+                                        <img src="{{ asset('storage/' . $image->image_path) }}" class="w-100 h-auto" style="aspect-ratio: 1/1; object-fit: cover;">
+                                        <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-dark bg-opacity-25 opacity-0 hover-opacity-100 transition-all">
+                                            <input type="checkbox" name="delete_images[]" value="{{ $image->id }}" class="form-check-input" id="del_img_{{ $image->id }}">
+                                            <label for="del_img_{{ $image->id }}" class="ms-2 text-white small cursor-pointer">Supprimer</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
+
+                    <input type="file" name="secondary_images[]" id="secondary_images" class="form-control rounded-3 border-gray-200" multiple>
+                    <p class="text-secondary x-small mt-2 mb-0">Ajouter de nouvelles images à la galerie.</p>
                 </div>
 
                 <div class="card border-0 rounded-4 shadow-sm p-4 bg-white mb-4">

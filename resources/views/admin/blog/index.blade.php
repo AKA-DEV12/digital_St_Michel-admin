@@ -64,7 +64,7 @@
         </div>
     </div>
 
-    <x-data-table :headers="['Aperçu', 'Titre', 'Catégorie', 'Auteur', 'Statut', 'Actions']" :collection="$posts">
+    <x-data-table :headers="['Aperçu', 'Titre', 'Catégorie', 'Auteur', 'Vues', 'Statut', 'Actions']" :collection="$posts">
         <x-slot name="title">Liste des articles</x-slot>
 
         @foreach($posts as $post)
@@ -100,6 +100,12 @@
                             {{ substr($post->author->name ?? 'A', 0, 1) }}
                         </div>
                         <span class="small text-secondary fw-medium">{{ $post->author->name ?? 'Rédaction' }}</span>
+                    </div>
+                </td>
+                <td class="px-6 py-4">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="fa-solid fa-eye text-secondary opacity-50"></i>
+                        <span class="fw-bold">{{ number_format($post->views_count ?? 0) }}</span>
                     </div>
                 </td>
                 <td class="px-6 py-4">
