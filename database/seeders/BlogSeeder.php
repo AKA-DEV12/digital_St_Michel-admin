@@ -17,10 +17,30 @@ class BlogSeeder extends Seeder
             return;
         }
 
-        // Categories
+        // Categories representant les menus et sections du portail
+        $catActualite = BlogCategory::firstOrCreate(
+            ['slug' => 'actualite'],
+            ['name' => 'Actualité', 'description' => 'Toute l\'actualité de la paroisse et de l\'Église.']
+        );
+
         $catEnseignement = BlogCategory::firstOrCreate(
             ['slug' => 'enseignement'],
             ['name' => 'Enseignement', 'description' => 'Approfondissez votre foi par l\'enseignement doctrinal.']
+        );
+
+        $catEvenement = BlogCategory::firstOrCreate(
+            ['slug' => 'evenement'],
+            ['name' => 'Événement', 'description' => 'Vivez les moments forts de notre communauté.']
+        );
+
+        $catSpiritualite = BlogCategory::firstOrCreate(
+            ['slug' => 'spiritualite'],
+            ['name' => 'Spiritualité', 'description' => 'Méditations et ressources pour nourrir votre vie intérieure.']
+        );
+
+        $catAnnonce = BlogCategory::firstOrCreate(
+            ['slug' => 'annonce'],
+            ['name' => 'Annonce', 'description' => 'Flash infos et annonces paroissiales importantes.']
         );
 
         $catLumiere = BlogCategory::firstOrCreate(
