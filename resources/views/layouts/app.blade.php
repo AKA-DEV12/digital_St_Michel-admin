@@ -546,6 +546,9 @@
                         <a href="{{ route('admin.blog.index') }}" class="submenu-link {{ request()->routeIs('admin.blog.index') ? 'active' : '' }}">
                             Articles
                         </a>
+                        <a href="{{ route('admin.ads.index') }}" class="submenu-link {{ request()->routeIs('admin.ads.index') ? 'active' : '' }}">
+                            Publicités
+                        </a>
                         <a href="{{ route('admin.blog.categories') }}" class="submenu-link {{ request()->routeIs('admin.blog.categories') ? 'active' : '' }}">
                             Catégories
                         </a>

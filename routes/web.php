@@ -16,6 +16,7 @@ use App\Http\Controllers\PriestAppointmentController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\BlogController;
+use App\Http\Controllers\Admin\AdvertisementController;
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
@@ -145,6 +146,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
             'edit' => 'admin.reviews.edit',
             'update' => 'admin.reviews.update',
             'destroy' => 'admin.reviews.destroy',
+        ]);
+
+        Route::resource('advertisements', AdvertisementController::class)->names([
+            'index' => 'admin.ads.index',
+            'create' => 'admin.ads.create',
+            'store' => 'admin.ads.store',
+            'edit' => 'admin.ads.edit',
+            'update' => 'admin.ads.update',
+            'destroy' => 'admin.ads.destroy',
         ]);
     });
 
