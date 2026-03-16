@@ -161,6 +161,7 @@ jobs:
               echo "--- Exécution des migrations ---"
               php8.4 artisan migrate --force
               php8.4 artisan db:seed --class=RolePermissionSeeder --force || true
+              php8.4 artisan db:seed --class=BlogSeeder --force || true
               # RESET du cache Spatie (Crucial pour les permissions)
               php8.4 artisan permission:cache-reset || true
               php8.4 artisan config:cache
