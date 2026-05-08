@@ -6,12 +6,20 @@ use App\Http\Controllers\Controller;
 use App\Models\BlogPost;
 use App\Models\BlogCategory;
 use App\Models\BlogTag;
+use App\Services\CloudinaryService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
 class BlogController extends Controller
 {
+    protected $cloudinaryService;
+
+    public function __construct(CloudinaryService $cloudinaryService)
+    {
+        $this->cloudinaryService = $cloudinaryService;
+    }
+
     public function export(Request $request, \App\Services\ExportService $exportService)
     {
         $posts = BlogPost::with(['author', 'category'])->latest()->get();
@@ -57,18 +65,34 @@ class BlogController extends Controller
             'status' => 'required|in:draft,published',
             'is_featured' => 'boolean',
             'is_popular' => 'boolean',
-            'featured_image' => 'nullable|image|max:2048',
-            'url_video' => 'nullable|url|max:255',
-            'secondary_images.*' => 'nullable|image|max:2048',
+            'featured_media_type' => 'required|in:image,video',
+            'featured_image' => 'nullable|required_if:featured_media_type,image|image|mimes:jpeg,png,jpg,gif|max:10240',
+            'url_video' => 'nullable|required_if:featured_media_type,video|file|mimes:mp4,avi,mov,wmv,flv,webm|max:51200',
+            'secondary_images' => 'nullable|array|max:2',
+            'secondary_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240',
+            'gallery_images' => 'nullable|array',
+            'gallery_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240',
         ]);
-
-        if ($request->hasFile('featured_image')) {
-            $validated['featured_image'] = $request->file('featured_image')->store('blog/posts', 'public');
-        }
 
         $validated['user_id'] = auth()->id();
         $validated['slug'] = Str::slug($validated['title']);
         $validated['published_at'] = $request->status === 'published' ? now() : null;
+
+        // Gestion de l'image principale avec Cloudinary
+        if ($request->hasFile('featured_image') && $request->file('featured_image')->isValid()) {
+            $url = $this->cloudinaryService->uploadFile($request->file('featured_image'), 'blog/featured');
+            if ($url) {
+                $validated['featured_image'] = $url;
+            }
+        }
+
+        // Gestion de la vidéo avec Cloudinary
+        if ($request->hasFile('url_video') && $request->file('url_video')->isValid()) {
+            $url = $this->cloudinaryService->uploadVideo($request->file('url_video'), 'blog/videos');
+            if ($url) {
+                $validated['url_video'] = $url;
+            }
+        }
 
         $post = BlogPost::create($validated);
 
@@ -76,10 +100,33 @@ class BlogController extends Controller
             $post->tags()->sync($request->tags);
         }
 
+        // Gestion des images secondaires avec Cloudinary
         if ($request->hasFile('secondary_images')) {
-            foreach ($request->file('secondary_images') as $image) {
-                $path = $image->store('blog/galleries', 'public');
-                $post->images()->create(['image_path' => $path]);
+            foreach ($request->file('secondary_images') as $file) {
+                if ($file && $file->isValid()) {
+                    $url = $this->cloudinaryService->uploadFile($file, 'blog/secondary');
+                    if ($url) {
+                        $post->images()->create([
+                            'image_path' => $url,
+                            'is_gallery' => false
+                        ]);
+                    }
+                }
+            }
+        }
+
+        // Gestion des images de galerie avec Cloudinary
+        if ($request->hasFile('gallery_images')) {
+            foreach ($request->file('gallery_images') as $file) {
+                if ($file && $file->isValid()) {
+                    $url = $this->cloudinaryService->uploadFile($file, 'blog/gallery');
+                    if ($url) {
+                        $post->images()->create([
+                            'image_path' => $url,
+                            'is_gallery' => true
+                        ]);
+                    }
+                }
             }
         }
 
@@ -103,24 +150,35 @@ class BlogController extends Controller
             'status' => 'required|in:draft,published',
             'is_featured' => 'boolean',
             'is_popular' => 'boolean',
-            'featured_image' => 'nullable|image|max:2048',
-            'url_video' => 'nullable|url|max:255',
-            'secondary_images.*' => 'nullable|image|max:2048',
-            'delete_images' => 'nullable|array',
-            'delete_images.*' => 'exists:blog_post_images,id',
+            'featured_media_type' => 'required|in:image,video',
+            'featured_image' => 'nullable|required_if:featured_media_type,image|image|mimes:jpeg,png,jpg,gif|max:10240',
+            'url_video' => 'nullable|required_if:featured_media_type,video|file|mimes:mp4,avi,mov,wmv,flv,webm|max:51200',
+            'secondary_images' => 'nullable|array|max:2',
+            'secondary_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240',
+            'gallery_images' => 'nullable|array',
+            'gallery_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240',
         ]);
-
-        if ($request->hasFile('featured_image')) {
-            if ($post->featured_image) {
-                Storage::disk('public')->delete($post->featured_image);
-            }
-            $validated['featured_image'] = $request->file('featured_image')->store('blog/posts', 'public');
-        }
 
         $validated['slug'] = Str::slug($validated['title']);
 
         if ($request->status === 'published' && !$post->published_at) {
             $validated['published_at'] = now();
+        }
+
+        // Gestion de l'image principale avec Cloudinary
+        if ($request->hasFile('featured_image') && $request->file('featured_image')->isValid()) {
+            $url = $this->cloudinaryService->uploadFile($request->file('featured_image'), 'blog/featured');
+            if ($url) {
+                $validated['featured_image'] = $url;
+            }
+        }
+
+        // Gestion de la vidéo avec Cloudinary
+        if ($request->hasFile('url_video') && $request->file('url_video')->isValid()) {
+            $url = $this->cloudinaryService->uploadVideo($request->file('url_video'), 'blog/videos');
+            if ($url) {
+                $validated['url_video'] = $url;
+            }
         }
 
         $post->update($validated);
@@ -129,20 +187,36 @@ class BlogController extends Controller
             $post->tags()->sync($request->tags);
         }
 
-        // Delete requested secondary images
-        if ($request->has('delete_images')) {
-            $imagesToDelete = \App\Models\BlogPostImage::find($request->delete_images);
-            foreach ($imagesToDelete as $image) {
-                Storage::disk('public')->delete($image->image_path);
-                $image->delete();
+        // Gestion des images - suppression et recréation
+        $post->images()->delete();
+        
+        // Gestion des images secondaires avec Cloudinary
+        if ($request->hasFile('secondary_images')) {
+            foreach ($request->file('secondary_images') as $file) {
+                if ($file && $file->isValid()) {
+                    $url = $this->cloudinaryService->uploadFile($file, 'blog/secondary');
+                    if ($url) {
+                        $post->images()->create([
+                            'image_path' => $url,
+                            'is_gallery' => false
+                        ]);
+                    }
+                }
             }
         }
 
-        // Upload new secondary images
-        if ($request->hasFile('secondary_images')) {
-            foreach ($request->file('secondary_images') as $image) {
-                $path = $image->store('blog/galleries', 'public');
-                $post->images()->create(['image_path' => $path]);
+        // Gestion des images de galerie avec Cloudinary
+        if ($request->hasFile('gallery_images')) {
+            foreach ($request->file('gallery_images') as $file) {
+                if ($file && $file->isValid()) {
+                    $url = $this->cloudinaryService->uploadFile($file, 'blog/gallery');
+                    if ($url) {
+                        $post->images()->create([
+                            'image_path' => $url,
+                            'is_gallery' => true
+                        ]);
+                    }
+                }
             }
         }
 
@@ -151,12 +225,10 @@ class BlogController extends Controller
 
     public function destroy(BlogPost $post)
     {
-        if ($post->featured_image) {
-            Storage::disk('public')->delete($post->featured_image);
-        }
         $post->delete();
         return redirect()->route('admin.blog.index')->with('success', 'Article supprimé.');
     }
+
 
     public function exportCategories(Request $request, \App\Services\ExportService $exportService)
     {

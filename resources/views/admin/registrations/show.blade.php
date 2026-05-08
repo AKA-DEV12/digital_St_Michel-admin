@@ -189,10 +189,8 @@
                                 <label class="small text-secondary text-uppercase fw-bold d-block mb-3">Reçu de paiement</label>
                                 <div class="bg-light rounded-4 p-3 border">
                                     @php
-                                        $isImage = in_array(pathinfo($registration->payment_receipt, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'webp']);
-                                        $receiptUrl = (strpos($registration->payment_receipt, 'assets/') === 0) 
-                                            ? rtrim(env('PUBLIC_SITE_URL', 'https://digital.saint-michel-archange.com'), '/') . '/' . $registration->payment_receipt 
-                                            : asset('storage/' . $registration->payment_receipt);
+                                        $receiptUrl = $registration->payment_receipt_url;
+                                        $isImage = $receiptUrl && in_array(pathinfo($receiptUrl, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'webp']);
                                     @endphp
                                     
                                     @if($isImage)

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Group;
 use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -34,9 +35,10 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = User::with('roles')->latest()->paginate(15);
+        $users = User::with('roles', 'group')->latest()->paginate(15);
         $roles = Role::all();
-        return view('admin.users.index', compact('users', 'roles'));
+        $groups = Group::orderBy('nom_groupe')->get();
+        return view('admin.users.index', compact('users', 'roles', 'groups'));
     }
 
     public function store(Request $request)
@@ -46,12 +48,14 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8',
             'roles' => 'required|array',
+            'group_id' => 'nullable|exists:groups,id',
         ]);
 
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
+            'group_id' => $validated['group_id'] ?? null,
         ]);
 
         $user->assignRole($validated['roles']);
@@ -66,11 +70,13 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:8',
             'roles' => 'required|array',
+            'group_id' => 'nullable|exists:groups,id',
         ]);
 
         $user->update([
             'name' => $validated['name'],
             'email' => $validated['email'],
+            'group_id' => $validated['group_id'] ?? null,
         ]);
 
         if ($request->filled('password')) {

@@ -47,27 +47,35 @@ class Registration extends Model
         return url("/api/scan/{$this->id}");
     }
 
+    /**
+     * Obtenir l'URL correcte pour le reçu de paiement
+     */
+    public function getPaymentReceiptUrlAttribute()
+    {
+        if (!$this->payment_receipt) {
+            return null;
+        }
+
+        // Si c'est déjà une URL complète (Cloudinary), la retourner directement
+        if (str_starts_with($this->payment_receipt, 'http')) {
+            return $this->payment_receipt;
+        }
+
+        // Si c'est un chemin commençant par 'assets/', utiliser l'URL du site public
+        if (str_starts_with($this->payment_receipt, 'assets/')) {
+            return rtrim(env('PUBLIC_SITE_URL', 'https://digital.saint-michel-archange.com'), '/') . '/' . $this->payment_receipt;
+        }
+
+        // Sinon, considérer que c'est un fichier local dans storage
+        return asset('storage/' . $this->payment_receipt);
+    }
+
     protected static function boot()
     {
         parent::boot();
         static::creating(function ($model) {
             if (empty($model->uuid)) {
                 $model->uuid = (string) \Illuminate\Support\Str::uuid();
-            }
-        });
-
-        static::deleting(function ($registration) {
-            // Delete payment receipt file if it exists
-            if ($registration->payment_receipt && file_exists(public_path($registration->payment_receipt))) {
-                // Check if other registrations use the same file (same UUID group)
-                // before deleting the physical file
-                $otherCount = Registration::where('payment_receipt', $registration->payment_receipt)
-                    ->where('id', '!=', $registration->id)
-                    ->count();
-                
-                if ($otherCount === 0) {
-                    @unlink(public_path($registration->payment_receipt));
-                }
             }
         });
     }

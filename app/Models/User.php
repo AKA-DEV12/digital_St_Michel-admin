@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class User extends Authenticatable
 {
@@ -23,6 +25,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'group_id',
     ];
 
     /**
@@ -49,5 +52,36 @@ class User extends Authenticatable
 
     }
 
+    /**
+     * Relation avec le groupe de l'utilisateur
+     */
+    public function group(): BelongsTo
+    {
+        return $this->belongsTo(Group::class);
+    }
+
+    /**
+     * Relation avec les membres créés par cet utilisateur
+     */
+    public function createdMembers(): HasMany
+    {
+        return $this->hasMany(GroupMember::class, 'created_by');
+    }
+
+    /**
+     * Vérifier si l'utilisateur est associé à un groupe
+     */
+    public function hasGroup(): bool
+    {
+        return !is_null($this->group_id);
+    }
+
+    /**
+     * Obtenir le nom du groupe
+     */
+    public function getGroupNameAttribute(): ?string
+    {
+        return $this->group ? $this->group->nom_groupe : null;
+    }
 
 }

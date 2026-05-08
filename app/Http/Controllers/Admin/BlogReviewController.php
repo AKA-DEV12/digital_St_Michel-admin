@@ -4,11 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\BlogReview;
+use App\Services\CloudinaryService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class BlogReviewController extends Controller
 {
+    protected $cloudinaryService;
+
+    public function __construct(CloudinaryService $cloudinaryService)
+    {
+        $this->cloudinaryService = $cloudinaryService;
+    }
     public function index()
     {
         $reviews = BlogReview::latest()->paginate(10);
@@ -30,7 +37,7 @@ class BlogReviewController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('reviews', 'public');
+            $data['image'] = $this->cloudinaryService->uploadFile($request->file('image'), 'reviews');
         }
 
         BlogReview::create($data);
@@ -53,10 +60,7 @@ class BlogReviewController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            if ($review->image) {
-                Storage::disk('public')->delete($review->image);
-            }
-            $data['image'] = $request->file('image')->store('reviews', 'public');
+            $data['image'] = $this->cloudinaryService->uploadFile($request->file('image'), 'reviews');
         }
 
         $review->update($data);
@@ -66,9 +70,7 @@ class BlogReviewController extends Controller
 
     public function destroy(BlogReview $review)
     {
-        if ($review->image) {
-            Storage::disk('public')->delete($review->image);
-        }
+        // No local storage cleanup
         $review->delete();
         return redirect()->route('admin.reviews.index')->with('success', 'Critique supprimée avec succès.');
     }

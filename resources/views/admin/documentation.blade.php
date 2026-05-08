@@ -59,10 +59,38 @@
     <div class="col-lg-9">
         <div class="bg-white rounded-4 shadow-sm border p-0 overflow-hidden">
             
+            <!-- 0. Dashboard -->
+            <section id="dashboard" class="p-5 border-bottom">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <div class="rounded-4 bg-dark text-white p-3 shadow-lg">
+                        <i class="fa-solid fa-chart-line fs-4"></i>
+                    </div>
+                    <div>
+                        <h2 class="h4 fw-bold mb-1">Tableau de Bord & Business Intelligence</h2>
+                        <div class="text-dark small fw-bold">PILOTAGE DATA-DRIVEN</div>
+                    </div>
+                </div>
+
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-dark"><i class="fa-solid fa-chart-pie me-2 text-primary"></i> Graphiques Interactifs</h6>
+                        <p class="small text-secondary leading-relaxed">
+                            Consultez en un coup d'œil l'<strong>état matrimonial</strong>, la <strong>répartition par âge</strong> et les <strong>profils professionnels</strong> de vos paroissiens. Ces données sont extraites automatiquement des membres de groupes.
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-dark"><i class="fa-solid fa-wallet me-2 text-primary"></i> Suivi des Revenus</h6>
+                        <p class="small text-secondary leading-relaxed">
+                            Le dashboard agrège les paiements validés des <strong>Messes</strong>, des <strong>Réservations</strong> et des <strong>Activités</strong> pour vous donner le revenu total en temps réel.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
             <!-- 1. Clergé -->
             <section id="clerge" class="p-5 border-bottom">
                 <div class="d-flex align-items-center gap-3 mb-4">
-                    <div class="rounded-4 bg-primary text-white p-3 shadow-lg shadow-blue-100">
+                    <div class="rounded-4 bg-primary text-white p-3 shadow-lg">
                         <i class="fa-solid fa-user-tie fs-4"></i>
                     </div>
                     <div>
@@ -75,53 +103,76 @@
                     <div class="col-md-6">
                         <h6 class="fw-bold text-dark"><i class="fa-solid fa-circle-plus me-2 text-primary"></i> Ajouter un Prêtre</h6>
                         <p class="small text-secondary leading-relaxed">
-                            Allez dans <strong>Clergé > Ajouter</strong>. Renseignez le nom, le rôle et surtout les <strong>créneaux de disponibilité</strong>. Ces créneaux apparaîtront sur le site public pour les prises de RDV.
+                            Allez dans <strong>Clergé > Ajouter</strong>. Renseignez le nom et les <strong>créneaux de disponibilité</strong>. Ces créneaux apparaîtront sur le site public pour les prises de RDV.
                         </p>
                     </div>
                     <div class="col-md-6">
                         <h6 class="fw-bold text-dark"><i class="fa-solid fa-calendar-check me-2 text-primary"></i> Valider un RDV</h6>
                         <p class="small text-secondary leading-relaxed">
-                            Dans <strong>Rendez-vous</strong>, vous voyez les demandes entrantes. Vous pouvez <strong>Valider</strong> ou <strong>Annuler</strong> une demande. Le fidèle recevra un feedback visuel sur son statut.
+                            Dans <strong>Rendez-vous</strong>, vous voyez les demandes. Cliquez sur <strong>Valider</strong> pour confirmer la rencontre.
                         </p>
-                    </div>
-                </div>
-                <div class="alert bg-primary-light border-0 rounded-4 p-4 mb-0">
-                    <div class="d-flex gap-3">
-                        <i class="fa-solid fa-lightbulb text-primary fs-4"></i>
-                        <div class="small text-dark leading-relaxed">
-                            <strong>Astuce :</strong> Si un prêtre est en voyage, utilisez le champ "Dates d'indisponibilité" pour bloquer automatiquement sa prise de RDV sur ces jours précis.
-                        </div>
                     </div>
                 </div>
             </section>
 
-            <!-- 2. Activités -->
+            <!-- 2. Activités & Groupes -->
             <section id="activites" class="p-5 border-bottom">
                 <div class="d-flex align-items-center gap-3 mb-4">
-                    <div class="rounded-4 bg-success text-white p-3 shadow-lg shadow-emerald-100">
-                        <i class="fa-solid fa-person-walking fs-4"></i>
+                    <div class="rounded-4 bg-success text-white p-3 shadow-lg">
+                        <i class="fa-solid fa-users fs-4"></i>
                     </div>
                     <div>
-                        <h2 class="h4 fw-bold mb-1">Activités & Inscriptions</h2>
-                        <div class="text-success small fw-bold">PILOTAGE DES ÉVÉNEMENTS</div>
+                        <h2 class="h4 fw-bold mb-1">Activités & Groupes Paroissiaux</h2>
+                        <div class="text-success small fw-bold">VIE DE LA COMMUNAUTÉ</div>
                     </div>
                 </div>
 
                 <div class="mb-4">
-                    <h6 class="fw-bold text-dark mb-3">Cycle de manipulation :</h6>
-                    <div class="d-flex flex-column gap-3">
-                        <div class="d-flex align-items-start gap-3">
-                            <span class="badge rounded-circle bg-success p-2">1</span>
-                            <div class="small text-secondary mt-1"><strong>Création :</strong> Définissez le titre, le lieu, et les 4 numéros de paiement (Wave, MTN, Moov, Orange).</div>
+                    <h6 class="fw-bold text-dark mb-3">Saisie enrichie des membres :</h6>
+                    <p class="small text-secondary mb-3">
+                        Pour des statistiques précises sur le dashboard, veillez à renseigner lors de l'ajout d'un membre :
+                    </p>
+                    <div class="row g-2 mb-4">
+                        <div class="col-md-4">
+                            <div class="p-2 border rounded-3 bg-light small text-center">Date de naissance</div>
                         </div>
-                        <div class="d-flex align-items-start gap-3">
-                            <span class="badge rounded-circle bg-success p-2">2</span>
-                            <div class="small text-secondary mt-1"><strong>Confirmation :</strong> Allez dans <strong>Inscriptions</strong>. vérifiez le reçu de paiement joint. Si OK, cliquez sur "Confirmer". Un mail de confirmation avec QR Code est envoyé au fidèle.</div>
+                        <div class="col-md-4">
+                            <div class="p-2 border rounded-3 bg-light small text-center">Situation Prof.</div>
                         </div>
-                        <div class="d-flex align-items-start gap-3">
-                            <span class="badge rounded-circle bg-success p-2">3</span>
-                            <div class="small text-secondary mt-1"><strong>Groupage :</strong> Utilisez le module <strong>Groupes</strong> pour réunir plusieurs inscriptions confirmées sous une même entité (ex: "Chorale St-Michel").</div>
+                        <div class="col-md-4">
+                            <div class="p-2 border rounded-3 bg-light small text-center">Nombre d'enfants</div>
                         </div>
+                    </div>
+                    <div class="alert bg-success bg-opacity-10 border-0 rounded-4 p-3 small text-success">
+                        <strong>Note :</strong> Seuls les membres dont la date de naissance est renseignée sont comptabilisés dans le graphique de répartition par âge.
+                    </div>
+                </div>
+            </section>
+
+            <!-- 7. Messes -->
+            <section id="messes" class="p-5 border-bottom">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <div class="rounded-4 bg-indigo-600 text-white p-3 shadow-lg" style="background-color: #4f46e5;">
+                        <i class="fa-solid fa-church fs-4"></i>
+                    </div>
+                    <div>
+                        <h2 class="h4 fw-bold mb-1">Intentions de Messe</h2>
+                        <div class="text-indigo-600 small fw-bold" style="color: #4f46e5;">DEMANDES SPIRITUELLES</div>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-dark"><i class="fa-solid fa-list-check me-2" style="color: #4f46e5;"></i> Traitement des demandes</h6>
+                        <p class="small text-secondary mb-0">
+                            Chaque demande apparaît dans <strong>Messes > Demandes</strong>. Vérifiez l'objet et le montant. Une fois le paiement confirmé, passez le statut à <strong>Payé (Confirmé)</strong>.
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-dark"><i class="fa-solid fa-gear me-2" style="color: #4f46e5;"></i> Configuration</h6>
+                        <p class="small text-secondary mb-0">
+                            Dans l'onglet <strong>Configuration</strong>, vous pouvez modifier le prix unitaire d'une messe et mettre à jour les numéros de téléphone pour les paiements mobiles.
+                        </p>
                     </div>
                 </div>
             </section>
@@ -129,7 +180,7 @@
             <!-- 3. Réservations -->
             <section id="salles" class="p-5 border-bottom">
                 <div class="d-flex align-items-center gap-3 mb-4">
-                    <div class="rounded-4 bg-warning text-white p-3 shadow-lg shadow-yellow-100">
+                    <div class="rounded-4 bg-warning text-white p-3 shadow-lg">
                         <i class="fa-solid fa-hotel fs-4"></i>
                     </div>
                     <div>
@@ -138,23 +189,18 @@
                     </div>
                 </div>
 
-                <div class="p-4 bg-slate-50 rounded-4 border border-slate-100 mb-4">
-                    <h6 class="fw-bold text-dark small mb-2">Comment manipuler les conflits ?</h6>
+                <div class="p-4 bg-slate-50 rounded-4 border border-slate-100 mb-0">
+                    <h6 class="fw-bold text-dark small mb-2">Cycle de réservation</h6>
                     <p class="small text-secondary mb-0">
-                        La plateforme bloque automatiquement toute réservation si la salle est déjà occupée sur le même créneau horaire. En tant qu'admin, vous pouvez libérer une salle en <strong>Annulant</strong> une réservation existante dans le module <strong>Réservations</strong>.
+                        1. Création de la salle > 2. Définition des créneaux > 3. Validation de la demande (après vérification du paiement).
                     </p>
-                </div>
-                <div class="small text-secondary">
-                    <strong>Étape 1 :</strong> Définissez vos salles (Nom, Capacité). <br>
-                    <strong>Étape 2 :</strong> Définissez les créneaux horaires autorisés (ex: 08:00 - 10:00). <br>
-                    <strong>Étape 3 :</strong> Suivez les demandes dans "Liste des Réservations".
                 </div>
             </section>
 
             <!-- 4. Blog -->
             <section id="blog" class="p-5 border-bottom">
                 <div class="d-flex align-items-center gap-3 mb-4">
-                    <div class="rounded-4 bg-info text-white p-3 shadow-lg shadow-blue-100">
+                    <div class="rounded-4 bg-info text-white p-3 shadow-lg">
                         <i class="fa-solid fa-pen-nib fs-4"></i>
                     </div>
                     <div>
@@ -163,36 +209,13 @@
                     </div>
                 </div>
 
-                <p class="small text-secondary mb-4">Pour publier un contenu captivant :</p>
-                <div class="row g-3">
-                    <div class="col-md-4">
-                        <div class="p-3 rounded-4 border bg-light text-center">
-                            <i class="fa-solid fa-image text-primary mb-2"></i>
-                            <div class="small fw-bold">Images</div>
-                            <div class="text-xs text-secondary">Utilisez des JPEG/PNG < 2Mo</div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="p-3 rounded-4 border bg-light text-center">
-                            <i class="fa-solid fa-video text-danger mb-2"></i>
-                            <div class="small fw-bold">Vidéos</div>
-                            <div class="text-xs text-secondary">Collez l'ID YouTube (ex: dQw4w9WgXcQ)</div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="p-3 rounded-4 border bg-light text-center">
-                            <i class="fa-solid fa-tags text-success mb-2"></i>
-                            <div class="small fw-bold">SEO</div>
-                            <div class="text-xs text-secondary">Ajoutez des Tags pour le référencement</div>
-                        </div>
-                    </div>
-                </div>
+                <p class="small text-secondary mb-0">Utilisez l'ID YouTube pour les vidéos et des images de moins de 2Mo pour garantir un chargement rapide du site public.</p>
             </section>
 
             <!-- 5. Agents -->
             <section id="agents" class="p-5 border-bottom">
                 <div class="d-flex align-items-center gap-3 mb-4">
-                    <div class="rounded-4 bg-danger text-white p-3 shadow-lg shadow-red-100">
+                    <div class="rounded-4 bg-danger text-white p-3 shadow-lg">
                         <i class="fa-solid fa-qrcode fs-4"></i>
                     </div>
                     <div>
@@ -201,14 +224,7 @@
                     </div>
                 </div>
 
-                <div class="p-4 rounded-4 border bg-white">
-                    <h6 class="fw-bold text-dark small mb-3">Protocole pour l'Agent :</h6>
-                    <ol class="small text-secondary mb-0">
-                        <li class="mb-2">L'agent se connecte avec son compte sur son smartphone.</li>
-                        <li class="mb-2">Il scanne le QR Code présent sur le reçu du pèlerin.</li>
-                        <li>La présence est immédiatement marquée comme "Scannée" dans l'administration centrale.</li>
-                    </ol>
-                </div>
+                <p class="small text-secondary mb-0">L'agent scanne le QR Code du pèlerin via son smartphone pour marquer sa présence lors des activités.</p>
             </section>
 
             <!-- 6. Sécurité -->
@@ -223,20 +239,7 @@
                     </div>
                 </div>
 
-                <ul class="list-group list-group-flush small">
-                    <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
-                        <div><strong>Super Admin</strong> - Accès total (Inclus: Paramètres, Rôles, Utilisateurs)</div>
-                        <i class="fa-solid fa-lock-open text-success"></i>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
-                        <div><strong>Manager</strong> - Gestion des activités, blog et réservations.</div>
-                        <i class="fa-solid fa-lock text-warning"></i>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
-                        <div><strong>Agent</strong> - Uniquement le scanning de QR Codes.</div>
-                        <i class="fa-solid fa-mobile text-primary"></i>
-                    </li>
-                </ul>
+                <p class="small text-secondary mb-0">Gérez les accès via <strong>Paramètres > Rôles</strong> pour définir qui peut voir ou modifier chaque module.</p>
             </section>
 
         </div>

@@ -22,7 +22,8 @@ class BlogPost extends Model
         'is_featured',
         'is_popular',
         'published_at',
-        'views_count'
+        'views_count',
+        'featured_media_type'
     ];
 
     protected $casts = [

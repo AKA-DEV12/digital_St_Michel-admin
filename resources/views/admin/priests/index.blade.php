@@ -18,8 +18,8 @@
     @foreach($priests as $priest)
     <tr>
         <td class="px-6 py-4">
-            @if($priest->photo_path && file_exists(public_path($priest->photo_path)))
-                <img src="{{ asset($priest->photo_path) }}" alt="{{ $priest->first_name }}" class="rounded-circle" style="width: 48px; height: 48px; object-fit: cover;">
+            @if($priest->photo_path)
+                <img src="{{ $priest->photo_path }}" alt="{{ $priest->first_name }}" class="rounded-circle" style="width: 48px; height: 48px; object-fit: cover;" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\\'rounded-circle bg-primary-light text-primary d-flex align-items-center justify-content-center\\' style=\\'width: 48px; height: 48px; font-size: 1.25rem;\\'><i class=\\'fa-solid fa-user-tie\\'></i></div>';">
             @else
                 <div class="rounded-circle bg-primary-light text-primary d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; font-size: 1.25rem;">
                     <i class="fa-solid fa-user-tie"></i>

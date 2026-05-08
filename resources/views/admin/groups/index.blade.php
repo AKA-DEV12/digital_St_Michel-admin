@@ -7,13 +7,13 @@
             <h1 class="h3 fw-bold mb-1">Groupes Constitués</h1>
             <p class="text-secondary">Gérez les super-groupes formés à partir des inscriptions confirmées.</p>
         </div>
-        <a href="{{ route('admin.participant_groups.create', ['activity_id' => $activity_id]) }}" class="btn btn-primary rounded-3 px-4 py-2 fw-bold shadow-sm">
-            <i class="fa-solid fa-layer-group me-2"></i> Constituer un groupe
+        <a href="{{ route('groups.create') }}" class="btn btn-primary rounded-3 px-4 py-2 fw-bold shadow-sm">
+            <i class="fa-solid fa-plus me-2"></i> Ajouter un groupe
         </a>
     </div>
 </div>
 
-<x-data-table :headers="['Nom du groupe', 'Objectif de taille', 'Inscriptions Actuelles', 'Statut', 'Date de création']" :collection="$groups">
+<x-data-table :headers="['Nom du groupe', 'Nombre de membres', 'Nouveaux inscrits (Ce mois)', 'Statut', 'Date de création', 'Actions']" :collection="$groups">
     <x-slot name="title">Liste des groupes</x-slot>
 
     @foreach($groups as $group)
@@ -24,28 +24,30 @@
                     <i class="fa-solid fa-users fs-4"></i>
                 </div>
                 <div>
-                    <div class="fw-bold text-dark">{{ $group->name }}</div>
+                    <div class="fw-bold text-dark">{{ $group->nom_groupe }}</div>
                     <div class="small text-secondary">#{{ $group->id }}</div>
                 </div>
             </div>
         </td>
         <td class="px-6 py-4">
-            <div class="fw-bold text-dark">{{ $group->target_size }} personnes</div>
+            <div class="fw-bold text-dark">{{ $group->members_count ?? 0 }} membre(s)</div>
         </td>
         <td class="px-6 py-4">
-            <div class="fw-bold text-primary">{{ $group->registrations_count }} inscription(s) associée(s)</div>
+            <div class="fw-bold text-success">+{{ $group->new_members_count ?? 0 }} ce mois</div>
         </td>
         <td class="px-6 py-4">
-            <span class="badge rounded-pill bg-success text-white px-3 py-1 border-0 shadow-sm fw-bold">Complet</span>
+            <span class="badge rounded-pill bg-success bg-opacity-10 text-success px-3 py-1 border border-success border-opacity-25 shadow-sm fw-bold">Actif</span>
         </td>
         <td class="px-6 py-4">
-            <div class="text-secondary small mb-2">
+            <div class="text-secondary small">
                 {{ $group->created_at->format('d/m/Y H:i') }}
             </div>
-            <a href="{{ route('admin.participant_groups.show', $group->id) }}" class="btn btn-sm btn-light border-0 text-primary fw-bold rounded-pill px-3">
+        </td>
+        <td class="px-6 py-4">
+            <a href="{{ route('groups.show', $group->id) }}" class="btn btn-sm btn-light border-0 text-primary fw-bold rounded-pill px-3">
                 <i class="fa-solid fa-eye me-1"></i> Voir détails
             </a>
-            <form action="{{ route('admin.participant_groups.destroy', $group->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Supprimer ce groupe ? Les inscriptions associées seront également supprimées.')">
+            <form action="{{ route('groups.destroy', $group->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Supprimer ce groupe ?')">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="btn btn-sm btn-light border-0 text-danger fw-bold rounded-pill px-3 ms-1">

@@ -6,7 +6,72 @@
     <p class="text-secondary">Gérez les demandes de réservation des salles.</p>
 </div>
 
-<x-data-table :headers="['Nom', 'Objet & Salle', 'Date', 'Statut', 'Actions']" :collection="$reservations">
+<!-- Premium Wallet Cards -->
+<div class="row mb-5 animate-fade-in justify-content-center g-4" style="animation-delay: 0.1s">
+    <!-- Confirmed Wallet -->
+    <div class="col-12 col-md-6 col-lg-5">
+        <div class="card border-0 rounded-4 overflow-hidden shadow-lg position-relative premium-wallet-card">
+            <!-- Background Decoration -->
+            <div class="position-absolute top-0 end-0 p-3 opacity-25" style="transform: translate(20%, -20%) scale(2);">
+                <i class="fa-solid fa-wallet text-white" style="font-size: 8rem;"></i>
+            </div>
+            
+            <div class="card-body p-4 position-relative z-1">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="rounded-circle bg-white bg-opacity-25 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                            <i class="fa-solid fa-vault text-white"></i>
+                        </div>
+                        <h6 class="text-white text-uppercase fw-bold mb-0" style="letter-spacing: 1px; font-size: 0.85rem;">Portefeuille Global</h6>
+                    </div>
+                    <span class="badge bg-white text-danger rounded-pill px-3 py-2 fw-bold shadow-sm">
+                        <i class="fa-solid fa-circle-check text-success me-1"></i> Validé
+                    </span>
+                </div>
+
+                <div class="mb-1">
+                    <span class="text-white-50 small fw-bold text-uppercase">Solde Disponible</span>
+                    <h2 class="display-6 fw-bolder text-white mb-0" style="text-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                        {{ number_format($walletTotal, 0, ',', ' ') }} <span class="fs-5 opacity-75">FCFA</span>
+                    </h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pending Wallet -->
+    <div class="col-12 col-md-6 col-lg-5">
+        <div class="card border-0 rounded-4 overflow-hidden shadow-lg position-relative premium-wallet-secondary">
+            <!-- Background Decoration -->
+            <div class="position-absolute top-0 end-0 p-3 opacity-25" style="transform: translate(20%, -20%) scale(2);">
+                <i class="fa-solid fa-hourglass-half text-white" style="font-size: 8rem;"></i>
+            </div>
+            
+            <div class="card-body p-4 position-relative z-1">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="rounded-circle bg-white bg-opacity-25 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                            <i class="fa-solid fa-vault text-white"></i>
+                        </div>
+                        <h6 class="text-white text-uppercase fw-bold mb-0" style="letter-spacing: 1px; font-size: 0.85rem;">En Attente</h6>
+                    </div>
+                    <span class="badge bg-white align-items-center d-flex gap-1 text-secondary rounded-pill px-3 py-2 fw-bold shadow-sm">
+                        <i class="fa-solid fa-clock text-warning"></i> Non validé
+                    </span>
+                </div>
+
+                <div class="mb-1">
+                    <span class="text-white-50 small fw-bold text-uppercase">Solde Potentiel</span>
+                    <h2 class="display-6 fw-bolder text-white mb-0" style="text-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                        {{ number_format($pendingWalletTotal, 0, ',', ' ') }} <span class="fs-5 opacity-75">FCFA</span>
+                    </h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<x-data-table :headers="['Nom', 'Objet & Salle', 'Date', 'Montant', 'Statut', 'Actions']" :collection="$reservations">
     <x-slot name="title">Liste des réservations</x-slot>
     
     <x-slot name="actions">
@@ -42,8 +107,16 @@
         <td class="px-6 py-4">
             <div class="text-dark">{{ \Carbon\Carbon::parse($reservation->reservation_date)->format('d/m/Y') }}</div>
             <div class="text-xs text-secondary mt-1">
-                <i class="fa-regular fa-clock me-1 opacity-50"></i> {{ $reservation->time_slot }}
+                <i class="fa-regular fa-clock me-1 opacity-50"></i> 
+                @if($reservation->hasMultipleTimeSlots())
+                    {{ $reservation->time_slots_count }} créneaux
+                @else
+                    {{ $reservation->time_slots_display }}
+                @endif
             </div>
+        </td>
+        <td class="px-6 py-4">
+            <div class="fw-bold text-primary">{{ number_format($reservation->price, 0, ',', ' ') }} FCFA</div>
         </td>
         <td class="px-6 py-4">
             @if($reservation->status == 'pending')
@@ -91,6 +164,24 @@
 @endsection
 
 <style>
+    .premium-wallet-card {
+        background: linear-gradient(135deg, #dc143c 0%, #be123c 100%);
+        box-shadow: 0 10px 25px -5px rgba(220, 20, 60, 0.4) !important;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .premium-wallet-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 25px -5px rgba(220, 20, 60, 0.5) !important;
+    }
+    .premium-wallet-secondary {
+        background: linear-gradient(135deg, #475569 0%, #1e293b 100%);
+        box-shadow: 0 10px 25px -5px rgba(30, 41, 59, 0.4) !important;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .premium-wallet-secondary:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 25px -5px rgba(30, 41, 59, 0.5) !important;
+    }
     .bg-warning-subtle { background-color: #fffbeb !important; }
     .bg-success-subtle { background-color: #f0fdf4 !important; }
     .bg-danger-subtle { background-color: #fef2f2 !important; }
@@ -197,10 +288,30 @@ function showReservationDetails(reservation) {
     document.getElementById('modalObject').textContent = reservation.reservation_object;
     document.getElementById('modalRoom').textContent = reservation.room ? reservation.room.name : 'N/A';
     
-    // Format date
+    // Format date and time slots
     const date = new Date(reservation.reservation_date);
     const dateStr = date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
-    document.getElementById('modalDateTime').textContent = dateStr + ' | ' + reservation.time_slot;
+    
+    // Handle multiple time slots
+    let timeSlotText = '';
+    if (Array.isArray(reservation.time_slot)) {
+        if (reservation.time_slot.length === 1) {
+            timeSlotText = reservation.time_slot[0];
+        } else {
+            timeSlotText = reservation.time_slot.length + ' créneaux: ' + reservation.time_slot.join(', ');
+        }
+    } else {
+        timeSlotText = reservation.time_slot;
+    }
+    
+    // Convert pricing types to French
+    if (timeSlotText === 'full_day') {
+        timeSlotText = 'Journée complète';
+    } else if (timeSlotText === 'half_day') {
+        timeSlotText = 'Demi-journée';
+    }
+    
+    document.getElementById('modalDateTime').textContent = dateStr + ' | ' + timeSlotText;
     
     // Status Badge
     let statusHTML = '';

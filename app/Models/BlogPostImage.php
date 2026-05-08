@@ -10,7 +10,8 @@ class BlogPostImage extends Model
     protected $fillable = [
         'blog_post_id',
         'image_path',
-        'caption'
+        'caption',
+        'is_gallery'
     ];
 
     public function post(): BelongsTo

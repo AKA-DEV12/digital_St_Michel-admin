@@ -72,7 +72,7 @@
                 <td class="px-6 py-4">
                     <div class="rounded-3 overflow-hidden shadow-sm d-flex align-items-center justify-content-center bg-light" style="width: 60px; height: 40px;">
                         @if($post->featured_image)
-                            <img src="{{ asset('storage/' . $post->featured_image) }}" class="w-100 h-100 object-cover" alt="">
+                            <img src="{{ filter_var($post->featured_image, FILTER_VALIDATE_URL) ? $post->featured_image : asset('storage/' . $post->featured_image) }}" class="w-100 h-100 object-cover" alt="" onerror="this.src='https://placehold.co/100x100?text=Invalide'">
                         @elseif($post->video_thumbnail)
                             <img src="{{ $post->video_thumbnail }}" class="w-100 h-100 object-cover" alt="">
                         @elseif($post->url_video)

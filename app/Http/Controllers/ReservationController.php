@@ -44,7 +44,11 @@ class ReservationController extends Controller
             ->paginate(33)
             ->withQueryString();
 
-        return view('admin.reservations.index', compact('reservations', 'status'));
+        // Calcul du portefeuille
+        $walletTotal = Reservation::where('status', 'validated')->sum('price');
+        $pendingWalletTotal = Reservation::where('status', 'pending')->sum('price');
+
+        return view('admin.reservations.index', compact('reservations', 'status', 'walletTotal', 'pendingWalletTotal'));
     }
 
     public function export(Request $request, \App\Services\ExportService $exportService)
@@ -91,7 +95,7 @@ class ReservationController extends Controller
                     $res->reservation_object,
                     $res->room->name ?? 'N/A',
                     $res->reservation_date,
-                    $res->time_slot,
+                    $res->time_slots_display,
                     $res->status
                 ];
             }

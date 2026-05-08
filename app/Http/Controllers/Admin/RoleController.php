@@ -12,8 +12,62 @@ class RoleController extends Controller
     public function index()
     {
         $roles = Role::with('permissions')->get();
-        $permissions = Permission::all();
-        return view('admin.roles.index', compact('roles', 'permissions'));
+        $allPermissions = Permission::all();
+        
+        $permissionGroups = [
+            'Général' => [
+                'access_dashboard',
+                'access_settings',
+                'manage_users',
+                'manage_roles',
+                'access_agents',
+            ],
+            'Réservations' => [
+                'access_reservations',
+                'access_rooms',
+                'access_time_slots',
+            ],
+            'Évènements & Inscriptions' => [
+                'access_activities',
+                'access_registrations',
+                'access_presences',
+                'access_groups',
+                'access_group_members',
+                'access_movements',
+            ],
+            'Contenu' => [
+                'access_blog',
+                'access_flash_messages',
+                'access_priests',
+            ],
+            'Services' => [
+                'access_mass_requests',
+            ],
+        ];
+
+        // Traduction des permissions
+        $translations = [
+            'access_dashboard' => 'Tableau de bord',
+            'access_reservations' => 'Réservations',
+            'access_rooms' => 'Gestion des salles',
+            'access_time_slots' => 'Créneaux horaires',
+            'access_movements' => 'Mouvements & Groupes',
+            'access_activities' => 'Activités',
+            'access_registrations' => 'Inscriptions',
+            'access_presences' => 'Pointage/Présences',
+            'access_agents' => 'Gestion des agents',
+            'access_blog' => 'Blog & Actualités',
+            'access_flash_messages' => 'Messages flash',
+            'access_settings' => 'Paramètres du site',
+            'access_priests' => 'Gestion des prêtres',
+            'access_groups' => 'Gestion des groupes (Liste)',
+            'access_group_members' => 'Gestion des groupes (Membres)',
+            'manage_users' => 'Gestion des administrateurs',
+            'manage_roles' => 'Gestion des rôles & droits',
+            'access_mass_requests' => 'Demandes de messe',
+        ];
+
+        return view('admin.roles.index', compact('roles', 'permissionGroups', 'translations', 'allPermissions'));
     }
 
     public function store(Request $request)

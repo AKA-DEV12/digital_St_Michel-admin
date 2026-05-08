@@ -87,31 +87,67 @@
                 </div>
 
                 <div class="card border-0 rounded-4 shadow-sm p-4 bg-white mb-4">
-                    <h6 class="fw-bold mb-4">Image à la une</h6>
+                    <h6 class="fw-bold mb-4">Image à la une (Optionnelle si Vidéo)</h6>
                     
                     @if(isset($post) && $post->featured_image)
                         <div class="mb-3 rounded-3 overflow-hidden shadow-sm border">
-                            <img src="{{ asset('storage/' . $post->featured_image) }}" class="w-100 h-auto" alt="Aperçu">
+                            <img src="{{ $post->featured_image }}" class="w-100 h-auto" alt="Aperçu" onerror="this.src='https://placehold.co/600x400?text=Lien+Invalide'">
                         </div>
                     @endif
 
-                    <input type="file" name="featured_image" id="featured_image" class="form-control rounded-3 border-gray-200">
-                    <p class="text-secondary x-small mt-2 mb-0">Format recommandé : 1200x800px. Max 12Mo.</p>
+                    <input type="file" name="featured_image" id="featured_image" class="form-control rounded-3 border-gray-200" accept="image/*">
+                    @error('featured_image') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
+                    <p class="text-secondary x-small mt-2 mb-0">Téléchargez l'image principale pour cet article (JPEG, PNG, JPG, GIF - Max 10MB).</p>
                 </div>
 
                 <div class="card border-0 rounded-4 shadow-sm p-4 bg-white mb-4">
-                    <h6 class="fw-bold mb-4">Galerie d'images (secondaires)</h6>
-                    <input type="file" name="secondary_images[]" id="secondary_images" class="form-control rounded-3 border-gray-200" multiple>
-                    <p class="text-secondary x-small mt-2 mb-0">Vous pouvez sélectionner plusieurs images. Max 12Mo par image.</p>
+                    <h6 class="fw-bold mb-4">Images pour le Slider (Max 2)</h6>
+                    <div id="slider-files-container">
+                        @for($i = 0; $i < 2; $i++)
+                            <div class="mb-3">
+                                <label class="form-label small text-secondary">Image {{ $i + 1 }} du Slider</label>
+                                <input type="file" name="secondary_images[]" class="form-control rounded-3 border-gray-200" accept="image/*">
+                            </div>
+                        @endfor
+                    </div>
+                    @error('secondary_images.*') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
+                    <p class="text-secondary x-small mt-2 mb-0">Téléchargez jusqu'à 2 images pour le slider (JPEG, PNG, JPG, GIF - Max 10MB par image).</p>
                 </div>
 
                 <div class="card border-0 rounded-4 shadow-sm p-4 bg-white mb-4">
-                    <h6 class="fw-bold mb-4">URL Vidéo</h6>
+                    <h6 class="fw-bold mb-4">Galerie d'images supplémentaires</h6>
+                    <div id="additional-gallery-container">
+                        <div class="mb-3">
+                            <label class="form-label small text-secondary">Images de la Galerie</label>
+                            <input type="file" name="gallery_images[]" class="form-control rounded-3 border-gray-200" accept="image/*" multiple>
+                        </div>
+                        
+                        <button type="button" class="btn btn-sm btn-outline-primary rounded-3 px-3 py-2 mt-2" onclick="addGalleryImageInput()">
+                            <i class="fa-solid fa-plus me-1"></i> Ajouter une image à la galerie
+                        </button>
+                    </div>
+                    @error('gallery_images.*') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
+                    <p class="text-secondary x-small mt-2 mb-0">Téléchargez plusieurs images pour la galerie (JPEG, PNG, JPG, GIF - Max 10MB par image).</p>
+                </div>
+
+                <div class="card border-0 rounded-4 shadow-sm p-4 bg-white mb-4">
+                    <h6 class="fw-bold mb-4">Vidéo & Média Principal</h6>
+                    
+                    <div class="mb-4">
+                        <label for="featured_media_type" class="form-label small fw-bold text-secondary">Type de média principal (À la une)</label>
+                        <select name="featured_media_type" id="featured_media_type" class="form-select rounded-3 border-gray-200">
+                            <option value="image" {{ (old('featured_media_type', $post->featured_media_type ?? '') == 'image') ? 'selected' : '' }}>Image Principale</option>
+                            <option value="video" {{ (old('featured_media_type', $post->featured_media_type ?? '') == 'video') ? 'selected' : '' }}>Vidéo (Si lien fourni ci-dessous)</option>
+                        </select>
+                        <p class="text-secondary x-small mt-2 mb-0">Choisissez si la zone d'entête de l'article doit afficher l'image à la une complète (avec le slider) ou un lecteur vidéo.</p>
+                        @error('featured_media_type') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
+                    </div>
+
                     <div class="mb-0">
-                        <label for="url_video" class="form-label small fw-bold text-secondary">Lien de la vidéo (Optionnel)</label>
-                        <input type="url" name="url_video" id="url_video" class="form-control rounded-3 border-gray-200" value="{{ old('url_video', $post->url_video ?? '') }}" placeholder="https://www.youtube.com/watch?v=...">
-                        <p class="text-secondary x-small mt-2 mb-0">Ajoutez un lien YouTube, Vimeo ou autre pour inclure une vidéo à l'article.</p>
+                        <label for="url_video" class="form-label small fw-bold text-secondary">Fichier vidéo (Optionnel)</label>
+                        <input type="file" name="url_video" id="url_video" class="form-control rounded-3 border-gray-200" accept="video/*">
                         @error('url_video') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
+                        <p class="text-secondary x-small mt-2 mb-0">Téléchargez un fichier vidéo (MP4, AVI, MOV, WMV, FLV, WebM - Max 50MB).</p>
                     </div>
                 </div>
 
@@ -141,6 +177,27 @@
         .catch(error => {
             console.error(error);
         });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const container = document.getElementById('additional-gallery-container');
+        const addBtn = document.getElementById('add-gallery-btn');
+
+        addBtn.addEventListener('click', function() {
+            const row = document.createElement('div');
+            row.className = 'mb-3 d-flex align-items-center gap-2 gallery-row';
+            row.innerHTML = `
+                <input type="url" name="gallery_images[]" class="form-control rounded-3 border-gray-200" placeholder="https://exemple.com/gallery-image.jpg">
+                <button type="button" class="btn btn-outline-danger btn-sm remove-gallery-row"><i class="fa-solid fa-trash"></i></button>
+            `;
+            container.appendChild(row);
+        });
+
+        container.addEventListener('click', function(e) {
+            if (e.target.closest('.remove-gallery-row')) {
+                e.target.closest('.gallery-row').remove();
+            }
+        });
+    });
 </script>
 @endpush
 

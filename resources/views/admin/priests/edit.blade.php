@@ -78,9 +78,9 @@
                     <div class="mb-4">
                         <label class="form-label fw-600">Photo</label>
                         <input type="file" name="photo" id="priestPhoto" class="form-control rounded-3 py-2 bg-light" accept="image/*">
-                        @if($priest->photo_path && file_exists(public_path($priest->photo_path)))
+                        @if($priest->photo_path)
                             <div class="mt-3 p-3 bg-white border rounded-3 d-inline-block">
-                                <img src="{{ asset($priest->photo_path) }}" alt="Photo actuelle" class="rounded-3" style="max-height: 80px;">
+                                <img src="{{ $priest->photo_path }}" alt="Photo actuelle" class="rounded-3" style="max-height: 80px;" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\\'text-muted small\\'>Photo non disponible</div>';">
                                 <div class="small fw-bold text-secondary mt-2">Photo actuelle</div>
                             </div>
                         @endif

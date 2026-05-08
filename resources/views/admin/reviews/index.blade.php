@@ -23,7 +23,7 @@
                 <td class="px-6 py-4">
                     <div class="rounded-3 overflow-hidden shadow-sm d-flex align-items-center justify-content-center bg-light" style="width: 60px; height: 40px;">
                         @if($review->image)
-                            <img src="{{ asset('storage/' . $review->image) }}" class="w-100 h-100 object-cover" alt="">
+                            <img src="{{ str_starts_with($review->image, 'http') ? $review->image : asset('storage/' . $review->image) }}" class="w-100 h-100 object-cover" alt="">
                         @else
                             <i class="fa-solid fa-star text-secondary"></i>
                         @endif

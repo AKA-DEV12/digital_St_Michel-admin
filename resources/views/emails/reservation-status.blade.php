@@ -50,7 +50,28 @@
                 </div>
                 <div class="detail-row">
                     <span class="detail-label">Horaire :</span>
-                    <span>{{ $reservation->time_slot }}</span>
+                    <span>
+                        @if($reservation->hasMultipleTimeSlots())
+                            {{ $reservation->time_slots_count }} créneaux:<br>
+                            @foreach($reservation->time_slot as $slot)
+                                @if($slot === 'full_day')
+                                    Journée complète<br>
+                                @elseif($slot === 'half_day')
+                                    Demi-journée<br>
+                                @else
+                                    {{ $slot }}<br>
+                                @endif
+                            @endforeach
+                        @else
+                            @if($reservation->time_slots_display === 'full_day')
+                                Journée complète
+                            @elseif($reservation->time_slots_display === 'half_day')
+                                Demi-journée
+                            @else
+                                {{ $reservation->time_slots_display }}
+                            @endif
+                        @endif
+                    </span>
                 </div>
             </div>
 

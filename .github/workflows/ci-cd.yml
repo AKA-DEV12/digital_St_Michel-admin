@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ "main" ]
 
+env:
+  NODE_VERSION: '20'
+  PHP_VERSION: '8.2'
+
 jobs:
   laravel-workflow:
     runs-on: ubuntu-latest
@@ -26,8 +30,8 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
-          extensions: mbstring, dom, curl, libxml, zlib, mysql, pdo_mysql, bcmath, tokenizer, xml, ctype, json, zip, gd
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: mbstring, dom, curl, libxml, zlib, mysql, pdo_mysql, bcmath, tokenizer, xml, ctype, json, zip, gd, imagick
           coverage: none
 
       - name: Get Composer Cache Directory
@@ -49,7 +53,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
       - name: Install NPM dependencies
@@ -77,6 +81,14 @@ jobs:
           DB_PASSWORD: root
         run: php artisan test
 
+      - name: Cloudinary Configuration Test
+        run: |
+          if [ -n "${{ secrets.CLOUDINARY_URL }}" ]; then
+            echo "✓ Cloudinary URL is configured"
+          else
+            echo "⚠ Cloudinary URL not found in secrets"
+          fi
+
       - name: Deploy via SSH
         if: github.ref == 'refs/heads/main'
         uses: appleboy/ssh-action@v1.0.3
@@ -92,10 +104,10 @@ jobs:
             set -e
             set -x
 
-            # Installation des outils nécessaires
+            # Installation des dépendances système
             echo "--- Installation des dépendances système ---"
             sudo apt-get -y -o Dpkg::Lock::Timeout=120 update
-            sudo apt-get -y -o Dpkg::Lock::Timeout=120 install git unzip curl php8.4-gd php8.4-imagick php8.4-mysql php8.4-xml php8.4-curl php8.4-mbstring php8.4-zip
+            sudo apt-get -y -o Dpkg::Lock::Timeout=120 install git unzip curl php8.4-gd php8.4-imagick php8.4-mysql php8.4-xml php8.4-curl php8.4-mbstring php8.4-zip imagemagick
             
             # Installation de Node.js si absent
             if ! command -v npm &> /dev/null; then
@@ -139,6 +151,10 @@ jobs:
             MAIL_ENCRYPTION=tls
             MAIL_FROM_ADDRESS="${{ secrets.MAIL_FROM_ADDRESS }}"
             MAIL_FROM_NAME="${{ secrets.APP_NAME }}"
+
+            # Cloudinary Configuration
+            CLOUDINARY_URL=${{ secrets.CLOUDINARY_URL }}
+            CLOUDINARY_UPLOAD_PRESET=${{ secrets.CLOUDINARY_UPLOAD_PRESET }}
             EOF
             
             cd "$APP_DIR"
@@ -161,13 +177,21 @@ jobs:
               echo "--- Exécution des migrations ---"
               php8.4 artisan migrate --force
               php8.4 artisan db:seed --class=RolePermissionSeeder --force || true
-              php8.4 artisan db:seed --class=BlogSeeder --force || true
+              # php8.4 artisan db:seed --class=BlogSeeder --force || true
               # RESET du cache Spatie (Crucial pour les permissions)
               php8.4 artisan permission:cache-reset || true
               php8.4 artisan config:cache
               php8.4 artisan route:cache
               php8.4 artisan view:cache
               php8.4 artisan storage:link || true
+              
+              # Vérification de la configuration Cloudinary
+              echo "--- Vérification Cloudinary ---"
+              if php8.4 artisan tinker --execute="echo config('cloudinary.cloud_url') ? '✓ Cloudinary configuré' : '✗ Cloudinary non configuré';" | grep -q "configuré"; then
+                echo "✓ Configuration Cloudinary validée"
+              else
+                echo "⚠ Configuration Cloudinary manquante"
+              fi
             fi
 
             # Permissions finales

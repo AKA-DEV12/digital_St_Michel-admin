@@ -58,7 +58,7 @@
                         <div class="d-flex align-items-center gap-4 p-3 border rounded-4 bg-light">
                             <div class="bg-white rounded-3 shadow-sm d-flex align-items-center justify-content-center" style="width: 120px; height: 120px; overflow: hidden;">
                                 @if(isset($settings['site_logo']))
-                                    <img src="{{ asset('storage/' . $settings['site_logo']) }}" class="img-fluid" alt="Current Logo">
+                                    <img src="{{ str_starts_with($settings['site_logo'], 'http') ? $settings['site_logo'] : asset('storage/' . $settings['site_logo']) }}" class="img-fluid" alt="Current Logo">
                                 @else
                                     <i class="fa-solid fa-photo-film fs-1 text-secondary opacity-25"></i>
                                 @endif
@@ -120,7 +120,7 @@
                         <div class="border rounded-4 bg-light p-3">
                             <div class="mb-3 bg-white rounded-3 shadow-sm d-flex align-items-center justify-content-center overflow-hidden" style="height: 150px;">
                                 @if(isset($settings['header_ad_flyer']))
-                                    <img src="{{ asset('storage/' . $settings['header_ad_flyer']) }}" class="h-100" alt="Current Ad">
+                                    <img src="{{ str_starts_with($settings['header_ad_flyer'], 'http') ? $settings['header_ad_flyer'] : asset('storage/' . $settings['header_ad_flyer']) }}" class="h-100" alt="Current Ad">
                                 @else
                                     <i class="fa-solid fa-image fs-1 text-secondary opacity-25"></i>
                                 @endif
@@ -153,13 +153,44 @@
                                 <div class="border rounded-4 bg-light p-3">
                                     <div class="mb-3 bg-white rounded-3 shadow-sm d-flex align-items-center justify-content-center overflow-hidden" style="height: 150px;">
                                         @if(isset($settings['ad_digital_service_image']))
-                                            <img src="{{ asset('storage/' . $settings['ad_digital_service_image']) }}" class="h-100" alt="Current Ad">
+                                            <img src="{{ str_starts_with($settings['ad_digital_service_image'], 'http') ? $settings['ad_digital_service_image'] : asset('storage/' . $settings['ad_digital_service_image']) }}" class="h-100" alt="Current Ad">
                                         @else
                                             <i class="fa-solid fa-image fs-1 text-secondary opacity-25"></i>
                                         @endif
                                     </div>
                                     <input type="file" name="ad_digital_service_image" class="form-control mb-2 rounded-3">
                                     <small class="text-secondary">Taille recommandée : 300x250px (Carré ou portrait), Max 12MB.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Critiques Ad Section -->
+                    <div class="mb-5 pb-4 border-bottom">
+                        <label class="form-label fw-bold mb-3 d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-star text-primary"></i> Publicité Block Critiques (Bannière Carrée)
+                        </label>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="small text-secondary mb-1">Texte associé à la pub</label>
+                                <input type="text" name="ad_critiques_title" class="form-control rounded-3" value="{{ $settings['ad_critiques_title'] ?? '' }}" placeholder="Ex: Publicité">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small text-secondary mb-1">Lien de la publicité</label>
+                                <input type="url" name="ad_critiques_link" class="form-control rounded-3" value="{{ $settings['ad_critiques_link'] ?? '' }}" placeholder="https://...">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="small text-secondary mb-1">Image de la publicité</label>
+                                <div class="border rounded-4 bg-light p-3">
+                                    <div class="mb-3 bg-white rounded-3 shadow-sm d-flex align-items-center justify-content-center overflow-hidden" style="height: 150px;">
+                                        @if(isset($settings['ad_critiques_image']))
+                                            <img src="{{ str_starts_with($settings['ad_critiques_image'], 'http') ? $settings['ad_critiques_image'] : asset('storage/' . $settings['ad_critiques_image']) }}" class="h-100" alt="Current Ad">
+                                        @else
+                                            <i class="fa-solid fa-image fs-1 text-secondary opacity-25"></i>
+                                        @endif
+                                    </div>
+                                    <input type="file" name="ad_critiques_image" class="form-control mb-2 rounded-3">
+                                    <small class="text-secondary">Taille recommandée : Format carré (ex: 200x200px), Max 12MB.</small>
                                 </div>
                             </div>
                         </div>

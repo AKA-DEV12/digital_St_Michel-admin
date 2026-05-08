@@ -102,6 +102,15 @@
                             @endforeach
                         </div>
                     </div>
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-slate-700">Groupe associé (optionnel)</label>
+                        <select name="group_id" id="group_id" class="form-select rounded-3 py-2">
+                            <option value="">Aucun groupe</option>
+                            @foreach($groups as $group)
+                                <option value="{{ $group->id }}">{{ $group->nom_groupe }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
                 <div class="modal-footer bg-slate-50 border-0 p-4">
                     <button type="button" class="btn btn-light px-4 py-2 rounded-3 fw-bold" data-bs-dismiss="modal">Annuler</button>
@@ -128,6 +137,9 @@ function editUser(user, userRoles) {
     document.querySelectorAll('input[name="roles[]"]').forEach(cb => {
         cb.checked = userRoles.includes(cb.value);
     });
+
+    // Set group_id
+    document.getElementById('group_id').value = user.group_id || '';
 }
 
 document.getElementById('userModal').addEventListener('show.bs.modal', function (event) {
@@ -140,6 +152,7 @@ document.getElementById('userModal').addEventListener('show.bs.modal', function 
         document.getElementById('password').placeholder = "Min. 8 caractères";
         form.reset();
         document.querySelectorAll('input[name="roles[]"]').forEach(cb => cb.checked = false);
+        document.getElementById('group_id').value = '';
     }
 });
 </script>

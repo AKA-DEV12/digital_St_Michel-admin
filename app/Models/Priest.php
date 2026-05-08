@@ -34,6 +34,11 @@ class Priest extends Model
         return $this->hasMany(PriestAppointment::class);
     }
 
+    public function getNameAttribute()
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
+
     protected static function booted()
     {
         static::deleting(function ($priest) {

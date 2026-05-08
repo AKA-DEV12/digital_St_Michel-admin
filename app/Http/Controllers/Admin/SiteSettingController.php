@@ -6,10 +6,17 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\SiteSetting;
+use App\Services\CloudinaryService;
 use Illuminate\Support\Facades\Storage;
 
 class SiteSettingController extends Controller
 {
+    protected $cloudinaryService;
+
+    public function __construct(CloudinaryService $cloudinaryService)
+    {
+        $this->cloudinaryService = $cloudinaryService;
+    }
     public function index()
     {
         $settings = SiteSetting::all()->pluck('value', 'key');
@@ -33,20 +40,26 @@ class SiteSettingController extends Controller
             'ad_digital_service_text' => 'nullable|string|max:255',
             'ad_digital_service_link' => 'nullable|url|max:255',
             'ad_digital_service_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:12288',
+            'ad_critiques_title' => 'nullable|string|max:255',
+            'ad_critiques_link' => 'nullable|url|max:255',
+            'ad_critiques_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:12288',
         ];
 
         $messages = [
             'site_logo.max' => 'Le logo doit faire moins de 12 Mo',
             'header_ad_flyer.max' => 'La bannière doit faire moins de 12 Mo',
             'ad_digital_service_image.max' => 'L\'image doit faire moins de 12 Mo',
+            'ad_critiques_image.max' => 'L\'image doit faire moins de 12 Mo',
             'site_logo.image' => 'Le fichier doit être une image',
             'header_ad_flyer.image' => 'Le fichier doit être une image',
             'ad_digital_service_image.image' => 'Le fichier doit être une image',
+            'ad_critiques_image.image' => 'Le fichier doit être une image',
             'site_email.email' => 'L\'adresse e-mail doit être valide',
             'facebook_url.url' => 'Le lien Facebook doit être une URL valide',
             'youtube_url.url' => 'Le lien YouTube doit être une URL valide',
             'tiktok_url.url' => 'Le lien TikTok doit être une URL valide',
             'ad_digital_service_link.url' => 'Le lien de la publicité doit être une URL valide',
+            'ad_critiques_link.url' => 'Le lien de la publicité doit être une URL valide',
         ];
 
         $validator = \Illuminate\Support\Facades\Validator::make($request->all(), $rules, $messages);
@@ -59,16 +72,12 @@ class SiteSettingController extends Controller
 
         try {
             // Handle File uploads
-            foreach (['site_logo', 'header_ad_flyer', 'ad_digital_service_image'] as $key) {
+            foreach (['site_logo', 'header_ad_flyer', 'ad_digital_service_image', 'ad_critiques_image'] as $key) {
                 if ($request->hasFile($key)) {
-                    // Delete old file if exists
-                    $oldSetting = SiteSetting::where('key', $key)->first();
-                    if ($oldSetting && $oldSetting->value) {
-                        Storage::disk('public')->delete($oldSetting->value);
+                    $imageUrl = $this->cloudinaryService->uploadFile($request->file($key), 'settings');
+                    if ($imageUrl) {
+                        SiteSetting::updateOrCreate(['key' => $key], ['value' => $imageUrl]);
                     }
-
-                    $path = $request->file($key)->store('settings', 'public');
-                    SiteSetting::updateOrCreate(['key' => $key], ['value' => $path]);
                 }
             }
 
@@ -76,12 +85,20 @@ class SiteSettingController extends Controller
             $textFields = [
                 'site_name', 'site_description', 'site_address', 'site_phone', 'site_email',
                 'facebook_url', 'youtube_url', 'tiktok_url',
-                'ad_digital_service_title', 'ad_digital_service_text', 'ad_digital_service_link'
+                'ad_digital_service_title', 'ad_digital_service_text', 'ad_digital_service_link',
+                'ad_critiques_title', 'ad_critiques_link'
             ];
 
             foreach ($textFields as $field) {
                 if ($request->has($field)) {
                     SiteSetting::updateOrCreate(['key' => $field], ['value' => $request->get($field)]);
+                }
+            }
+
+            // Handle Payment Settings
+            if ($request->has('settings')) {
+                foreach ($request->get('settings') as $key => $value) {
+                    SiteSetting::updateOrCreate(['key' => $key], ['value' => $value]);
                 }
             }
 

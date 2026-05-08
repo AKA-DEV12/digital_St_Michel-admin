@@ -53,7 +53,7 @@
                 <td class="px-6 py-4">
                     <div class="rounded-3 overflow-hidden shadow-sm d-flex align-items-center justify-content-center bg-light" style="width: 80px; height: 50px;">
                         @if($ad->image)
-                            <img src="{{ asset('storage/' . $ad->image) }}" class="w-100 h-100 object-cover" alt="">
+                            <img src="{{ str_starts_with($ad->image, 'http') ? $ad->image : asset('storage/' . $ad->image) }}" class="w-100 h-100 object-cover" alt="">
                         @else
                             <i class="fa-solid fa-image text-secondary opacity-30"></i>
                         @endif

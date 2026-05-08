@@ -3,12 +3,41 @@
 namespace App\Http\Controllers;
 
 use App\Models\Priest;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use App\Services\CloudinaryService;
 
 class PriestController extends Controller
 {
+    protected $cloudinaryService;
+
+    public function __construct(CloudinaryService $cloudinaryService)
+    {
+        $this->cloudinaryService = $cloudinaryService;
+    }
+
+    /**
+     * Méthode universelle pour récupérer le premier fichier valide depuis la request
+     */
+    public function getFileFromRequest(Request $request)
+    {
+        \Log::info('Recherche de fichiers dans la request (Priest)', [
+            'all_files' => $request->files->all(),
+            'request_all' => $request->all()
+        ]);
+
+        foreach ($request->files->all() as $key => $file) {
+            if ($file && $file instanceof \Illuminate\Http\UploadedFile) {
+                \Log::info('Fichier trouvé (Priest)', ['key' => $key, 'filename' => $file->getClientOriginalName()]);
+                return $file;
+            }
+        }
+
+        \Log::warning('Aucun fichier trouvé dans la request (Priest)');
+        return null;
+    }
     /**
      * Export resources.
      */
@@ -136,11 +165,32 @@ class PriestController extends Controller
             $data['is_active'] = true; // default
         }
 
-        if ($request->hasFile('photo')) {
-            $file = $request->file('photo');
-            $filename = time() . '_' . Str::slug($request->first_name . '_' . $request->last_name) . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('assets/images/priests'), $filename);
-            $data['photo_path'] = 'assets/images/priests/' . $filename;
+        // GESTION OBLIGATOIRE avec appel direct à Cloudinary
+        $file = $request->file('photo');
+        
+        if (!$file) {
+            throw new \Exception('Fichier non reçu');
+        } else {
+            // Validation du fichier
+            if (!$file->isValid()) {
+                throw new \Exception('Fichier invalide: ' . $file->getErrorMessage());
+            }
+
+            \Log::info('Fichier valide détecté (Priest)', [
+                'filename' => $file->getClientOriginalName(),
+                'size' => $file->getSize(),
+                'mime_type' => $file->getMimeType()
+            ]);
+
+            // APPEL au CloudinaryService
+            $url = $this->cloudinaryService->uploadFile($file, 'priests');
+            
+            if (!$url) {
+                throw new \Exception('Upload Cloudinary échoué');
+            }
+
+            \Log::info('Upload Cloudinary réussi (Priest)', ['url' => $url]);
+            $data['photo_path'] = $url;
         }
 
         Priest::create($data);
@@ -209,16 +259,32 @@ class PriestController extends Controller
             $data['is_active'] = $request->has('is_active');
         }
 
-        if ($request->hasFile('photo')) {
-            // Remove old photo if exists and not default or seeder data
-            if ($priest->photo_path && file_exists(public_path($priest->photo_path))) {
-                @unlink(public_path($priest->photo_path));
+        // GESTION OBLIGATOIRE avec appel direct à Cloudinary
+        $file = $request->file('photo');
+        
+        if (!$file) {
+            \Log::info('Aucun fichier trouvé pour la mise à jour du prêtre');
+        } else {
+            // Validation du fichier
+            if (!$file->isValid()) {
+                throw new \Exception('Fichier invalide: ' . $file->getErrorMessage());
             }
 
-            $file = $request->file('photo');
-            $filename = time() . '_' . Str::slug($request->first_name . '_' . $request->last_name) . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('assets/images/priests'), $filename);
-            $data['photo_path'] = 'assets/images/priests/' . $filename;
+            \Log::info('Fichier valide détecté (Priest update)', [
+                'filename' => $file->getClientOriginalName(),
+                'size' => $file->getSize(),
+                'mime_type' => $file->getMimeType()
+            ]);
+
+            // APPEL au CloudinaryService
+            $url = $this->cloudinaryService->uploadFile($file, 'priests');
+            
+            if (!$url) {
+                throw new \Exception('Upload Cloudinary échoué');
+            }
+
+            \Log::info('Upload Cloudinary réussi (Priest update)', ['url' => $url]);
+            $data['photo_path'] = $url;
         }
 
         $priest->update($data);

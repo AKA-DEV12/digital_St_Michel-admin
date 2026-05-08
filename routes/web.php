@@ -17,6 +17,9 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\AdvertisementController;
+use App\Http\Controllers\GroupMemberController;
+use App\Http\Controllers\GroupController;
+use App\Http\Controllers\CatechistController;
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
@@ -171,6 +174,45 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ]);
     });
 
+    // Groups Management
+    Route::middleware(['permission:access_groups'])->group(function () {
+        Route::get('/groups/export', [GroupController::class, 'export'])->name('groups.export');
+        Route::get('/groups/create', [GroupController::class, 'create'])->name('groups.create');
+        Route::post('/groups', [GroupController::class, 'store'])->name('groups.store');
+        Route::get('/groups/{group}', [GroupController::class, 'show'])->name('groups.show');
+        Route::put('/groups/{group}', [GroupController::class, 'update'])->name('groups.update');
+        Route::delete('/groups/{group}', [GroupController::class, 'destroy'])->name('groups.destroy');
+        Route::get('/groups', [GroupController::class, 'index'])->name('groups.index');
+    });
+
+    // Group Members Management
+    Route::middleware(['permission:access_group_members'])->group(function () {
+        Route::get('/group-members/export', [GroupMemberController::class, 'export'])->name('group-members.export');
+        Route::get('/group-members/create', [GroupMemberController::class, 'create'])->name('group-members.create');
+        Route::post('/group-members', [GroupMemberController::class, 'store'])->name('group-members.store');
+        Route::get('/group-members/{groupMember}/edit', [GroupMemberController::class, 'edit'])->name('group-members.edit');
+        Route::put('/group-members/{groupMember}', [GroupMemberController::class, 'update'])->name('group-members.update');
+        Route::delete('/group-members/{groupMember}', [GroupMemberController::class, 'destroy'])->name('group-members.destroy');
+        Route::get('/group-members/{groupMember}', [GroupMemberController::class, 'show'])->name('group-members.show');
+        Route::get('/group-members', [GroupMemberController::class, 'index'])->name('group-members.index');
+    });
+
+    // Catéchistes Management
+    Route::middleware(['permission:access_groups'])->group(function () {
+        Route::get('/catechists/api/members/{group}', [CatechistController::class, 'getMembersByGroup'])->name('api.catechists.members');
+        Route::get('/catechists/export', [CatechistController::class, 'export'])->name('catechists.export');
+        Route::get('/catechists/create', [CatechistController::class, 'create'])->name('admin.catechists.create');
+        Route::post('/catechists', [CatechistController::class, 'store'])->name('admin.catechists.store');
+        Route::get('/catechists', [CatechistController::class, 'index'])->name('admin.catechists.index');
+        Route::get('/catechists/{catechist}', [CatechistController::class, 'show'])->name('admin.catechists.show');
+        Route::get('/catechists/{catechist}/edit', [CatechistController::class, 'edit'])->name('admin.catechists.edit');
+        Route::put('/catechists/{catechist}', [CatechistController::class, 'update'])->name('admin.catechists.update');
+        Route::delete('/catechists/{catechist}', [CatechistController::class, 'destroy'])->name('admin.catechists.destroy');
+    });
+
+    // Catéchèse - Route simple pour chargement membres par groupe
+    Route::get('/catechese/groups/{groupId}/members', [CatechistController::class, 'getMembersByGroup'])->name('catechese.groups.members');
+
     // Profile (from Breeze)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -178,8 +220,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Site Settings
     Route::middleware(['permission:access_settings'])->group(function () {
         Route::get('/settings', [\App\Http\Controllers\Admin\SiteSettingController::class, 'index'])->name('admin.settings.index');
+        Route::put('/settings', [\App\Http\Controllers\Admin\SiteSettingController::class, 'update'])->name('admin.settings.update');
     });
-    Route::post('/settings', [\App\Http\Controllers\Admin\SiteSettingController::class, 'update'])->name('admin.settings.update');
+
+    // Mass Request Management
+    Route::middleware(['permission:access_mass_requests'])->group(function () {
+        Route::get('/mass-requests', [\App\Http\Controllers\MassRequestController::class, 'index'])->name('admin.mass_requests.index');
+        Route::get('/mass-requests/export', [\App\Http\Controllers\MassRequestController::class, 'export'])->name('admin.mass_requests.export');
+        Route::get('/mass-requests/config', [\App\Http\Controllers\MassRequestController::class, 'config'])->name('admin.mass_requests.config');
+        Route::post('/mass-requests-config/settings', [\App\Http\Controllers\MassRequestController::class, 'updateSettings'])->name('admin.mass_requests.update_settings');
+        Route::post('/mass-requests-config/times', [\App\Http\Controllers\MassRequestController::class, 'storeTime'])->name('admin.mass_requests.store_time');
+        Route::delete('/mass-requests-config/times/{id}', [\App\Http\Controllers\MassRequestController::class, 'destroyTime'])->name('admin.mass_requests.destroy_time');
+        Route::get('/mass-requests/{id}', [\App\Http\Controllers\MassRequestController::class, 'show'])->name('admin.mass_requests.show');
+        Route::post('/mass-requests/{id}/validate', [\App\Http\Controllers\MassRequestController::class, 'validateRequest'])->name('admin.mass_requests.validate');
+        Route::post('/mass-requests/{id}/cancel', [\App\Http\Controllers\MassRequestController::class, 'cancelRequest'])->name('admin.mass_requests.cancel');
+    });
 });
 
 require __DIR__ . '/auth.php';

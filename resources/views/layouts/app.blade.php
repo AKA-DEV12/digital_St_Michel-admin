@@ -437,11 +437,11 @@
             <nav class="sidebar-nav">
                 <div class="nav-label">Tableau de bord</div>
                 @can('access_dashboard')
-                <div class="nav-item">
-                    <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
-                        <i class="fa-solid fa-grid-2"></i> Dashboard
-                    </a>
-                </div>
+                    <div class="nav-item">
+                        <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                            <i class="fa-solid fa-gauge-high"></i> Tableau de bord
+                        </a>
+                    </div>
                 @endcan
 
                 <div class="nav-label">Gestion</div>
@@ -479,6 +479,48 @@
                 </div>
                 @endif
 
+                <!-- Catéchèse -->
+                @can('access_groups')
+                <div class="nav-item">
+                    <button class="nav-link w-100 border-0 bg-transparent dropdown-toggle-custom {{ request()->routeIs(['admin.catechists.*']) ? 'active open' : '' }}" onclick="toggleDropdown(this)">
+                        <i class="fa-solid fa-book-open"></i> 
+                        <span>Catéchèse</span>
+                        <i class="fa-solid fa-chevron-right ms-auto arrow-icon" style="font-size: 0.6rem;"></i>
+                    </button>
+                    <div class="submenu">
+                        <a href="{{ route('admin.catechists.index') }}" class="submenu-link {{ request()->routeIs('admin.catechists.*') ? 'active' : '' }}">
+                            Base de données
+                        </a>
+                        <a href="{{ route('admin.catechists.create') }}" class="submenu-link {{ request()->routeIs('admin.catechists.create') ? 'active' : '' }}">
+                            Ajouter un catéchiste
+                        </a>
+                    </div>
+                </div>
+                @endcan
+
+                <!-- Groupes/Mouvements/Associations -->
+                @if(auth()->user()->can('access_groups') || auth()->user()->can('access_group_members'))
+                <div class="nav-item">
+                    <button class="nav-link w-100 border-0 bg-transparent dropdown-toggle-custom {{ request()->routeIs(['groups.*', 'group-members.*']) ? 'active open' : '' }}" onclick="toggleDropdown(this)">
+                        <i class="fa-solid fa-people-group"></i> 
+                        <span>Groupes</span>
+                        <i class="fa-solid fa-chevron-right ms-auto arrow-icon" style="font-size: 0.6rem;"></i>
+                    </button>
+                    <div class="submenu">
+                        @can('access_groups')
+                        <a href="{{ route('groups.index') }}" class="submenu-link {{ request()->routeIs('groups.*') ? 'active' : '' }}">
+                            Liste
+                        </a>
+                        @endcan
+                        @can('access_group_members')
+                        <a href="{{ route('group-members.index') }}" class="submenu-link {{ request()->routeIs('group-members.*') ? 'active' : '' }}">
+                            Membres
+                        </a>
+                        @endcan
+                    </div>
+                </div>
+                @endif
+
                 <!-- Clergé & RDV -->
                 @can('access_priests')
                 <div class="nav-item">
@@ -497,7 +539,26 @@
                     </div>
                 </div>
                 @endcan
-                
+
+                <!-- Demande de Messe -->
+                @can('access_mass_requests')
+                <div class="nav-item">
+                    <button class="nav-link w-100 border-0 bg-transparent dropdown-toggle-custom {{ request()->routeIs(['admin.mass_requests.*']) ? 'active open' : '' }}" onclick="toggleDropdown(this)">
+                        <i class="fa-solid fa-hands-praying"></i> 
+                        <span>Demandes Messe</span>
+                        <i class="fa-solid fa-chevron-right ms-auto arrow-icon" style="font-size: 0.6rem;"></i>
+                    </button>
+                    <div class="submenu">
+                        <a href="{{ route('admin.mass_requests.index') }}" class="submenu-link {{ (request()->routeIs('admin.mass_requests.index') || request()->routeIs('admin.mass_requests.show')) ? 'active' : '' }}">
+                            Demandes
+                        </a>
+                        <a href="{{ route('admin.mass_requests.config') }}" class="submenu-link {{ request()->routeIs('admin.mass_requests.config') ? 'active' : '' }}">
+                            Configuration
+                        </a>
+                    </div>
+                </div>
+                @endcan
+
                 <div class="nav-label">Public</div>
 
                 <!-- Inscriptions & Activités -->
