@@ -19,17 +19,19 @@ class CloudinaryService
     {
         try {
             if ($file instanceof UploadedFile) {
-                $result = Cloudinary::upload($file->getRealPath(), [
+                $result = Cloudinary::uploadApi()->upload($file->getRealPath(), [
                     'folder' => $folder,
+                    'resource_type' => 'auto'
                 ]);
             } else {
                 // Assume base64 string
-                $result = Cloudinary::upload($file, [
+                $result = Cloudinary::uploadApi()->upload($file, [
                     'folder' => $folder,
+                    'resource_type' => 'auto'
                 ]);
             }
             
-            return $result->getSecurePath();
+            return $result['secure_url'];
         } catch (\Exception $e) {
             Log::error('Cloudinary Upload Error: ' . $e->getMessage());
             return null;
@@ -46,11 +48,12 @@ class CloudinaryService
     public function uploadVideo(UploadedFile $file, string $folder = 'st_michel/videos')
     {
         try {
-            $result = Cloudinary::uploadVideo($file->getRealPath(), [
+            $result = Cloudinary::uploadApi()->upload($file->getRealPath(), [
                 'folder' => $folder,
+                'resource_type' => 'video'
             ]);
             
-            return $result->getSecurePath();
+            return $result['secure_url'];
         } catch (\Exception $e) {
             Log::error('Cloudinary Video Upload Error: ' . $e->getMessage());
             return null;
@@ -67,7 +70,7 @@ class CloudinaryService
     public function deleteAsset(string $publicId)
     {
         try {
-            Cloudinary::destroy($publicId);
+            Cloudinary::uploadApi()->destroy($publicId);
             return true;
         } catch (\Exception $e) {
             Log::error('Cloudinary Delete Error: ' . $e->getMessage());

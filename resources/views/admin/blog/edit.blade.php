@@ -100,55 +100,57 @@
 
                 <div class="card border-0 rounded-4 shadow-sm p-4 bg-white mb-4">
                     <h6 class="fw-bold mb-4">Images pour le Slider (Max 2)</h6>
-                    <div id="slider-urls-container">
+                    <div id="slider-files-container">
                         @php
-                            $secondaryImages = isset($post) ? $post->images->where('is_gallery', false)->pluck('image_path')->toArray() : [];
-                            // Re-index array to ensure correct mapping in loop
-                            $secondaryImages = array_values($secondaryImages);
-                            $oldSecondary = old('secondary_images', $secondaryImages);
+                            $secondaryImages = isset($post) ? $post->images->where('is_gallery', false)->take(2) : collect([]);
                         @endphp
                         
                         @for($i = 0; $i < 2; $i++)
                             <div class="mb-3">
                                 <label class="form-label x-small fw-bold text-secondary">Image de Slide {{ $i + 1 }}</label>
-                                <input type="url" name="secondary_images[]" class="form-control rounded-3 border-gray-200" 
-                                    value="{{ $oldSecondary[$i] ?? '' }}" placeholder="https://exemple.com/image-slide-{{ $i + 1 }}.jpg">
+                                @if(isset($secondaryImages[$i]))
+                                    <div class="mb-2">
+                                        <img src="{{ $secondaryImages[$i]->image_path }}" class="img-thumbnail" style="max-height: 100px;" alt="Image actuelle">
+                                        <p class="text-secondary x-small mb-1">Image actuelle: {{ basename($secondaryImages[$i]->image_path) }}</p>
+                                    </div>
+                                @endif
+                                <input type="file" name="secondary_images[]" class="form-control rounded-3 border-gray-200" accept="image/*">
                             </div>
                         @endfor
                     </div>
                     @error('secondary_images.*') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
-                    <p class="text-secondary x-small mt-2 mb-0">Ces images seront combinées à l'image à la une pour former le slider en haut de l'article.</p>
+                    <p class="text-secondary x-small mt-2 mb-0">Téléchargez jusqu'à 2 images pour le slider (JPEG, PNG, JPG, GIF - Max 10MB par image). Les nouvelles images remplaceront les existantes.</p>
                 </div>
 
                 <div class="card border-0 rounded-4 shadow-sm p-4 bg-white mb-4">
                     <h6 class="fw-bold mb-4">Galerie d'images supplémentaires</h6>
                     <div id="additional-gallery-container">
                         @php
-                            $galleryImages = isset($post) ? $post->images->where('is_gallery', true)->pluck('image_path')->toArray() : [];
-                            $oldGallery = old('gallery_images', $galleryImages);
+                            $galleryImages = isset($post) ? $post->images->where('is_gallery', true) : collect([]);
                         @endphp
                         
-                        @if(count($oldGallery) > 0)
-                            @foreach($oldGallery as $index => $url)
+                        @if($galleryImages->count() > 0)
+                            @foreach($galleryImages as $image)
                                 <div class="mb-3 d-flex align-items-center gap-2 gallery-row">
-                                    <input type="url" name="gallery_images[]" class="form-control rounded-3 border-gray-200" 
-                                        value="{{ $url }}" placeholder="https://exemple.com/gallery-image.jpg">
+                                    <div class="flex-grow-1">
+                                        <img src="{{ $image->image_path }}" class="img-thumbnail mb-2" style="max-height: 100px;" alt="Image actuelle">
+                                        <p class="text-secondary x-small mb-1">Image actuelle: {{ basename($image->image_path) }}</p>
+                                    </div>
                                     <button type="button" class="btn btn-outline-danger btn-sm remove-gallery-row"><i class="fa-solid fa-trash"></i></button>
                                 </div>
                             @endforeach
-                        @else
-                            <div class="mb-3 d-flex align-items-center gap-2 gallery-row">
-                                <input type="url" name="gallery_images[]" class="form-control rounded-3 border-gray-200" 
-                                    value="" placeholder="https://exemple.com/gallery-image.jpg">
-                                <button type="button" class="btn btn-outline-danger btn-sm remove-gallery-row" style="display: none;"><i class="fa-solid fa-trash"></i></button>
-                            </div>
                         @endif
+                        
+                        <div class="mb-3">
+                            <label class="form-label small text-secondary">Ajouter de nouvelles images à la galerie</label>
+                            <input type="file" name="gallery_images[]" class="form-control rounded-3 border-gray-200" accept="image/*" multiple>
+                        </div>
                     </div>
                     <button type="button" id="add-gallery-btn" class="btn btn-sm btn-outline-primary mt-2">
                         <i class="fa-solid fa-plus me-1"></i> Ajouter une image à la galerie
                     </button>
                     @error('gallery_images.*') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
-                    <p class="text-secondary x-small mt-2 mb-0">Ces images apparaitront dans la section "Exploration en images" en bas de l'article.</p>
+                    <p class="text-secondary x-small mt-2 mb-0">Téléchargez plusieurs images pour la galerie (JPEG, PNG, JPG, GIF - Max 10MB par image).</p>
                 </div>
 
                 <div class="card border-0 rounded-4 shadow-sm p-4 bg-white mb-4">
@@ -207,7 +209,7 @@
             const row = document.createElement('div');
             row.className = 'mb-3 d-flex align-items-center gap-2 gallery-row';
             row.innerHTML = `
-                <input type="url" name="gallery_images[]" class="form-control rounded-3 border-gray-200" placeholder="https://exemple.com/gallery-image.jpg">
+                <input type="file" name="gallery_images[]" class="form-control rounded-3 border-gray-200" accept="image/*">
                 <button type="button" class="btn btn-outline-danger btn-sm remove-gallery-row"><i class="fa-solid fa-trash"></i></button>
             `;
             container.appendChild(row);

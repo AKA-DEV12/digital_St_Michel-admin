@@ -51,6 +51,15 @@ class ReservationController extends Controller
         return view('admin.reservations.index', compact('reservations', 'status', 'walletTotal', 'pendingWalletTotal'));
     }
 
+    /**
+     * Display the details of a specific reservation.
+     */
+    public function show(Reservation $reservation)
+    {
+        $reservation->load('room');
+        return view('admin.reservations.show', compact('reservation'));
+    }
+
     public function export(Request $request, \App\Services\ExportService $exportService)
     {
         $status = $request->get('status', 'pending');

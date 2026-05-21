@@ -134,7 +134,7 @@
                     <i class="fa-solid fa-ellipsis-vertical"></i>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-3 p-2">
-                    <li><a class="dropdown-item small py-2 rounded-2" href="javascript:void(0)" onclick="showReservationDetails({{ json_encode($reservation) }})"><i class="fa-solid fa-eye me-2 opacity-100 text-primary"></i> <b>Détails</b></a></li>
+                    <li><a class="dropdown-item small py-2 rounded-2" href="{{ route('reservations.show', $reservation) }}"><i class="fa-solid fa-eye me-2 opacity-100 text-primary"></i> <b>Détails</b></a></li>
                     
                     @if($status == 'pending')
                         <li><hr class="dropdown-divider opacity-50"></li>

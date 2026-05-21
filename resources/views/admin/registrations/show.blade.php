@@ -67,11 +67,9 @@
                     <div class="h4 fw-bold text-primary">{{ number_format($participants->sum('amount'), 0, ',', ' ') }} FCFA</div>
                 </div>
             </div>
-        </div>
-
-        @if($registration->status === 'pending')
+             @if($registration->status === 'pending')
         <!-- Action Card -->
-        <div class="glass-card">
+        <div class="mt-8">
             <h5 class="fw-bold mb-4">Changer le statut</h5>
             <form action="{{ route('admin.registrations.update_status', $registration->uuid) }}" method="POST">
                 @csrf
@@ -85,13 +83,16 @@
             </form>
         </div>
         @else
-        <div class="glass-card bg-light border-0">
+        <div class="mt-8">
             <div class="text-center py-2">
                 <i class="fa-solid fa-lock text-secondary mb-2"></i>
                 <p class="small text-secondary mb-0">Statut verrouillé</p>
             </div>
         </div>
         @endif
+        </div>
+
+       
     </div>
 
     <!-- Right Column: Tabs Card -->

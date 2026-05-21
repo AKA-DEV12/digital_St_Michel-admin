@@ -243,6 +243,7 @@ class PriestController extends Controller
                 }
             }
         }
+        
         $data['available_time_slots'] = count($slots) > 0 ? $slots : null;
 
         // Clean up array fields

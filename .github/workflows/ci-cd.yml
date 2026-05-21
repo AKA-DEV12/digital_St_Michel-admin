@@ -154,7 +154,6 @@ jobs:
 
             # Cloudinary Configuration
             CLOUDINARY_URL=${{ secrets.CLOUDINARY_URL }}
-            CLOUDINARY_UPLOAD_PRESET=${{ secrets.CLOUDINARY_UPLOAD_PRESET }}
             EOF
             
             cd "$APP_DIR"

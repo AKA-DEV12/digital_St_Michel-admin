@@ -35,6 +35,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Reservation Management
     Route::middleware(['permission:access_reservations'])->group(function () {
         Route::get('/reservations', [ReservationController::class, 'index'])->name('reservations.index');
+        Route::get('/reservations/{reservation}', [ReservationController::class, 'show'])->name('reservations.show');
         Route::get('/reservations/export', [ReservationController::class, 'export'])->name('reservations.export');
         Route::post('/reservations/{reservation}/validate', [ReservationController::class, 'validateReservation'])->name('reservations.validate');
         Route::post('/reservations/{reservation}/cancel', [ReservationController::class, 'cancelReservation'])->name('reservations.cancel');
