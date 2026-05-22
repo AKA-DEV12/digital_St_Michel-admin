@@ -224,7 +224,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/settings', [\App\Http\Controllers\Admin\SiteSettingController::class, 'update'])->name('admin.settings.update');
     });
 
-    // Mass Request Management
+    // Mass Request Management Route
     Route::middleware(['permission:access_mass_requests'])->group(function () {
         Route::get('/mass-requests', [\App\Http\Controllers\MassRequestController::class, 'index'])->name('admin.mass_requests.index');
         Route::get('/mass-requests/export', [\App\Http\Controllers\MassRequestController::class, 'export'])->name('admin.mass_requests.export');
