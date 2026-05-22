@@ -162,7 +162,7 @@ jobs:
             # Installation Composer
             if [ -f composer.json ]; then
               echo "--- Composer install ---"
-              composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+              php8.4 /usr/local/bin/composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
             fi
 
             # Build NPM (Vite)
