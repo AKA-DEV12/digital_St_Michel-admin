@@ -197,5 +197,5 @@ jobs:
             chown -R www-data:www-data "$APP_DIR"
             chmod -R 775 "$APP_DIR/storage" "$APP_DIR/bootstrap/cache"
             
-            sudo systemctl reload php8.4-fpm
+            sudo systemctl reload $(systemctl list-units --type=service --state=running | grep -oE 'php[0-9.]*-fpm' | head -n 1) || sudo systemctl reload php-fpm || true
             sudo systemctl reload nginx
