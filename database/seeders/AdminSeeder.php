@@ -16,10 +16,10 @@ class AdminSeeder extends Seeder
     {
         // Création de l'administrateur principal avec les données réelles
         $admin = User::firstOrCreate(
-            ['email' => 'adminAGBP@saint-michel-archange.com'],
+            ['email' => 'curesma2024@saint-michelarchange.com'],
             [
                 'name' => 'Admin Saint Michel',
-                'password' => Hash::make('adminAGBP@saint-michel-archange.com'),
+                'password' => Hash::make('curesma2024@saint-michelarchange.com'),
                 'email_verified_at' => now(),
             ]
         );
