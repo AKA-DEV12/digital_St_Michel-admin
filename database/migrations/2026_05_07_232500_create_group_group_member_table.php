@@ -33,7 +33,9 @@ return new class extends Migration
         // Nettoyage de la table d'origine
         Schema::table('group_members', function (Blueprint $table) {
             $table->dropForeign(['group_id']);
+            $table->dropIndex(['nom_prenom', 'date_adhesion']);
             $table->dropColumn(['group_id', 'responsabilite', 'date_adhesion']);
+            $table->index('nom_prenom');
         });
     }
 
@@ -43,6 +45,8 @@ return new class extends Migration
             $table->foreignId('group_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('responsabilite')->nullable();
             $table->date('date_adhesion')->nullable();
+            $table->dropIndex(['nom_prenom']);
+            $table->index(['nom_prenom', 'date_adhesion']);
         });
 
         Schema::dropIfExists('group_group_member');
