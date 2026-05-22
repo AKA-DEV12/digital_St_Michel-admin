@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
     <title>Digital Service Saint-Michel - Administration</title>
     <!--Favicon-->
     <link rel="icon" href="{{ asset('assets/images/logo/logo.png') }}">
