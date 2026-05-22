@@ -480,7 +480,7 @@
                 @endif
 
                 <!-- Catéchèse -->
-                @can('access_groups')
+                @can('access_catechists')
                 <div class="nav-item">
                     <button class="nav-link w-100 border-0 bg-transparent dropdown-toggle-custom {{ request()->routeIs(['admin.catechists.*']) ? 'active open' : '' }}" onclick="toggleDropdown(this)">
                         <i class="fa-solid fa-book-open"></i> 
@@ -631,10 +631,10 @@
                 </div>
                 @endif
 
-                @if(auth()->user()->hasAnyPermission(['manage_users', 'manage_roles']))
+                @if(auth()->user()->hasAnyPermission(['manage_users', 'manage_roles', 'access_agents']))
                 <div class="nav-label">Système</div>
                 <div class="nav-item">
-                    <button class="nav-link w-100 border-0 bg-transparent dropdown-toggle-custom {{ request()->routeIs(['users.*', 'roles.*']) ? 'active open' : '' }}" onclick="toggleDropdown(this)">
+                    <button class="nav-link w-100 border-0 bg-transparent dropdown-toggle-custom {{ request()->routeIs(['users.*', 'roles.*', 'agents.*']) ? 'active open' : '' }}" onclick="toggleDropdown(this)">
                         <i class="fa-solid fa-lock"></i> 
                         <span>Sécurité</span>
                         <i class="fa-solid fa-chevron-right ms-auto arrow-icon" style="font-size: 0.6rem;"></i>

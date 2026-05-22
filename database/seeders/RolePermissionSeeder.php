@@ -35,6 +35,7 @@ class RolePermissionSeeder extends Seeder
             'manage_users',
             'manage_roles',
             'access_mass_requests',
+            'access_catechists',
         ];
 
         foreach ($permissions as $permission) {
@@ -54,6 +55,7 @@ class RolePermissionSeeder extends Seeder
             'access_presences',
             'access_groups',
             'access_group_members',
+            'access_catechists',
         ]);
 
         // Les utilisateurs administratifs sont désormais gérés dans AdminSeeder

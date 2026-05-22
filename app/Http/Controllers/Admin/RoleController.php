@@ -33,6 +33,7 @@ class RoleController extends Controller
                 'access_presences',
                 'access_groups',
                 'access_group_members',
+                'access_catechists',
                 'access_movements',
             ],
             'Contenu' => [
@@ -62,6 +63,7 @@ class RoleController extends Controller
             'access_priests' => 'Gestion des prêtres',
             'access_groups' => 'Gestion des groupes (Liste)',
             'access_group_members' => 'Gestion des groupes (Membres)',
+            'access_catechists' => 'Gestion des catéchistes',
             'manage_users' => 'Gestion des administrateurs',
             'manage_roles' => 'Gestion des rôles & droits',
             'access_mass_requests' => 'Demandes de messe',

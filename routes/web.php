@@ -199,7 +199,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     // Catéchistes Management
-    Route::middleware(['permission:access_groups'])->group(function () {
+    Route::middleware(['permission:access_catechists'])->group(function () {
         Route::get('/catechists/api/members/{group}', [CatechistController::class, 'getMembersByGroup'])->name('api.catechists.members');
         Route::get('/catechists/export', [CatechistController::class, 'export'])->name('catechists.export');
         Route::get('/catechists/create', [CatechistController::class, 'create'])->name('admin.catechists.create');
