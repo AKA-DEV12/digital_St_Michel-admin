@@ -214,7 +214,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Catéchèse - Route simple pour chargement membres par groupe
     Route::get('/catechese/groups/{groupId}/members', [CatechistController::class, 'getMembersByGroup'])->name('catechese.groups.members');
 
-    // Profile (from Breeze)
+    // Profile (from Breeze) Route
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
