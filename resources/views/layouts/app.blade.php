@@ -632,8 +632,15 @@
                 </div>
                 @endif
 
-                @if(auth()->user()->hasAnyPermission(['manage_users', 'manage_roles', 'access_agents']))
+                @if(auth()->user()->hasAnyPermission(['manage_users', 'manage_roles', 'access_agents', 'access_settings']))
                 <div class="nav-label">Système</div>
+                @can('access_settings')
+                <div class="nav-item">
+                    <a href="{{ route('admin.modules.index') }}" class="nav-link {{ request()->routeIs('admin.modules.*') ? 'active' : '' }}">
+                        <i class="fa-solid fa-cubes"></i> Modules
+                    </a>
+                </div>
+                @endcan
                 <div class="nav-item">
                     <button class="nav-link w-100 border-0 bg-transparent dropdown-toggle-custom {{ request()->routeIs(['users.*', 'roles.*', 'agents.*']) ? 'active open' : '' }}" onclick="toggleDropdown(this)">
                         <i class="fa-solid fa-lock"></i> 

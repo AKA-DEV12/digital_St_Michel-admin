@@ -222,6 +222,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware(['permission:access_settings'])->group(function () {
         Route::get('/settings', [\App\Http\Controllers\Admin\SiteSettingController::class, 'index'])->name('admin.settings.index');
         Route::put('/settings', [\App\Http\Controllers\Admin\SiteSettingController::class, 'update'])->name('admin.settings.update');
+        Route::get('/modules', [\App\Http\Controllers\Admin\SiteSettingController::class, 'modules'])->name('admin.modules.index');
+        Route::put('/modules', [\App\Http\Controllers\Admin\SiteSettingController::class, 'updateModules'])->name('admin.modules.update');
     });
 
     // Mass Request Management Route

@@ -109,4 +109,37 @@ class SiteSettingController extends Controller
                 ->withInput();
         }
     }
+
+    public function modules()
+    {
+        $settings = SiteSetting::whereIn('key', [
+            'module_booking_enabled',
+            'module_registrations_enabled',
+            'module_priests_enabled',
+            'module_mass_requests_enabled'
+        ])->pluck('value', 'key');
+
+        return view('admin.settings.modules', compact('settings'));
+    }
+
+    public function updateModules(Request $request)
+    {
+        $modules = [
+            'module_booking_enabled',
+            'module_registrations_enabled',
+            'module_priests_enabled',
+            'module_mass_requests_enabled'
+        ];
+
+        try {
+            foreach ($modules as $module) {
+                $value = $request->has($module) ? '1' : '0';
+                SiteSetting::updateOrCreate(['key' => $module], ['value' => $value]);
+            }
+
+            return redirect()->back()->with('success', 'Visibilité des modules mise à jour avec succès.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Une erreur est survenue : ' . $e->getMessage());
+        }
+    }
 }

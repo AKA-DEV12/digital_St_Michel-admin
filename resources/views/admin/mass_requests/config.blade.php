@@ -65,10 +65,29 @@
             
             <form action="{{ route('admin.mass_requests.store_time') }}" method="POST" class="mb-4">
                 @csrf
+                
+                {{-- Sélecteur de type de jour --}}
+                <label class="form-label fw-bold text-secondary small text-uppercase mb-2">Type de jour</label>
+                <div class="d-flex gap-2 mb-3" role="group">
+                    <input type="radio" class="btn-check" name="day_type" id="day_type_semaine" value="semaine" checked autocomplete="off">
+                    <label class="btn btn-outline-primary rounded-pill flex-fill text-center fw-bold" for="day_type_semaine">
+                        <i class="fa-solid fa-calendar-week me-2"></i>Semaine
+                        <small class="d-block " style="font-size: 0.7rem; font-weight: 400; ">Lun – Sam</small>
+                    </label>
+
+                    <input type="radio" class="btn-check" name="day_type" id="day_type_dimanche" value="dimanche" autocomplete="off">
+                    <label class="btn btn-outline-warning rounded-pill flex-fill text-center fw-bold" for="day_type_dimanche">
+                        <i class="fa-solid fa-sun me-2"></i>Dimanche
+                        <small class="d-block text-muted" style="font-size: 0.7rem; font-weight: 400;">Dimanche uniquement</small>
+                    </label>
+                </div>
+
+                <label class="form-label fw-bold text-secondary small text-uppercase mb-2">Heure</label>
                 <div class="input-group">
-                    <input type="time" name="time" class="form-control rounded-start-3" required>
-                    <button type="submit" class="btn btn-primary rounded-end-3 px-4">
-                        <i class="fa-solid fa-plus"></i> Ajouter
+                    <span class="input-group-text bg-light border-end-0 rounded-start-3"><i class="fa-regular fa-clock text-primary"></i></span>
+                    <input type="time" name="time" class="form-control border-start-0 rounded-end-3" required>
+                    <button type="submit" class="btn btn-primary rounded-3 px-4 ms-2">
+                        <i class="fa-solid fa-plus me-1"></i> Ajouter
                     </button>
                 </div>
             </form>
@@ -77,10 +96,21 @@
                 @forelse($times as $time)
                 <div class="list-group-item d-flex justify-content-between align-items-center py-3 bg-transparent">
                     <div class="d-flex align-items-center gap-3">
-                        <div class="rounded-circle bg-primary-light text-primary d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center {{ $time->day_type === 'dimanche' ? 'bg-warning bg-opacity-10 text-warning' : 'bg-primary-light text-primary' }}" style="width: 32px; height: 32px;">
                             <i class="fa-regular fa-clock small"></i>
                         </div>
-                        <span class="fw-bold h5 mb-0">{{ $time->time }}</span>
+                        <div>
+                            <span class="fw-bold h5 mb-0 d-block">{{ $time->time }}</span>
+                            @if($time->day_type === 'dimanche')
+                                <span class="badge rounded-pill text-bg-warning" style="font-size: 0.65rem;">
+                                    <i class="fa-solid fa-sun me-1"></i>Dimanche
+                                </span>
+                            @else
+                                <span class="badge rounded-pill text-bg-primary" style="font-size: 0.65rem; opacity: 0.75;">
+                                    <i class="fa-solid fa-calendar-week me-1"></i>Semaine
+                                </span>
+                            @endif
+                        </div>
                     </div>
                     <form action="{{ route('admin.mass_requests.destroy_time', $time->id) }}" method="POST" onsubmit="return confirm('Supprimer ce créneau ?')">
                         @csrf

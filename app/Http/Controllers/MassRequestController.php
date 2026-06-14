@@ -107,8 +107,14 @@ class MassRequestController extends Controller
 
     public function storeTime(Request $request)
     {
-        $request->validate(['time' => 'required']);
-        MassTime::create(['time' => $request->time]);
+        $request->validate([
+            'time' => 'required',
+            'day_type' => 'required|in:semaine,dimanche',
+        ]);
+        MassTime::create([
+            'time' => $request->time,
+            'day_type' => $request->day_type,
+        ]);
         return back()->with('success', 'Créneau ajouté.');
     }
 
