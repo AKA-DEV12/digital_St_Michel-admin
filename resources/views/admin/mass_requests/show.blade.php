@@ -50,12 +50,28 @@
                 
                  @if($request->status === 'pending')
                 <div class="d-grid gap-2 mt-7">
-                    <form action="{{ route('admin.mass_requests.validate', $request->id) }}" method="POST">
-                        @csrf
-                        <button type="submit" class="btn btn-success w-100 rounded-pill mb-2">
-                            <i class="fa-solid fa-check me-2"></i> Valider et envoyer mail
-                        </button>
-                    </form>
+                    <button class="btn btn-success w-100 rounded-pill mb-2" type="button" onclick="document.getElementById('validationCollapse').classList.toggle('d-none')">
+                        <i class="fa-solid fa-check me-2"></i> Valider la demande
+                    </button>
+                    
+                    <div class="mt-2 mb-3 @if(!$errors->has('transaction_id')) d-none @endif" id="validationCollapse">
+                        <div class="card card-body border-0 shadow-sm rounded-4 p-3 bg-light text-start">
+                            <form action="{{ route('admin.mass_requests.validate', $request->id) }}" method="POST">
+                                @csrf
+                                <div class="mb-3">
+                                    <label for="transaction_id" class="form-label small fw-bold text-secondary text-uppercase mb-1">ID de Transaction *</label>
+                                    <input type="text" name="transaction_id" id="transaction_id" class="form-control rounded-3 @error('transaction_id') is-invalid @enderror" placeholder="Ex: REF-12345678" value="{{ old('transaction_id') }}" required>
+                                    @error('transaction_id')
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <button type="submit" class="btn btn-success w-100 rounded-pill py-2 fw-bold">
+                                    <i class="fa-solid fa-check me-1"></i> Confirmer & Envoyer Mail
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
                     <form action="{{ route('admin.mass_requests.cancel', $request->id) }}" method="POST">
                         @csrf
                         <button type="submit" class="btn btn-outline-danger w-100 rounded-pill">

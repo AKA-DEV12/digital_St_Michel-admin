@@ -19,6 +19,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        if ($this->app->runningInConsole() && $this->app->environment('testing')) {
+            $this->loadMigrationsFrom(base_path('../digital_St_Michel-public/database/migrations'));
+        }
     }
 }

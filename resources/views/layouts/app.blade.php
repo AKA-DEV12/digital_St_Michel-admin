@@ -553,6 +553,9 @@
                         <a href="{{ route('admin.mass_requests.index') }}" class="submenu-link {{ (request()->routeIs('admin.mass_requests.index') || request()->routeIs('admin.mass_requests.show')) ? 'active' : '' }}">
                             Demandes
                         </a>
+                        <a href="{{ route('admin.mass_requests.transactions') }}" class="submenu-link {{ request()->routeIs('admin.mass_requests.transactions') ? 'active' : '' }}">
+                            Transactions
+                        </a>
                         <a href="{{ route('admin.mass_requests.config') }}" class="submenu-link {{ request()->routeIs('admin.mass_requests.config') ? 'active' : '' }}">
                             Configuration
                         </a>

@@ -143,12 +143,9 @@
                             @if($req->status == 'pending')
                             <li><hr class="dropdown-divider opacity-50"></li>
                             <li>
-                                <form action="{{ route('admin.mass_requests.validate', $req->id) }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="dropdown-item small py-2 rounded-2 text-success fw-bold">
-                                        <i class="fa-solid fa-check me-2"></i> VALIDER
-                                    </button>
-                                </form>
+                                <button type="button" class="dropdown-item small py-2 rounded-2 text-success fw-bold" data-bs-toggle="modal" data-bs-target="#validateModal-{{ $req->id }}">
+                                    <i class="fa-solid fa-check me-2"></i> VALIDER
+                                </button>
                             </li>
                             <li>
                                 <form action="{{ route('admin.mass_requests.cancel', $req->id) }}" method="POST">
@@ -165,6 +162,36 @@
             </tr>
         @endforeach
     </x-data-table>
+
+    @foreach($requests as $req)
+        @if($req->status == 'pending')
+        <!-- Modal de validation pour la requête #{{ $req->id }} -->
+        <div class="modal fade" id="validateModal-{{ $req->id }}" tabindex="-1" aria-labelledby="validateModalLabel-{{ $req->id }}" aria-hidden="true" style="z-index: 1060;">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 rounded-4 shadow-lg text-start">
+                    <div class="modal-header border-0 pb-0">
+                        <h5 class="modal-title fw-bold" id="validateModalLabel-{{ $req->id }}">Valider la demande</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('admin.mass_requests.validate', $req->id) }}" method="POST">
+                        @csrf
+                        <div class="modal-body py-3">
+                            <p class="text-secondary small mb-3">Veuillez renseigner l'identifiant unique de la transaction pour valider la demande de messe de <strong>{{ $req->name1 }}</strong> d'un montant de <strong>{{ number_format($req->amount, 0, ',', ' ') }} FCFA</strong>.</p>
+                            <div class="mb-2">
+                                <label for="transaction_id-{{ $req->id }}" class="form-label small fw-bold text-secondary text-uppercase mb-1">ID de Transaction *</label>
+                                <input type="text" name="transaction_id" id="transaction_id-{{ $req->id }}" class="form-control rounded-3" placeholder="Ex: REF-12345678" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer border-0 pt-0">
+                            <button type="button" class="btn btn-light rounded-pill px-3" data-bs-dismiss="modal">Annuler</button>
+                            <button type="submit" class="btn btn-success rounded-pill px-4 fw-bold">Valider la demande</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        @endif
+    @endforeach
 @endsection
 
 <style>

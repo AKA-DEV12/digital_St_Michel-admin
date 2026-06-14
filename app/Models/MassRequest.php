@@ -22,11 +22,14 @@ class MassRequest extends Model
         'phone',
         'payment_operator',
         'payment_receipt',
+        'transaction_id',
+        'validated_at',
     ];
 
     protected $casts = [
         'time_slots' => 'array',
         'requested_date' => 'date',
+        'validated_at' => 'datetime',
     ];
 
     /**

@@ -229,6 +229,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Mass Request Management Route
     Route::middleware(['permission:access_mass_requests'])->group(function () {
         Route::get('/mass-requests', [\App\Http\Controllers\MassRequestController::class, 'index'])->name('admin.mass_requests.index');
+        Route::get('/mass-requests/transactions', [\App\Http\Controllers\MassRequestController::class, 'transactions'])->name('admin.mass_requests.transactions');
         Route::get('/mass-requests/export', [\App\Http\Controllers\MassRequestController::class, 'export'])->name('admin.mass_requests.export');
         Route::get('/mass-requests/config', [\App\Http\Controllers\MassRequestController::class, 'config'])->name('admin.mass_requests.config');
         Route::post('/mass-requests-config/settings', [\App\Http\Controllers\MassRequestController::class, 'updateSettings'])->name('admin.mass_requests.update_settings');

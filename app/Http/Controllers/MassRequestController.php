@@ -52,18 +52,48 @@ class MassRequestController extends Controller
             return back()->with('error', 'Cette demande a déjà été traitée.');
         }
 
-        $massRequest->update(['status' => 'confirmed']);
+        $request->validate([
+            'transaction_id' => 'required|string|unique:mass_requests,transaction_id'
+        ], [
+            'transaction_id.required' => 'L\'identifiant de transaction est obligatoire.',
+            'transaction_id.unique' => 'Cet identifiant de transaction est déjà utilisé par une autre demande de messe.'
+        ]);
+
+        $massRequest->update([
+            'status' => 'confirmed',
+            'transaction_id' => $request->transaction_id,
+            'validated_at' => now(),
+        ]);
 
         if ($massRequest->email) {
             try {
                 Mail::to($massRequest->email)->send(new MassRequestConfirmed($massRequest));
             } catch (\Exception $e) {
                 Log::error("Erreur d'envoi de mail pour Demande Messe #$id: " . $e->getMessage());
-                return back()->with('success', 'Demande validée, mais l\'envoi du mail a échoué.');
+                return back()->with('success', 'Demande validée avec l\'ID de transaction, mais l\'envoi du mail a échoué.');
             }
         }
 
         return back()->with('success', 'Demande validée avec succès et mail envoyé.');
+    }
+
+    public function transactions(Request $request)
+    {
+        $search = $request->get('search');
+        $query = MassRequest::whereNotNull('transaction_id');
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('transaction_id', 'like', "%{$search}%")
+                    ->orWhere('name1', 'like', "%{$search}%")
+                    ->orWhere('phone', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        $requests = $query->latest('validated_at')->paginate(20)->withQueryString();
+
+        return view('admin.mass_requests.transactions', compact('requests'));
     }
 
     public function cancelRequest($id)
