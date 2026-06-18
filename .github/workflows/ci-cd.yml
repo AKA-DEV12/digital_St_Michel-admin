@@ -28,12 +28,10 @@ jobs:
       - name: Checkout Admin Repository
         uses: actions/checkout@v4
 
-      - name: Checkout Public Repository (for migrations)
-        uses: actions/checkout@v4
-        with:
-          repository: AKA-DEV12/digital_St_Michel-public
-          path: ../digital_St_Michel-public
-          token: ${{ secrets.GH_TOKEN }}
+      - name: Clone Public Repository (for migrations)
+        run: |
+          cd ..
+          git clone https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/AKA-DEV12/digital_St_Michel-public.git
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
