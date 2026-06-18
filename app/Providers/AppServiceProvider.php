@@ -30,18 +30,21 @@ class AppServiceProvider extends ServiceProvider
 
             // Load only the public migrations that are NOT already handled by the admin
             $publicMigrationsPath = base_path('../digital_St_Michel-public/database/migrations');
-            $publicMigrations = collect(File::files($publicMigrationsPath))
-                ->filter(function ($file) use ($adminMigrationFiles) {
-                    $table = $this->extractMigrationTable($file->getFilename());
-                    // Skip if this migration creates a table already defined in admin migrations
-                    return ! $table || ! in_array($table, $adminMigrationFiles);
-                })
-                ->map(fn ($file) => $file->getPathname())
-                ->values()
-                ->all();
+            
+            if (is_dir($publicMigrationsPath)) {
+                $publicMigrations = collect(File::files($publicMigrationsPath))
+                    ->filter(function ($file) use ($adminMigrationFiles) {
+                        $table = $this->extractMigrationTable($file->getFilename());
+                        // Skip if this migration creates a table already defined in admin migrations
+                        return ! $table || ! in_array($table, $adminMigrationFiles);
+                    })
+                    ->map(fn ($file) => $file->getPathname())
+                    ->values()
+                    ->all();
 
-            if (! empty($publicMigrations)) {
-                $this->loadMigrationsFrom($publicMigrations);
+                if (! empty($publicMigrations)) {
+                    $this->loadMigrationsFrom($publicMigrations);
+                }
             }
         }
     }
