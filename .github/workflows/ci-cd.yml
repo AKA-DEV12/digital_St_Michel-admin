@@ -25,7 +25,15 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Admin Repository
+        uses: actions/checkout@v4
+
+      - name: Checkout Public Repository (for migrations)
+        uses: actions/checkout@v4
+        with:
+          repository: AKA-DEV12/digital_St_Michel-public
+          path: ../digital_St_Michel-public
+          token: ${{ secrets.GH_TOKEN }}
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
