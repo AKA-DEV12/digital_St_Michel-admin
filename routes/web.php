@@ -211,7 +211,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('/catechists/{catechist}', [CatechistController::class, 'destroy'])->name('admin.catechists.destroy');
     });
 
-    // Catéchèse - Route simple pour chargement membres par groupe
+    // Catéchèse - Route simple pour chargement membres par groupe de mouvement
     Route::get('/catechese/groups/{groupId}/members', [CatechistController::class, 'getMembersByGroup'])->name('catechese.groups.members');
 
     // Profile (from Breeze) Route
