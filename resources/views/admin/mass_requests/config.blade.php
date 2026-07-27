@@ -40,12 +40,24 @@
                         <input type="text" name="mtn_number" class="form-control rounded-3" value="{{ $settings['mtn_number'] }}">
                     </div>
                     <div class="col-md-6">
+                        <label class="form-label small text-secondary fw-bold text-uppercase">Lien de paiement MTN</label>
+                        <input type="text" name="mtn_link" class="form-control rounded-3" value="{{ $settings['mtn_link'] }}" placeholder="https://mtn.com/...">
+                    </div>
+                    <div class="col-md-6">
                         <label class="form-label small text-secondary fw-bold text-uppercase">Numéro Orange Money</label>
                         <input type="text" name="orange_number" class="form-control rounded-3" value="{{ $settings['orange_number'] }}">
                     </div>
                     <div class="col-md-6">
+                        <label class="form-label small text-secondary fw-bold text-uppercase">Lien de paiement Orange</label>
+                        <input type="text" name="orange_link" class="form-control rounded-3" value="{{ $settings['orange_link'] }}" placeholder="https://orange.com/...">
+                    </div>
+                    <div class="col-md-6">
                         <label class="form-label small text-secondary fw-bold text-uppercase">Numéro Moov Money</label>
                         <input type="text" name="moov_number" class="form-control rounded-3" value="{{ $settings['moov_number'] }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label small text-secondary fw-bold text-uppercase">Lien de paiement Moov</label>
+                        <input type="text" name="moov_link" class="form-control rounded-3" value="{{ $settings['moov_link'] }}" placeholder="https://moov.com/...">
                     </div>
                 </div>
 
@@ -72,7 +84,13 @@
                     <input type="radio" class="btn-check" name="day_type" id="day_type_semaine" value="semaine" checked autocomplete="off">
                     <label class="btn btn-outline-primary rounded-pill flex-fill text-center fw-bold" for="day_type_semaine">
                         <i class="fa-solid fa-calendar-week me-2"></i>Semaine
-                        <small class="d-block " style="font-size: 0.7rem; font-weight: 400; ">Lun – Sam</small>
+                        <small class="d-block " style="font-size: 0.7rem; font-weight: 400; ">Lun – Ven</small>
+                    </label>
+
+                    <input type="radio" class="btn-check" name="day_type" id="day_type_samedi" value="samedi" autocomplete="off">
+                    <label class="btn btn-outline-info rounded-pill flex-fill text-center fw-bold" for="day_type_samedi">
+                        <i class="fa-solid fa-calendar-day me-2"></i>Samedi
+                        <small class="d-block text-muted" style="font-size: 0.7rem; font-weight: 400;">Samedi uniquement</small>
                     </label>
 
                     <input type="radio" class="btn-check" name="day_type" id="day_type_dimanche" value="dimanche" autocomplete="off">
@@ -96,7 +114,7 @@
                 @forelse($times as $time)
                 <div class="list-group-item d-flex justify-content-between align-items-center py-3 bg-transparent">
                     <div class="d-flex align-items-center gap-3">
-                        <div class="rounded-circle d-flex align-items-center justify-content-center {{ $time->day_type === 'dimanche' ? 'bg-warning bg-opacity-10 text-warning' : 'bg-primary-light text-primary' }}" style="width: 32px; height: 32px;">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center {{ $time->day_type === 'dimanche' ? 'bg-warning bg-opacity-10 text-warning' : ($time->day_type === 'samedi' ? 'bg-info bg-opacity-10 text-info' : 'bg-primary-light text-primary') }}" style="width: 32px; height: 32px;">
                             <i class="fa-regular fa-clock small"></i>
                         </div>
                         <div>
@@ -104,6 +122,10 @@
                             @if($time->day_type === 'dimanche')
                                 <span class="badge rounded-pill text-bg-warning" style="font-size: 0.65rem;">
                                     <i class="fa-solid fa-sun me-1"></i>Dimanche
+                                </span>
+                            @elseif($time->day_type === 'samedi')
+                                <span class="badge rounded-pill text-bg-info" style="font-size: 0.65rem;">
+                                    <i class="fa-solid fa-calendar-day me-1"></i>Samedi
                                 </span>
                             @else
                                 <span class="badge rounded-pill text-bg-primary" style="font-size: 0.65rem; opacity: 0.75;">

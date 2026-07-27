@@ -109,8 +109,11 @@ class MassRequestController extends Controller
             'mass_price' => SiteSetting::where('key', 'mass_price')->first()->value ?? '3000',
             'wave_number' => SiteSetting::where('key', 'wave_number')->first()->value ?? '',
             'mtn_number' => SiteSetting::where('key', 'mtn_number')->first()->value ?? '',
+            'mtn_link' => SiteSetting::where('key', 'mtn_link')->first()->value ?? '',
             'orange_number' => SiteSetting::where('key', 'orange_number')->first()->value ?? '',
+            'orange_link' => SiteSetting::where('key', 'orange_link')->first()->value ?? '',
             'moov_number' => SiteSetting::where('key', 'moov_number')->first()->value ?? '',
+            'moov_link' => SiteSetting::where('key', 'moov_link')->first()->value ?? '',
         ];
 
         $times = MassTime::orderBy('time')->get();
@@ -124,8 +127,11 @@ class MassRequestController extends Controller
             'mass_price' => 'required|numeric',
             'wave_number' => 'nullable|string',
             'mtn_number' => 'nullable|string',
+            'mtn_link' => 'nullable|string',
             'orange_number' => 'nullable|string',
+            'orange_link' => 'nullable|string',
             'moov_number' => 'nullable|string',
+            'moov_link' => 'nullable|string',
         ]);
 
         foreach ($data as $key => $value) {
@@ -139,7 +145,7 @@ class MassRequestController extends Controller
     {
         $request->validate([
             'time' => 'required',
-            'day_type' => 'required|in:semaine,dimanche',
+            'day_type' => 'required|in:semaine,dimanche,samedi',
         ]);
         MassTime::create([
             'time' => $request->time,
